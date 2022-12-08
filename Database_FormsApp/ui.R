@@ -1,13 +1,5 @@
-#
-# This is the user-interface definition of a Shiny web application. You can
-# run the application by clicking 'Run App' above.
-#
-# Find out more about building applications with Shiny here:
-#
-#    http://shiny.rstudio.com/
-#
+source(here("Database_FormsApp", "global.R"))
 
-library(shiny)
 
 # Define UI for application that draws a histogram
 shinyUI(fluidPage(
@@ -18,14 +10,19 @@ shinyUI(fluidPage(
     # Sidebar with a slider input for number of bins
     sidebarLayout(
         sidebarPanel(
-            radioButtons("location",
-                        "Locations:",
-                        choices = c("panama", ))
+            pickerInput(inputId = "location",
+                        label = "Select Locations:",
+                        choices = unique(location$location),
+                        multiple = T),
+            pickerInput(inputId = "region",
+                        label = "Select Region:",
+                        choices = unique_regions,
+                        multiple = T)
         ),
 
         # Show a plot of the generated distribution
         mainPanel(
-            DT::dataTableOutput("loc")
+            withSpinner(DT::dataTableOutput("loc"))
         )
     )
 ))

@@ -15,7 +15,7 @@ if (!require(librarian)){
 
 # librarian downloads, if not already downloaded, and reads in needed packages
 
-librarian::shelf(tidyverse, here, janitor, sf, lubridate, RPostgres, rstudioapi)
+librarian::shelf(tidyverse, here, janitor, sf, lubridate, RPostgres, rstudioapi, DBI)
 ```
 
 
@@ -45,6 +45,42 @@ tryCatch({
 dbExecute(connection, "set search_path = survey_data")
 
 dbListTables(connection)
+
+a <- dbGetQuery(connection, "Select * from location where location = 'panama'")
+
+```
+
+```{r}
+
+sql_loc <- "Select * from location where location = ?location"
+
+loc_q <- sqlInterpolate(ANSI(), sql_loc, location = 'usa')
+
+loc_out <- dbGetQuery(connection, loc_q)
+
+sql_reg <- "Select * from region where region = ?region"
+
+loc_r <- sqlInterpolate(ANSI(), sql_reg, region = 'new_mexico')
+
+reg_out <- dbGetQuery(connection, loc_r)
+
+loc_reg <- left_join(loc_out, reg_out, by = c("location_id"))
+
+
+
+```
+
+
+```{r}
+
+loc_r <- glue::glue_data_sql(
+      
+      "SELECT * FROM region
+       WHERE region IN ({reg_name*})",
+      reg_name = c("new_mexico", "california"),
+      .con = connection)
+    
+    reg_out <- as.data.frame(dbGetQuery(connection, loc_r))
 
 ```
 

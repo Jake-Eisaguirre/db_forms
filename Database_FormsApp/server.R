@@ -1,28 +1,46 @@
-#
-# This is the server logic of a Shiny web application. You can run the
-# application by clicking 'Run App' above.
-#
-# Find out more about building applications with Shiny here:
-#
-#    http://shiny.rstudio.com/
-#
+source(here("Database_FormsApp", "global.R"))
 
-library(shiny)
 
 # Define server logic required to draw a histogram
 shinyServer(function(input, output) {
-
-    output$distPlot <- renderPlot({
-
-        # generate bins based on input$bins from ui.R
-        x    <- faithful[, 2]
-        bins <- seq(min(x), max(x), length.out = input$bins + 1)
-
-        # draw the histogram with the specified number of bins
-        hist(x, breaks = bins, col = 'darkgray', border = 'white',
-             xlab = 'Waiting time to next eruption (in mins)',
-             main = 'Histogram of waiting times')
-
-    })
+  
+  #reactive location query
+  location_data <- reactive({
+    
+    loc_q <- glue::glue_sql(
+      
+      "SELECT * FROM location
+       WHERE location IN ({loc_name*});",
+      loc_name = input$location,
+      .con = connection)
+    
+    
+    loc_out <- as.data.frame(dbGetQuery(connection, loc_q))
+    
+  })
+  
+  #table output
+  #output$loc <- renderDataTable(location_data())
+  
+  #reactive region table
+  location_region <- reactive({
+    
+    loc_r <- glue::glue_data_sql(
+      
+      "SELECT * FROM region
+       WHERE region IN ({reg_name*})",
+      reg_name = input$region,
+      .con = connection)
+    
+    reg_out <- as.data.frame(dbGetQuery(connection, loc_r))
+    
+  loc_reg <- loc_out %>% 
+    left_join(reg_out, by = c("location_id"))
+  
+  })
+  
+  output$loc <- renderDataTable(location_region())
+  
+  
 
 })
