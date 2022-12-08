@@ -1,2 +1,31 @@
- source(here("global.R"))
- source(here("server.R"))
+#
+# This is the user-interface definition of a Shiny web application. You can
+# run the application by clicking 'Run App' above.
+#
+# Find out more about building applications with Shiny here:
+#
+#    http://shiny.rstudio.com/
+#
+
+library(shiny)
+
+# Define UI for application that draws a histogram
+shinyUI(fluidPage(
+
+    # Application title
+    titlePanel("RIBBiTR Database Forms"),
+
+    # Sidebar with a slider input for number of bins
+    sidebarLayout(
+        sidebarPanel(
+            radioButtons("location",
+                        "Locations:",
+                        choices = c("panama", ))
+        ),
+
+        # Show a plot of the generated distribution
+        mainPanel(
+            DT::dataTableOutput("loc")
+        )
+    )
+))
