@@ -15,11 +15,12 @@ shinyServer(function(input, output) {
       left_join(region, by = c("location_id")) %>%
       left_join(site, by = c("region_id")) %>%
       left_join(visit, by = c("site_id")) %>%
+      left_join(survey, by = c("visit_id")) %>% 
       filter(year <= input$year[2] & year>= input$year[2],
              location %in% input$location,
              region %in% input$region,
              site %in% input$site) %>% 
-      select(location, region, input$site_cols, input$visit_cols)
+      select(location, region, input$site_cols, input$visit_cols, input$survey_cols)
 
   })
 
