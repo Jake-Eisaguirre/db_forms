@@ -9,11 +9,11 @@ librarian::shelf(tidyverse, here, janitor, shiny, lubridate, RPostgres, rstudioa
 
 
 
-filenames <- gsub("\\.csv$","", list.files(here("data", "clean_tables")))
-
-for(i in filenames){
-  assign(i, read.csv(here("data", "clean_tables", paste(i, ".csv", sep=""))))
-}
+# filenames <- gsub("\\.csv$","", list.files(here("data", "clean_tables")))
+# 
+# for(i in filenames){
+#   assign(i, read.csv(here("data", "clean_tables", paste(i, ".csv", sep=""))))
+# }
 
 
 #connect to database
@@ -32,7 +32,9 @@ region <- dbGetQuery(connection, "select * from region;")
 
 site <- dbGetQuery(connection, "select * from site")
 
-visit <- dbGetQuery(connection, "select * from visit")
+visit <- dbGetQuery(connection, "select * from visit") %>% 
+  drop_na(date) %>% 
+  mutate(year = year(date))
 
 penn_survey <- dbGetQuery(connection, "select * from penn_survey")
 
@@ -42,11 +44,15 @@ brazil_legacy_survey <- dbGetQuery(connection, "select * from brazil_legacy_surv
 
 panama_survey <- dbGetQuery(connection, "select * from panama_survey")
 
+sierra_nevada_survey <- dbGetQuery(connection, "select * from sierra_nevada_survey")
+
 capture <- dbGetQuery(connection, "select * from capture")
 
 ves <- dbGetQuery(connection, "select * from ves")
 
 aural <- dbGetQuery(connection, "select * from aural")
+
+survey <- plyr::rbind.fill(penn_survey, sierra_nevada_survey, panama_survey, brazil_legacy_survey, serdp_survey)
 
 
 
