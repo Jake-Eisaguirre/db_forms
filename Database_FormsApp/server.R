@@ -2,7 +2,7 @@ source(here("Database_FormsApp", "global.R"))
 
 
 # Define server logic required to draw a histogram
-shinyServer(function(input, output) {
+shinyServer(function(input, output, session) {
   
 
   #table output
@@ -11,21 +11,48 @@ shinyServer(function(input, output) {
   #reactive region table
   cap_data <- reactive({
 
-  location %>%
-      left_join(region, by = c("location_id")) %>%
-      left_join(site, by = c("region_id")) %>%
-      left_join(visit, by = c("site_id")) %>%
-      left_join(survey, by = c("visit_id")) %>% 
-      filter(year <= input$year[2] & year>= input$year[2],
+  capture %>% 
+      filter(year <= input$year[2] & year>= input$year[1],
              location %in% input$location,
              region %in% input$region,
              site %in% input$site) %>% 
-      select(location, region, input$site_cols, input$visit_cols, input$survey_cols)
+      select(location, region, site, input$site_cols, input$visit_cols, input$survey_cols)
 
   })
+  
+  
+  observe(
+    {input$year
+      
+      updatePickerInput(session, inputId = "location",
+                        choices = unique(capture$location[capture$year <= input$year[2] 
+                                                          & capture$year>=input$year[1]]))
+      })
+  
+  
+  observe(
+    {input$location
+      
+      updatePickerInput(session, inputId = "region",
+                        choices = unique(capture$region[capture$year <= input$year[2] 
+                                                        & capture$year>=input$year[1]
+                                                        & capture$location %in% input$location]))
+      })
+  
+  
+  observe(
+    {input$region
+      
+      updatePickerInput(session, inputId = "site",
+                        choices = unique(capture$site[capture$year <= input$year[2] 
+                                                        & capture$year>=input$year[1]
+                                                        & capture$location %in% input$location
+                                                        & capture$region %in% input$region]))
+      
+      })
 
   output$cap <- renderDataTable(cap_data(), options = list(scrollX = TRUE))
-  
+
   
 
 })

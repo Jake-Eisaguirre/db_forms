@@ -36,15 +36,7 @@ visit <- dbGetQuery(connection, "select * from visit") %>%
   drop_na(date) %>% 
   mutate(year = year(date))
 
-penn_survey <- dbGetQuery(connection, "select * from penn_survey")
-
-serdp_survey <- dbGetQuery(connection, "select * from serdp_survey")
-
-brazil_legacy_survey <- dbGetQuery(connection, "select * from brazil_survey")
-
-panama_survey <- dbGetQuery(connection, "select * from panama_survey")
-
-sierra_nevada_survey <- dbGetQuery(connection, "select * from sierra_nevada_survey")
+survey <- dbGetQuery(connection, "select * from survey")
 
 capture <- dbGetQuery(connection, "select * from capture")
 
@@ -52,7 +44,11 @@ ves <- dbGetQuery(connection, "select * from ves")
 
 aural <- dbGetQuery(connection, "select * from aural")
 
-survey <- plyr::rbind.fill(penn_survey, sierra_nevada_survey, panama_survey, brazil_legacy_survey, serdp_survey)
+capture <- location %>%
+  left_join(region, by = c("location_id")) %>%
+  left_join(site, by = c("region_id")) %>%
+  left_join(visit, by = c("site_id")) %>%
+  left_join(survey, by = c("visit_id"))
 
 
 
