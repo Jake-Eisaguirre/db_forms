@@ -38,17 +38,25 @@ visit <- dbGetQuery(connection, "select * from visit") %>%
 
 survey <- dbGetQuery(connection, "select * from survey")
 
-capture <- dbGetQuery(connection, "select * from capture")
+capture <- dbGetQuery(connection, "select * from capture") 
 
 ves <- dbGetQuery(connection, "select * from ves")
 
 aural <- dbGetQuery(connection, "select * from aural")
 
-capture <- location %>%
-  left_join(region, by = c("location_id")) %>%
-  left_join(site, by = c("region_id")) %>%
-  left_join(visit, by = c("site_id")) %>%
-  left_join(survey, by = c("visit_id"))
+raw_cap  <- dbGetQuery(connection, "select l.*, r.*, s.*, v.*, su.*, c.*
+                                    from location l
+                                    join region r on l.location_id = r.location_id 
+                                    join site s on r.region_id = s.region_id 
+                                    join visit v on s.site_id = v.site_id 
+                                    join survey su on v.visit_id = su.visit_id 
+                                    join capture c on su.survey_id = c.survey_id;")
+  
+  
+cap <- raw_cap %>%
+  select(!c(location_id, region_id, site_id, visit_id, survey_id)) %>% 
+  drop_na(date) %>% 
+  mutate(year = year(date))
 
 
 

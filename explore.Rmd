@@ -100,3 +100,15 @@ t <- capture %>%
 
 ```
 
+
+```{r}
+
+ t <- location %>%
+      left_join(region, by = c("location_id"))%>%
+      left_join(site, by = c("region_id"))%>%
+      left_join(visit, by = c("site_id")) %>%
+      left_join(survey, by = c("visit_id")) 
+a <- t %>% 
+      left_join(capture, by = c("survey_id"))
+```
+

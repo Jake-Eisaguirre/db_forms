@@ -53,19 +53,35 @@ ui <- fluidPage(
             pickerInput(inputId = "location",
                         label = "Select Locations:",
                         choices = unique(location$location),
-                        multiple = T),
+                        options = list(
+                          `actions-box` = TRUE, 
+                          size = 10,
+                          `selected-text-format` = "count > 3"
+                        ), 
+                        multiple = TRUE),
             pickerInput(inputId = "region",
                         label = "Select Regions:",
                         choices = unique(region$region),
+                        options = list(
+                          `actions-box` = TRUE, 
+                          size = 10,
+                          `selected-text-format` = "count > 3"
+                        ),
                         multiple = T),
             pickerInput(inputId = "site",
                         label = "Select Sites:",
                         choices = unique(site$site),
-                        multiple = T),
+                        options = list(
+                          `actions-box` = TRUE, 
+                          size = 10,
+                          `selected-text-format` = "count > 3"
+                        ), 
+                        multiple = TRUE),
           prettyCheckboxGroup(inputId = "site_cols",
                            label = "Select Site Variables of Interest:",
                            choices = colnames(site),
-                           inline = T),
+                           inline = T,
+                           outline = T),
           prettyCheckboxGroup(inputId = "visit_cols",
                          label = "Select Visit Variables of Interest:",
                          choices = colnames(visit),
@@ -73,50 +89,26 @@ ui <- fluidPage(
           prettyCheckboxGroup(inputId = "survey_cols",
                               label = "Select Survey Variables of Interest:",
                               choices = colnames(survey),
+                              inline = T),
+          prettyCheckboxGroup(inputId = "capture_cols",
+                              label = "Select Capture Variables of Interest:",
+                              choices = colnames(capture),
                               inline = T)
         ),
 
         # Show a plot of the generated distribution
         mainPanel(
-            withSpinner(DT::dataTableOutput("cap"))))),
+            withSpinner(DT::dataTableOutput("cap_table"))))),
     
     tabPanel(title = "VES", icon = icon("eye"),
              
      sidebarLayout(
        
        sidebarPanel(
-         sliderInput(inputId = "year",
-                     label = "Select Annual Range:",
-                     min = min(visit$year), max(visit$year),
-                     sep = "",
-                     value = c(max(visit$year) - 5, max(visit$year))),
-         pickerInput(inputId = "location",
-                     label = "Select Locations:",
-                     choices = unique(location$location),
-                     multiple = T),
-         pickerInput(inputId = "region",
-                     label = "Select Regions:",
-                     choices = unique(region$region),
-                     multiple = T),
-         pickerInput(inputId = "site",
-                     label = "Select Sites:",
-                     choices = unique(site$site),
-                     multiple = T),
-         prettyCheckboxGroup(inputId = "site_cols",
-                             label = "Select Site Variables of Interest:",
-                             choices = colnames(site),
-                             inline = T),
-         prettyCheckboxGroup(inputId = "visit_cols",
-                             label = "Select Visit Variables of Interest:",
-                             choices = colnames(visit),
-                             inline = T),
-         prettyCheckboxGroup(inputId = "survey_cols",
-                             label = "Select Survey Variables of Interest:",
-                             choices = colnames(survey),
-                             inline = T)
+         
          ),
        mainPanel(
-         withSpinner(DT::dataTableOutput("loc")))
+         )
        
      ))
     
