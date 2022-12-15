@@ -9,7 +9,7 @@ shinyServer(function(input, output) {
   #output$loc <- renderDataTable(location_data())
   
   #reactive region table
-  data <- reactive({
+  cap_data <- reactive({
 
   location %>%
       left_join(region, by = c("location_id")) %>%
@@ -24,7 +24,7 @@ shinyServer(function(input, output) {
 
   })
 
-  output$loc <- renderDataTable(data(), options = list(scrollX = TRUE))
+  output$cap <- renderDataTable(cap_data(), options = list(scrollX = TRUE))
   
   
 

@@ -84,3 +84,19 @@ loc_r <- glue::glue_data_sql(
 
 ```
 
+```{r}
+
+
+ t <- location %>%
+      left_join(region, by = c("location_id")) %>%
+      left_join(site, by = c("region_id")) %>%
+      left_join(visit, by = c("site_id")) %>%
+      left_join(survey, by = c("visit_id")) %>% 
+      left_join(capture, by = c("penn_survey_id"))
+
+t <- capture %>% 
+  left_join(penn_survey, by = c("penn_survey_id")) 
+  left_join(brazil_legacy_survey, by = c("brazil_survey_id"))
+
+```
+

@@ -40,7 +40,7 @@ penn_survey <- dbGetQuery(connection, "select * from penn_survey")
 
 serdp_survey <- dbGetQuery(connection, "select * from serdp_survey")
 
-brazil_legacy_survey <- dbGetQuery(connection, "select * from brazil_legacy_survey")
+brazil_legacy_survey <- dbGetQuery(connection, "select * from brazil_survey")
 
 panama_survey <- dbGetQuery(connection, "select * from panama_survey")
 
