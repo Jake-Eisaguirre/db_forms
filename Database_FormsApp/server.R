@@ -1,14 +1,10 @@
 source(here("Database_FormsApp", "global.R"))
 
 
-# Define server logic required to draw a histogram
 shinyServer(function(input, output, session) {
   
-
-  #table output
-  #output$loc <- renderDataTable(location_data())
   
-  #reactive region table
+  #r eactive capture data
   cap_data <- reactive({
 
   cap %>% 
@@ -21,6 +17,7 @@ shinyServer(function(input, output, session) {
   })
   
   
+  # update location options based on year selection
   observe(
     {input$year
       
@@ -29,7 +26,7 @@ shinyServer(function(input, output, session) {
                                                           & cap$year>=input$year[1]]))
       })
   
-  
+  # update region options based on location selection
   observe(
     {input$location
       
@@ -39,7 +36,7 @@ shinyServer(function(input, output, session) {
                                                         & cap$location %in% input$location]))
       })
   
-  
+  # update site options based on region selection
   observe(
     {input$region
       
@@ -52,18 +49,17 @@ shinyServer(function(input, output, session) {
       })
   
   
-  observe(
-    {input$region
-      
-      updatePickerInput(session, inputId = "site_cols",
-                        choices = unique(cap$site[cap$year <= input$year[2] 
-                                                      & cap$year>=input$year[1]
-                                                      & cap$location %in% input$location
-                                                      & cap$region %in% input$region]))
-      
-    })
-
-  output$cap_table <- renderDataTable(cap_data(), options = list(scrollX = TRUE))
+  # render data selection
+  output$cap_table <- renderDataTable(cap_data(), extensions= 'Buttons', options = list(scrollX = T, TRUEom = 'Bfrtip',
+                                                                                        buttons = c('copy', 'csv', 'excel', 
+                                                                                                    'pdf', 'print')))
+  # option for data download
+  output$download <- downloadHandler(
+    filename = function(){"insert_name.csv"}, 
+    content = function(fname){
+      write.csv(cap_data(), fname)
+    
+      })
 
   
 
