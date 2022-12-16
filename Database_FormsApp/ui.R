@@ -308,7 +308,7 @@ ui <- fluidPage(tags$style('body {
                sidebarPanel(
                  
                ),
-               mainPanel(img(src = "homer.jpeg", height = "700", width = "700")
+               mainPanel(img(src = "homer.jpeg", height = "600", width = "700")
                )
                
              )),
@@ -320,7 +320,7 @@ ui <- fluidPage(tags$style('body {
                sidebarPanel(
                  
                ),
-               mainPanel(img(src = "homer.jpeg", height = "700", width = "700")
+               mainPanel(img(src = "homer.jpeg", height = "600", width = "700")
                )
                
              ))
