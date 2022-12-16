@@ -53,13 +53,36 @@ shinyServer(function(input, output, session) {
   output$cap_table <- renderDataTable(cap_data(), extensions= 'Buttons', options = list(scrollX = T, TRUEom = 'Bfrtip',
                                                                                         buttons = c('copy', 'csv', 'excel', 
                                                                                                     'pdf', 'print')))
-  # option for data download
-  output$cap_download <- downloadHandler(
-    filename = function(){"insert_name.csv"}, 
-    content = function(fname){
-      write.csv(cap_data(), fname)
+  
+  
+
+  
+  observeEvent(input$cap_download, {
     
+    shinyalert(title = "Pump the breaks!", text = "Did you get approval for data use from the data owners?",
+               type = "warning", closeOnClickOutside = T, showCancelButton = T, inputId = "cap_dwnld",
+               showConfirmButton = T, confirmButtonText = "Yes", cancelButtonText = "No")
+    
+    output$cap_dwnld <- downloadHandler(
+      filename = function(){"insert_name.csv"},
+      content = function(fname){
+        write.csv(cap_data(), fname)
+        
       })
+     
+    })
+  
+  #option for data download
+
+  
+  # output$dwnld_data <- downloadHandler(
+  #   filename = "data.csv",
+  #   content = function(con){
+  #     on.exit(removeModal())
+  #     data.table::fwrite(cap_data(), con)
+  #   }
+  # )
+
 
 ####### End Capture Data ########
   

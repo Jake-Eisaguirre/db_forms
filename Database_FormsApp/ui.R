@@ -135,7 +135,8 @@ ui <- fluidPage(tags$style('.container-fluid {
             mainPanel(
                 withSpinner(DT::dataTableOutput("cap_table")),
                 headerPanel(""),
-                downloadButton('cap_download',"Download the data"))),
+                useShinyalert(),
+                actionButton('cap_download',"Download the data"))),
          hr(style = "border-top: 1px solid #000000;")),
          
     tabPanel(title = "VES", icon = icon("eye"),
