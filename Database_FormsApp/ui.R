@@ -2,7 +2,10 @@ source(here("Database_FormsApp", "global.R"))
 
 
 
-ui <- fluidPage(
+ui <- fluidPage(tags$style('.container-fluid {
+                             background-color: #c7c7c7;
+              }'
+              ),
 
     # Application title
     titlePanel(""),
@@ -10,8 +13,8 @@ ui <- fluidPage(
       fluidPage(
         
         # title and header image
-        fluidRow(column(8, h1(strong("RIBBiTR Database Forms"), style = "font-size:60px;")),
-                 column(4, img(src = "ribbitr.png", align = "right", height = "120", width = "150")))),
+        fluidRow(column(5, h1(span("RIBBiTR Data Repository"), style = "font-size:50px; color: black")),
+                 column(7, img(src = "ribbitr.png", align = "right", height = "120", width = "150")))),
     
     navbarPage("", inverse = T,
                
@@ -41,7 +44,7 @@ ui <- fluidPage(
       
     )),
     
-    tabPanel(title = "Capture Data", icon = icon("frog"),
+    tabPanel(title = "Capture", icon = icon("frog"),
 
          sidebarLayout(
           
@@ -79,6 +82,7 @@ ui <- fluidPage(
                               `selected-text-format` = "count > 3"
                             ), 
                             multiple = TRUE),
+              hr(style = "border-top: 1px solid #000000;"),
               prettyCheckboxGroup(inputId = "site_cols",
                                label = "Select Site Variables of Interest:",
                                choices = colnames(site),
@@ -113,7 +117,19 @@ ui <- fluidPage(
           mainPanel(
             )
        
-     ))
+     )),
+    
+    tabPanel(title = "Aural", icon = icon("music"),
+             
+             sidebarLayout(
+               
+               sidebarPanel(
+                 
+               ),
+               mainPanel(
+               )
+               
+             ))
     
     
   )
