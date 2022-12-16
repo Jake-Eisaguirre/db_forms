@@ -13,8 +13,9 @@ ui <- fluidPage(tags$style('.container-fluid {
       fluidPage(
         
         # title and header image
-        fluidRow(column(5, h1(span("RIBBiTR Data Repository"), style = "font-size:50px; color: black")),
-                 column(7, img(src = "ribbitr.png", align = "right", height = "120", width = "150")))),
+        fluidRow(column(9, h1(span("RIBBiTR Data Repository"), style = "font-size:50px; color: black")),
+                 column(2, img(src = "ribbitr.png", align = "right", height = "110", width = "150")),
+                 column(1, img(src = "nsf_logo.png", align = "reight", height = "110", width = "120")))),
     
     navbarPage("", inverse = T,
                
@@ -26,23 +27,32 @@ ui <- fluidPage(tags$style('.container-fluid {
                           fluidRow(
                             h1(strong("Intended Use"),style = "font-size:20px;"),
                             
-                            column(12, p("add text", tags$a(href = "https://mountainlakesresearch.com", "Mountain Lakes Research Group")))),
+                            column(12, p("The data found within this repository is intended for internal use within", 
+                                         tags$a(href = "https://ribbitr.com/", "RIBBiTR"), "and under no circumstances shall user login credentials be shared to outside participants. All users must adhear to data acuisition and data sharing protocols as stated in the", 
+                                         tags$a(href = "https://docs.google.com/document/d/1m1EEuUH3ioVVXtFkDaWFHITddPcmputEhZxfW_omtrI
+                                                /edit", "RIBBiTR Pre-collaboration Agreement"), "and", 
+                                         tags$a(href = "https://drive.google.com/drive/folders/1KBkHAjwyaCufJpM1qbcyN6F-pd_uJpxU", 
+                                                "RIBBiTR Schema"), ". As reminder, if you are downloading processed swab data, you must get approval from the data owners that collected the capture level data and the data owners who processed the swab data."))),
                           
                           fluidRow(
                             h1(strong("Acknowledgements"), style = "font-size:20px;"),
                             
-                            column(12, p("add text ",tags$a(href = "https://jake-eisaguirre.github.io/", "Jake Eisaguirre")))),
+                            column(12, p("This web-based application was created by ",tags$a(href = "https://jake-eisaguirre.github.io/", "Jake Eisaguirre"), ", Data Manager for the ",tags$a(href ="https://ribbitr.com/", "Resilience Institue Bridging Biological Training and Research"),"(RIBBiTR). Financial support was provided by the", tags$a(href = "https://www.nsf.gov/", "National Science Foundation.")))),
                           
                           # fluidRow(
                           #   align = "center", div(style = "display: inline", img(src = "ribbitr.png", height = "75", width = "95")),
                           #   img(src = "nsf_logo.png", align = "center", height = "75", width = "75")),
                           
+                          fluidRow(div(style = "height:92.5px")),
+                          
+                          fluidRow(hr(style = "border-top: 1px solid #000000;")),
+                          
                           fluidRow(
-                            h1(strong("Data Collection"),style = "font-size:20px;"),
-                            
-                            column(12, p("add text", tags$a(href ="https://mountainlakesresearch.com/resources/", "HERE.")))),
-      
-    )),
+                           column(12, align = "center",  
+                            div(#style = "display: inline;",
+                                img(src = "foot.png",
+                                    height = 300,
+                                    width = 1000)))))),
     
     tabPanel(title = "Capture", icon = icon("frog"),
 
