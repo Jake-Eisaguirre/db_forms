@@ -83,54 +83,238 @@ ui <- fluidPage(tags$style('.container-fluid {
                             ), 
                             multiple = TRUE),
               hr(style = "border-top: 1px solid #000000;"),
-              prettyCheckboxGroup(inputId = "site_cols",
-                               label = "Select Site Variables of Interest:",
-                               choices = colnames(site),
-                               inline = T,
-                               outline = T),
-              prettyCheckboxGroup(inputId = "visit_cols",
-                             label = "Select Visit Variables of Interest:",
-                             choices = colnames(visit),
-                             inline = T),
-              prettyCheckboxGroup(inputId = "survey_cols",
-                                  label = "Select Survey Variables of Interest:",
-                                  choices = colnames(survey),
-                                  inline = T),
-              prettyCheckboxGroup(inputId = "capture_cols",
-                                  label = "Select Capture Variables of Interest:",
-                                  choices = colnames(capture),
-                                  inline = T)
-            ),
+              pickerInput(inputId = "site_cols",
+                          label = "Select Site Variables of Interest:",
+                          choices = colnames(site),
+                          options = list(
+                            `actions-box` = TRUE, 
+                            size = 10,
+                            `selected-text-format` = "count > 3"
+                          ), 
+                          multiple = TRUE),
+              pickerInput(inputId = "visit_cols",
+                          label = "Select Visit Variables of Interest:",
+                          choices = colnames(visit),
+                          options = list(
+                            `actions-box` = TRUE, 
+                            size = 10,
+                            `selected-text-format` = "count > 3"
+                          ), 
+                          multiple = TRUE),
+              pickerInput(inputId = "survey_cols",
+                          label = "Select Survey Variables of Interest:",
+                          choices = colnames(survey),
+                          options = list(
+                            `actions-box` = TRUE, 
+                            size = 10,
+                            `selected-text-format` = "count > 3"
+                          ), 
+                          multiple = TRUE),
+              pickerInput(inputId = "capture_cols",
+                          label = "Select Capture Variables of Interest:",
+                          choices = colnames(capture),
+                          options = list(
+                            `actions-box` = TRUE, 
+                            size = 10,
+                            `selected-text-format` = "count > 3"
+                          ),
+                          multiple = TRUE)),
+           
 
             # Show a plot of the generated distribution
             mainPanel(
                 withSpinner(DT::dataTableOutput("cap_table")),
-                downloadButton('download',"Download the data")))),
+                headerPanel(""),
+                downloadButton('cap_download',"Download the data"))),
+         hr(style = "border-top: 1px solid #000000;")),
          
     tabPanel(title = "VES", icon = icon("eye"),
              
         sidebarLayout(
           
           sidebarPanel(
-            
-            ),
+            sliderInput(inputId = "year_ves",
+                        label = "Select Annual Range:",
+                        min = min(visit$year), max(visit$year),
+                        sep = "",
+                        value = c(max(visit$year) - 5, max(visit$year))),
+            pickerInput(inputId = "location_ves",
+                        label = "Select Locations:",
+                        choices = unique(location$location),
+                        options = list(
+                          `actions-box` = TRUE, 
+                          size = 10,
+                          `selected-text-format` = "count > 3"
+                        ), 
+                        multiple = TRUE),
+            pickerInput(inputId = "region_ves",
+                        label = "Select Regions:",
+                        choices = unique(region$region),
+                        options = list(
+                          `actions-box` = TRUE, 
+                          size = 10,
+                          `selected-text-format` = "count > 3"
+                        ),
+                        multiple = T),
+            pickerInput(inputId = "site_ves",
+                        label = "Select Sites:",
+                        choices = unique(site$site),
+                        options = list(
+                          `actions-box` = TRUE, 
+                          size = 10,
+                          `selected-text-format` = "count > 3"
+                        ), 
+                        multiple = TRUE),
+            hr(style = "border-top: 1px solid #000000;"),
+            pickerInput(inputId = "site_cols_ves",
+                        label = "Select Site Variables of Interest:",
+                        choices = colnames(site),
+                        options = list(
+                          `actions-box` = TRUE, 
+                          size = 10,
+                          `selected-text-format` = "count > 3"
+                        ), 
+                        multiple = TRUE),
+            pickerInput(inputId = "visit_cols_ves",
+                        label = "Select Visit Variables of Interest:",
+                        choices = colnames(visit),
+                        options = list(
+                          `actions-box` = TRUE, 
+                          size = 10,
+                          `selected-text-format` = "count > 3"
+                        ), 
+                        multiple = TRUE),
+            pickerInput(inputId = "survey_cols_ves",
+                        label = "Select Survey Variables of Interest:",
+                        choices = colnames(survey),
+                        options = list(
+                          `actions-box` = TRUE, 
+                          size = 10,
+                          `selected-text-format` = "count > 3"
+                        ), 
+                        multiple = TRUE),
+            pickerInput(inputId = "ves_cols",
+                        label = "Select VES Variables of Interest:",
+                        choices = colnames(ves_cols),
+                        options = list(
+                          `actions-box` = TRUE, 
+                          size = 10,
+                          `selected-text-format` = "count > 3"
+                        ),
+                        multiple = TRUE)),
+          
           mainPanel(
-            )
-       
-     )),
+            withSpinner(DT::dataTableOutput("ves_table")),
+            headerPanel(""),
+            downloadButton('ves_download',"Download the data"))),
+        hr(style = "border-top: 1px solid #000000;")),
     
     tabPanel(title = "Aural", icon = icon("music"),
              
              sidebarLayout(
                
                sidebarPanel(
+                 sliderInput(inputId = "year_a",
+                             label = "Select Annual Range:",
+                             min = min(visit$year), max(visit$year),
+                             sep = "",
+                             value = c(max(visit$year) - 5, max(visit$year))),
+                 pickerInput(inputId = "location_a",
+                             label = "Select Locations:",
+                             choices = unique(location$location),
+                             options = list(
+                               `actions-box` = TRUE, 
+                               size = 10,
+                               `selected-text-format` = "count > 3"
+                             ), 
+                             multiple = TRUE),
+                 pickerInput(inputId = "region_a",
+                             label = "Select Regions:",
+                             choices = unique(region$region),
+                             options = list(
+                               `actions-box` = TRUE, 
+                               size = 10,
+                               `selected-text-format` = "count > 3"
+                             ),
+                             multiple = T),
+                 pickerInput(inputId = "site_a",
+                             label = "Select Sites:",
+                             choices = unique(site$site),
+                             options = list(
+                               `actions-box` = TRUE, 
+                               size = 10,
+                               `selected-text-format` = "count > 3"
+                             ), 
+                             multiple = TRUE),
+                 hr(style = "border-top: 1px solid #000000;"),
+                 pickerInput(inputId = "site_cols_a",
+                             label = "Select Site Variables of Interest:",
+                             choices = colnames(site),
+                             options = list(
+                               `actions-box` = TRUE, 
+                               size = 10,
+                               `selected-text-format` = "count > 3"
+                             ), 
+                             multiple = TRUE),
+                 pickerInput(inputId = "visit_cols_a",
+                             label = "Select Visit Variables of Interest:",
+                             choices = colnames(visit),
+                             options = list(
+                               `actions-box` = TRUE, 
+                               size = 10,
+                               `selected-text-format` = "count > 3"
+                             ), 
+                             multiple = TRUE),
+                 pickerInput(inputId = "survey_cols_a",
+                             label = "Select Survey Variables of Interest:",
+                             choices = colnames(survey),
+                             options = list(
+                               `actions-box` = TRUE, 
+                               size = 10,
+                               `selected-text-format` = "count > 3"
+                             ), 
+                             multiple = TRUE),
+                 pickerInput(inputId = "aural_cols",
+                             label = "Select Aural Variables of Interest:",
+                             choices = colnames(aural_cols),
+                             options = list(
+                               `actions-box` = TRUE, 
+                               size = 10,
+                               `selected-text-format` = "count > 3"
+                             ),
+                             multiple = TRUE)
                  
                ),
-               mainPanel(
+               mainPanel(withSpinner(DT::dataTableOutput("aural_table")),
+                         headerPanel(""),
+                         downloadButton('aural_download',"Download the data"))),
+             hr(style = "border-top: 1px solid #000000;")),
+    
+    tabPanel(title = "Hobo Sensor", icon = icon("thermometer"),
+             
+             sidebarLayout(
+               
+               sidebarPanel(
+                 
+               ),
+               mainPanel(img(src = "homer.jpeg", height = "700", width = "700")
+               )
+               
+             )),
+    
+    tabPanel(title = "eDNA", icon = icon("dna"),
+             
+             sidebarLayout(
+               
+               sidebarPanel(
+                 
+               ),
+               mainPanel(img(src = "homer.jpeg", height = "700", width = "700")
                )
                
              ))
     
     
   )
-)
+ )
+

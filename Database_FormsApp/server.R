@@ -3,7 +3,7 @@ source(here("Database_FormsApp", "global.R"))
 
 shinyServer(function(input, output, session) {
   
-  
+###### Capture Data #########
   #r eactive capture data
   cap_data <- reactive({
 
@@ -54,13 +54,131 @@ shinyServer(function(input, output, session) {
                                                                                         buttons = c('copy', 'csv', 'excel', 
                                                                                                     'pdf', 'print')))
   # option for data download
-  output$download <- downloadHandler(
+  output$cap_download <- downloadHandler(
     filename = function(){"insert_name.csv"}, 
     content = function(fname){
       write.csv(cap_data(), fname)
     
       })
 
+####### End Capture Data ########
+  
+###### VES DATA ########
+  
+  ves_data <- reactive({
+    
+    ves %>% 
+      filter(year <= input$year_ves[2] & year>= input$year_ves[1],
+             location %in% input$location_ves,
+             region %in% input$region_ves,
+             site %in% input$site_ves) %>% 
+      select(location, region, site, input$site_cols_ves, input$visit_cols_ves, input$survey_cols_ves, input$ves_cols)
+    
+  })
+  
+  
+  # update location options based on year selection
+  observe(
+    {input$year_ves
+      
+      updatePickerInput(session, inputId = "location_ves",
+                        choices = unique(ves$location[ves$year <= input$year_ves[2] 
+                                                      & ves$year>=input$year_ves[1]]))
+    })
+  
+  # update region options based on location selection
+  observe(
+    {input$location_ves
+      
+      updatePickerInput(session, inputId = "region_ves",
+                        choices = unique(ves$region[ves$year <= input$year_ves[2] 
+                                                    & ves$year>=input$year_ves[1]
+                                                    & ves$location %in% input$location_ves]))
+    })
+  
+  # update site options based on region selection
+  observe(
+    {input$region_ves
+      
+      updatePickerInput(session, inputId = "site_ves",
+                        choices = unique(ves$site[ves$year <= input$year_ves[2] 
+                                                  & ves$year >= input$year_ves[1]
+                                                  & ves$location %in% input$location_ves
+                                                  & ves$region %in% input$region_ves]))
+      
+    })
+  
+  
+  # render data selection
+  output$ves_table <- renderDataTable(ves_data(), extensions= 'Buttons', options = list(scrollX = T, TRUEom = 'Bfrtip',
+                                                                                        buttons = c('copy', 'csv', 'excel', 
+                                                                                                    'pdf', 'print')))
+  # option for data download
+  output$ves_download <- downloadHandler(
+    filename = function(){"insert_name.csv"}, 
+    content = function(fname){
+      write.csv(ves_data(), fname)
+      
+    })
+  
+######## END VES Data ##########
+  
+######## Aural ################
+  
+  aural_data <- reactive({
+    
+    aural %>% 
+      filter(year <= input$year_a[2] & year>= input$year_a[1],
+             location %in% input$location_a,
+             region %in% input$region_a,
+             site %in% input$site_a) %>% 
+      select(location, region, site, input$site_cols_a, input$visit_cols_a, input$survey_cols_a, input$aural_cols)
+    
+  })
+  
+  # update location options based on year selection
+  observe(
+    {input$year_a
+      
+      updatePickerInput(session, inputId = "location_a",
+                        choices = unique(aural$location[aural$year <= input$year_a[2] 
+                                                      & aural$year>=input$year_a[1]]))
+    })
+  
+  # update region options based on location selection
+  observe(
+    {input$location_a
+      
+      updatePickerInput(session, inputId = "region_a",
+                        choices = unique(aural$region[aural$year <= input$year_a[2] 
+                                                    & aural$year>=input$year_a[1]
+                                                    & aural$location %in% input$location_a]))
+    })
+  
+  # update site options based on region selection
+  observe(
+    {input$region_a
+      
+      updatePickerInput(session, inputId = "site_a",
+                        choices = unique(aural$site[aural$year <= input$year_a[2] 
+                                                  & aural$year >= input$year_a[1]
+                                                  & aural$location %in% input$location_a
+                                                  & aural$region %in% input$region_a]))
+      
+    })
+  
+  
+  # render data selection
+  output$aural_table <- renderDataTable(aural_data(), extensions= 'Buttons', options = list(scrollX = T, TRUEom = 'Bfrtip',
+                                                                                        buttons = c('copy', 'csv', 'excel', 
+                                                                                                    'pdf', 'print')))
+  # option for data download
+  output$aural_download <- downloadHandler(
+    filename = function(){"insert_name.csv"}, 
+    content = function(fname){
+      write.csv(aural_data(), fname)
+      
+    })
   
 
 })
