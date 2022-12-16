@@ -59,6 +59,8 @@ cap <- raw_cap %>%
   mutate(year = year(date))
 ################
 
+
+
 ##### VES #######
 raw_ves <- dbGetQuery(connection, "select l.*, r.*, s.*, v.*, su.*, c.*
                                     from location l

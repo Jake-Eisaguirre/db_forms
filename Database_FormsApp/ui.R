@@ -2,7 +2,7 @@ source(here("Database_FormsApp", "global.R"))
 
 
 
-ui <- fluidPage(tags$style('.container-fluid {
+ui <- fluidPage(tags$style('body {
                              background-color: #c7c7c7;
               }'
               ),
