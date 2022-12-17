@@ -56,32 +56,26 @@ shinyServer(function(input, output, session) {
   
   
 
-  
+  # Data download
   observeEvent(input$cap_download, {
     
     shinyalert(title = "Pump the breaks!", text = "Did you get approval for data use from the data owners?",
-               type = "warning", closeOnClickOutside = T, showCancelButton = T, inputId = "cap_dwnld",
+               type = "warning", closeOnClickOutside = T, showCancelButton = T, inputId = "cap_download_btn",
                showConfirmButton = T, confirmButtonText = "Yes", cancelButtonText = "No")
-    
-    output$cap_dwnld <- downloadHandler(
-      filename = function(){"insert_name.csv"},
-      content = function(fname){
-        write.csv(cap_data(), fname)
-        
-      })
-     
+  })
+  
+  observeEvent(input$cap_download_btn,{
+    if(input$cap_download_btn == T)
+      showModal(modalDialog(downloadButton("cap_dwnld", "download"), footer = NULL, easyClose = T, size = "s"))
+  })
+  
+  output$cap_dwnld <- downloadHandler(
+    filename = function(){"insert_name.csv"},
+    content = function(fname){
+      removeModal()
+      write.csv(cap_data(), fname)
     })
   
-  #option for data download
-
-  
-  # output$dwnld_data <- downloadHandler(
-  #   filename = "data.csv",
-  #   content = function(con){
-  #     on.exit(removeModal())
-  #     data.table::fwrite(cap_data(), con)
-  #   }
-  # )
 
 
 ####### End Capture Data ########
