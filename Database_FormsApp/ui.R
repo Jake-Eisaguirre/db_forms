@@ -147,8 +147,9 @@ ui <- fluidPage(tags$style('body {
             mainPanel(
                 withSpinner(DT::dataTableOutput("cap_table")),
                 headerPanel(""),
-                useShinyalert(),
-                actionButton('cap_download',"Download the data"))),
+                actionButton('cap_download',"Download the data",
+                             icon("download"), 
+                             style="color: #fff; background-color: #337ab7; border-color: #2e6da4"))),
          hr(style = "border-top: 1px solid #000000;")),
 
 ######## END CAPTURE ##############
@@ -159,12 +160,13 @@ ui <- fluidPage(tags$style('body {
         sidebarLayout(
           
           sidebarPanel(
-            sliderInput(inputId = "year_ves",
+           fluidRow(
+            column(12, sliderInput(inputId = "year_ves",
                         label = "Select Annual Range:",
                         min = min(visit$year), max(visit$year),
                         sep = "",
-                        value = c(max(visit$year) - 5, max(visit$year))),
-            pickerInput(inputId = "location_ves",
+                        value = c(max(visit$year) - 5, max(visit$year)))),
+            column(5, pickerInput(inputId = "location_ves",
                         label = "Select Locations:",
                         choices = unique(location$location),
                         options = list(
@@ -172,8 +174,9 @@ ui <- fluidPage(tags$style('body {
                           size = 10,
                           `selected-text-format` = "count > 3"
                         ), 
-                        multiple = TRUE),
-            pickerInput(inputId = "region_ves",
+                        multiple = TRUE,
+                        width = "180px")),
+            column(5, pickerInput(inputId = "region_ves",
                         label = "Select Regions:",
                         choices = unique(region$region),
                         options = list(
@@ -181,8 +184,9 @@ ui <- fluidPage(tags$style('body {
                           size = 10,
                           `selected-text-format` = "count > 3"
                         ),
-                        multiple = T),
-            pickerInput(inputId = "site_ves",
+                        multiple = T,
+                        width = "180px"), offset = 1),
+            column(12, pickerInput(inputId = "site_ves",
                         label = "Select Sites:",
                         choices = unique(site$site),
                         options = list(
@@ -190,9 +194,9 @@ ui <- fluidPage(tags$style('body {
                           size = 10,
                           `selected-text-format` = "count > 3"
                         ), 
-                        multiple = TRUE),
-            hr(style = "border-top: 1px solid #000000;"),
-            pickerInput(inputId = "site_cols_ves",
+                        multiple = TRUE)),
+            column(12, hr(style = "border-top: 1px solid #000000;")),
+            column(12, pickerInput(inputId = "site_cols_ves",
                         label = "Select Site Variables of Interest:",
                         choices = colnames(site),
                         options = list(
@@ -200,8 +204,8 @@ ui <- fluidPage(tags$style('body {
                           size = 10,
                           `selected-text-format` = "count > 3"
                         ), 
-                        multiple = TRUE),
-            pickerInput(inputId = "visit_cols_ves",
+                        multiple = TRUE)),
+            column(12, pickerInput(inputId = "visit_cols_ves",
                         label = "Select Visit Variables of Interest:",
                         choices = colnames(visit),
                         options = list(
@@ -209,8 +213,8 @@ ui <- fluidPage(tags$style('body {
                           size = 10,
                           `selected-text-format` = "count > 3"
                         ), 
-                        multiple = TRUE),
-            pickerInput(inputId = "survey_cols_ves",
+                        multiple = TRUE)),
+            column(12, pickerInput(inputId = "survey_cols_ves",
                         label = "Select Survey Variables of Interest:",
                         choices = colnames(survey),
                         options = list(
@@ -218,8 +222,8 @@ ui <- fluidPage(tags$style('body {
                           size = 10,
                           `selected-text-format` = "count > 3"
                         ), 
-                        multiple = TRUE),
-            pickerInput(inputId = "ves_cols",
+                        multiple = TRUE)),
+            column(12, pickerInput(inputId = "ves_cols",
                         label = "Select VES Variables of Interest:",
                         choices = colnames(ves_cols),
                         options = list(
@@ -227,12 +231,14 @@ ui <- fluidPage(tags$style('body {
                           size = 10,
                           `selected-text-format` = "count > 3"
                         ),
-                        multiple = TRUE)),
+                        multiple = TRUE)))),
           
           mainPanel(
             withSpinner(DT::dataTableOutput("ves_table")),
             headerPanel(""),
-            downloadButton('ves_download',"Download the data"))),
+            actionButton('ves_download',"Download the data",
+                         icon("download"), 
+                         style="color: #fff; background-color: #337ab7; border-color: #2e6da4"))),
         hr(style = "border-top: 1px solid #000000;")),
 
 ####### END VES ##########
@@ -244,12 +250,13 @@ ui <- fluidPage(tags$style('body {
              sidebarLayout(
                
                sidebarPanel(
-                 sliderInput(inputId = "year_a",
+                fluidRow(    
+                 column(12, sliderInput(inputId = "year_a",
                              label = "Select Annual Range:",
                              min = min(visit$year), max(visit$year),
                              sep = "",
-                             value = c(max(visit$year) - 5, max(visit$year))),
-                 pickerInput(inputId = "location_a",
+                             value = c(max(visit$year) - 5, max(visit$year)))),
+                 column(5, pickerInput(inputId = "location_a",
                              label = "Select Locations:",
                              choices = unique(location$location),
                              options = list(
@@ -257,8 +264,9 @@ ui <- fluidPage(tags$style('body {
                                size = 10,
                                `selected-text-format` = "count > 3"
                              ), 
-                             multiple = TRUE),
-                 pickerInput(inputId = "region_a",
+                             multiple = TRUE,
+                             width = "180px")),
+                 column(5, pickerInput(inputId = "region_a",
                              label = "Select Regions:",
                              choices = unique(region$region),
                              options = list(
@@ -266,8 +274,9 @@ ui <- fluidPage(tags$style('body {
                                size = 10,
                                `selected-text-format` = "count > 3"
                              ),
-                             multiple = T),
-                 pickerInput(inputId = "site_a",
+                             multiple = T,
+                             width = "180px"), offset = 1),
+                 column(12, pickerInput(inputId = "site_a",
                              label = "Select Sites:",
                              choices = unique(site$site),
                              options = list(
@@ -275,9 +284,9 @@ ui <- fluidPage(tags$style('body {
                                size = 10,
                                `selected-text-format` = "count > 3"
                              ), 
-                             multiple = TRUE),
-                 hr(style = "border-top: 1px solid #000000;"),
-                 pickerInput(inputId = "site_cols_a",
+                             multiple = TRUE)),
+                 column(12, hr(style = "border-top: 1px solid #000000;")),
+                 column(12, pickerInput(inputId = "site_cols_a",
                              label = "Select Site Variables of Interest:",
                              choices = colnames(site),
                              options = list(
@@ -285,8 +294,8 @@ ui <- fluidPage(tags$style('body {
                                size = 10,
                                `selected-text-format` = "count > 3"
                              ), 
-                             multiple = TRUE),
-                 pickerInput(inputId = "visit_cols_a",
+                             multiple = TRUE)),
+                 column(12, pickerInput(inputId = "visit_cols_a",
                              label = "Select Visit Variables of Interest:",
                              choices = colnames(visit),
                              options = list(
@@ -294,8 +303,8 @@ ui <- fluidPage(tags$style('body {
                                size = 10,
                                `selected-text-format` = "count > 3"
                              ), 
-                             multiple = TRUE),
-                 pickerInput(inputId = "survey_cols_a",
+                             multiple = TRUE)),
+                 column(12, pickerInput(inputId = "survey_cols_a",
                              label = "Select Survey Variables of Interest:",
                              choices = colnames(survey),
                              options = list(
@@ -303,8 +312,8 @@ ui <- fluidPage(tags$style('body {
                                size = 10,
                                `selected-text-format` = "count > 3"
                              ), 
-                             multiple = TRUE),
-                 pickerInput(inputId = "aural_cols",
+                             multiple = TRUE)),
+                 column(12, pickerInput(inputId = "aural_cols",
                              label = "Select Aural Variables of Interest:",
                              choices = colnames(aural_cols),
                              options = list(
@@ -312,12 +321,13 @@ ui <- fluidPage(tags$style('body {
                                size = 10,
                                `selected-text-format` = "count > 3"
                              ),
-                             multiple = TRUE)
-                 
-               ),
+                             multiple = TRUE)))),
+               
                mainPanel(withSpinner(DT::dataTableOutput("aural_table")),
                          headerPanel(""),
-                         downloadButton('aural_download',"Download the data"))),
+                         actionButton('aural_download',"Download the data",
+                                      icon("download"), 
+                                      style="color: #fff; background-color: #337ab7; border-color: #2e6da4"))),
              hr(style = "border-top: 1px solid #000000;")),
 
 ########## END Aural Tab ##########
@@ -329,12 +339,13 @@ ui <- fluidPage(tags$style('body {
              sidebarLayout(
                
                sidebarPanel(
-                 sliderInput(inputId = "date_hobo",
+                fluidRow(   
+                 column(12, sliderInput(inputId = "date_hobo",
                              label = "Select Annual Range:",
                              min = min(hobo_cols$year), max(hobo_cols$year),
                              sep = "",
-                             value = c(max(hobo_cols$year) - 3, max(hobo_cols$year))),
-                 pickerInput(inputId = "location_hobo",
+                             value = c(max(hobo_cols$year) - 3, max(hobo_cols$year)))),
+                 column(5, pickerInput(inputId = "location_hobo",
                              label = "Select Locations:",
                              choices = unique(hobo_location$location),
                              options = list(
@@ -342,8 +353,9 @@ ui <- fluidPage(tags$style('body {
                                size = 10,
                                `selected-text-format` = "count > 3"
                              ), 
-                             multiple = TRUE),
-                 pickerInput(inputId = "region_hobo",
+                             multiple = TRUE,
+                             width = "180px")),
+                 column(5, pickerInput(inputId = "region_hobo",
                              label = "Select Regions:",
                              choices = unique(hobo_region$region),
                              options = list(
@@ -351,8 +363,9 @@ ui <- fluidPage(tags$style('body {
                                size = 10,
                                `selected-text-format` = "count > 3"
                              ),
-                             multiple = T),
-                 pickerInput(inputId = "site_hobo",
+                             multiple = T,
+                             width = "180px"), offset = 1),
+                 column(12, pickerInput(inputId = "site_hobo",
                              label = "Select Sites:",
                              choices = unique(hobo_site$site),
                              options = list(
@@ -360,9 +373,9 @@ ui <- fluidPage(tags$style('body {
                                size = 10,
                                `selected-text-format` = "count > 3"
                              ), 
-                             multiple = TRUE),
-                 hr(style = "border-top: 1px solid #000000;"),
-                 pickerInput(inputId = "hobo_cols",
+                             multiple = TRUE)),
+                 column(12, hr(style = "border-top: 1px solid #000000;")),
+                 column(12, pickerInput(inputId = "hobo_cols",
                              label = "Select Hobo Sensors Variables of Interest:",
                              choices = colnames(hobo_cols),
                              options = list(
@@ -370,12 +383,13 @@ ui <- fluidPage(tags$style('body {
                                size = 10,
                                `selected-text-format` = "count > 3"
                              ), 
-                             multiple = TRUE)
-                 
-               ),
+                             multiple = TRUE)))),
+               
                mainPanel(withSpinner(DT::dataTableOutput("hobo_t")),
                          headerPanel(""),
-                         downloadButton('hobo_download',"Download the data"))),
+                         actionButton('hobo_download',"Download the data",
+                                      icon("download"), 
+                                      style="color: #fff; background-color: #337ab7; border-color: #2e6da4"))),
              hr(style = "border-top: 1px solid #000000;")),
 
 ######## END HOBO Tab ##########

@@ -130,12 +130,24 @@ shinyServer(function(input, output, session) {
   output$ves_table <- renderDataTable(ves_data(), extensions= 'Buttons', options = list(scrollX = T, TRUEom = 'Bfrtip',
                                                                                         buttons = c('copy', 'csv', 'excel', 
                                                                                                     'pdf', 'print')))
-  # option for data download
-  output$ves_download <- downloadHandler(
-    filename = function(){"insert_name.csv"}, 
+  # Data download
+  observeEvent(input$ves_download, {
+    
+    shinyalert(title = "Pump the breaks!", text = "Did you get approval for data use from the data owners?",
+               type = "warning", closeOnClickOutside = T, showCancelButton = T, inputId = "ves_download_btn",
+               showConfirmButton = T, confirmButtonText = "Yes", cancelButtonText = "No")
+  })
+  
+  observeEvent(input$ves_download_btn,{
+    if(input$ves_download_btn == T)
+      showModal(modalDialog(downloadButton("ves_dwnld", "download"), footer = NULL, easyClose = T, size = "s"))
+  })
+  
+  output$ves_dwnld <- downloadHandler(
+    filename = function(){"insert_name.csv"},
     content = function(fname){
+      removeModal()
       write.csv(ves_data(), fname)
-      
     })
   
 ######## END VES Data ##########
@@ -189,15 +201,25 @@ shinyServer(function(input, output, session) {
   output$aural_table <- renderDataTable(aural_data(), extensions= 'Buttons', options = list(scrollX = T, TRUEom = 'Bfrtip',
                                                                                         buttons = c('copy', 'csv', 'excel', 
                                                                                                     'pdf', 'print')))
-  # option for data download
-  output$aural_download <- downloadHandler(
-    filename = function(){"insert_name.csv"}, 
-    content = function(fname){
-      write.csv(aural_data(), fname)
-      
-    })
+  # Data download
+  observeEvent(input$aural_download, {
+    
+    shinyalert(title = "Pump the breaks!", text = "Did you get approval for data use from the data owners?",
+               type = "warning", closeOnClickOutside = T, showCancelButton = T, inputId = "aural_download_btn",
+               showConfirmButton = T, confirmButtonText = "Yes", cancelButtonText = "No")
+  })
   
-
+  observeEvent(input$aural_download_btn,{
+    if(input$aural_download_btn == T)
+      showModal(modalDialog(downloadButton("aural_dwnld", "download"), footer = NULL, easyClose = T, size = "s"))
+  })
+  
+  output$aural_dwnld <- downloadHandler(
+    filename = function(){"insert_name.csv"},
+    content = function(fname){
+      removeModal()
+      write.csv(aural_data(), fname)
+    })
 
 
 ######## END AURAL##########
@@ -253,13 +275,46 @@ hobo_data <- reactive({
   output$hobo_t <- renderDataTable(hobo_data(), extensions= 'Buttons', options = list(scrollX = T, TRUEom = 'Bfrtip',
                                                                                           buttons = c('copy', 'csv', 'excel',
                                                                                                       'pdf', 'print')))
-# option for data download
-  output$hobo_download <- downloadHandler(
-    filename = function(){"insert_name.csv"},
-    content = function(fname){
-    write.csv(hobo_data(), fname)
 
+    # Data download
+  observeEvent(input$hobo_download, {
+    
+    shinyalert(title = "Pump the breaks!", text = "Did you get approval for data use from the data owners?",
+               type = "warning", closeOnClickOutside = T, showCancelButton = T, inputId = "hobo_download_btn",
+               showConfirmButton = T, confirmButtonText = "Yes", cancelButtonText = "No")
   })
+  
+  observeEvent(input$hobo_download_btn,{
+    if(input$hobo_download_btn == T)
+      showModal(modalDialog(downloadButton("hobo_dwnld", "download"), footer = NULL, easyClose = T, size = "s"))
+  })
+  
+  output$hobo_dwnld <- downloadHandler(
+    filename = function(){"insert_name.csv"},
+    
+    content = function(file) {
+      shiny::withProgress(
+        message = paste0("Downloading", input$dataset, " Data"),
+        value = 0,
+        {
+          shiny::incProgress(1/10)
+          Sys.sleep(1)
+          shiny::incProgress(5/10)
+          Sys.sleep(1)
+          shiny::incProgress(10/10)
+          write.csv(hobo_data(), file, row.names = FALSE)
+        }
+      )
+    }
+  )
+  
+  
+  # content = function(fname){
+  #   removeModal()
+  #   write.csv(hobo_data(), fname)
+  # }
+  
+
 ######## END HOBO ##########
     
 })
