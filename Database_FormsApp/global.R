@@ -59,6 +59,10 @@ cap <- raw_cap %>%
   mutate(year = year(date))
 ################
 
+##### Proccesed swabs ########
+
+serdp_bd <- dbGetQuery(connection, "select * from serdp_bd")
+
 
 
 ##### VES #######
