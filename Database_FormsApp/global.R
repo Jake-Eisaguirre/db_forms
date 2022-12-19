@@ -89,13 +89,26 @@ aural <- raw_aural %>%
   mutate(year = year(date))
 #################
 
-######### eDNA ########
-# dbExecute(connection, "set search_path = hobo")
-# 
-# raw_dna <- dbGetQuery(connection, "select hobo_site.*, shade_hobo.*, soil_hobo.*, sun_hobo.*, water_hobo.*
-#                                    from hobo_site
-#                                    join shade_hobo on hobo_site.hobo_site_id = shade_hobo.hobo_site_id
-#                                    join soil_hobo on  hobo_site.hobo_site_id = soil_hobo.hobo_site_id
-#                                    join sun_hobo on  hobo_site.hobo_site_id = sun_hobo.hobo_site_id
-#                                    join water_hobo on  hobo_site.hobo_site_id = water_hobo.hobo_site_id")
+######### hobo ########
+dbExecute(connection, "set search_path = hobo")
 
+raw_hobo <- dbGetQuery(connection, "select hl.*, hr.*, hs.*, h.*
+                                   from hobo_location hl 
+                                   join hobo_region hr on hl.hobo_location_id = hr.hobo_location_id 
+                                   join hobo_site hs on hr.hobo_region_id = hs.hobo_region_id 
+                                   join hobo h on hs.hobo_site_id = h.hobo_site_id;")
+
+hobo <- raw_hobo %>% 
+  select(!c(hobo_location_id, hobo_region_id, hobo_location_id..5, hobo_site_id, hobo_region_id..13, hobo_id, hobo_site_id..25)) %>% 
+  mutate(year = year(date_time))
+
+hobo_location <- dbGetQuery(connection, "select location from hobo_location")
+
+hobo_region <- dbGetQuery(connection, "select region from hobo_region")
+
+hobo_site <- dbGetQuery(connection, "select * from hobo_site")  
+hobo_site <- select(hobo_site, !c(hobo_site_id, hobo_region_id))
+
+hobo_cols <- dbGetQuery(connection, "select * from hobo")
+hobo_cols <- select(hobo_cols, !c(hobo_id, hobo_site_id)) %>% 
+  mutate(year = year(date_time))

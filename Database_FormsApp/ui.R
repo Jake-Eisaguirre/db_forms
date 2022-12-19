@@ -306,12 +306,54 @@ ui <- fluidPage(tags$style('body {
              sidebarLayout(
                
                sidebarPanel(
+                 sliderInput(inputId = "date_hobo",
+                             label = "Select Annual Range:",
+                             min = min(hobo_cols$year), max(hobo_cols$year),
+                             sep = "",
+                             value = c(max(hobo_cols$year) - 3, max(hobo_cols$year))),
+                 pickerInput(inputId = "location_hobo",
+                             label = "Select Locations:",
+                             choices = unique(hobo_location$location),
+                             options = list(
+                               `actions-box` = TRUE, 
+                               size = 10,
+                               `selected-text-format` = "count > 3"
+                             ), 
+                             multiple = TRUE),
+                 pickerInput(inputId = "region_hobo",
+                             label = "Select Regions:",
+                             choices = unique(hobo_region$region),
+                             options = list(
+                               `actions-box` = TRUE, 
+                               size = 10,
+                               `selected-text-format` = "count > 3"
+                             ),
+                             multiple = T),
+                 pickerInput(inputId = "site_hobo",
+                             label = "Select Sites:",
+                             choices = unique(hobo_site$site),
+                             options = list(
+                               `actions-box` = TRUE, 
+                               size = 10,
+                               `selected-text-format` = "count > 3"
+                             ), 
+                             multiple = TRUE),
+                 hr(style = "border-top: 1px solid #000000;"),
+                 pickerInput(inputId = "hobo_cols",
+                             label = "Select Hobo Sensors Variables of Interest:",
+                             choices = colnames(hobo_cols),
+                             options = list(
+                               `actions-box` = TRUE, 
+                               size = 10,
+                               `selected-text-format` = "count > 3"
+                             ), 
+                             multiple = TRUE),
                  
                ),
-               mainPanel(img(src = "homer.jpeg", height = "600", width = "700")
-               )
-               
-             )),
+               mainPanel(withSpinner(DT::dataTableOutput("hobo_t")),
+                         headerPanel(""),
+                         downloadButton('hobo_download',"Download the data"))),
+             hr(style = "border-top: 1px solid #000000;")),
     
     tabPanel(title = "eDNA", icon = icon("dna"),
              

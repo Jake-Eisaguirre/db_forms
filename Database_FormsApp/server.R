@@ -198,4 +198,69 @@ shinyServer(function(input, output, session) {
     })
   
 
+
+
+######## END AURAL##########
+
+######## HOBO ##########
+
+hobo_data <- reactive({
+  
+  hobo %>% 
+    filter(year <= input$date_hobo[2] & year>= input$date_hobo[1],
+           location %in% input$location_hobo,
+           region %in% input$region_hobo,
+           site %in% input$site_hobo) %>% 
+    select(location, region, site, input$hobo_cols)
+  
 })
+  
+  
+  # update location options based on year selection
+  observe(
+    {input$date_hobo
+      
+      updatePickerInput(session, inputId = "location_hobo",
+                        choices = unique(hobo$location[hobo$year <= input$date_hobo[2] 
+                                                        & hobo$year>=input$date_hobo[1]]))
+    })
+  
+  # update region options based on location selection
+  observe(
+    {input$location_hobo
+      
+      updatePickerInput(session, inputId = "region_hobo",
+                        choices = unique(hobo$region[hobo$year <= input$date_hobo[2] 
+                                                      & hobo$year>=input$date_hobo[1]
+                                                      & hobo$location %in% input$location_hobo]))
+    })
+  
+  # update site options based on region selection
+  observe(
+    {input$region_hobo
+      
+      updatePickerInput(session, inputId = "site_hobo",
+                        choices = unique(hobo$site[hobo$year <= input$date_hobo[2] 
+                                                    & hobo$year >= input$date_hobo[1]
+                                                    & hobo$location %in% input$location_hobo
+                                                    & hobo$region %in% input$region_hobo]))
+      
+    })
+  
+
+
+# render data selection
+  output$hobo_t <- renderDataTable(hobo_data(), extensions= 'Buttons', options = list(scrollX = T, TRUEom = 'Bfrtip',
+                                                                                          buttons = c('copy', 'csv', 'excel',
+                                                                                                      'pdf', 'print')))
+# option for data download
+  output$hobo_download <- downloadHandler(
+    filename = function(){"insert_name.csv"},
+    content = function(fname){
+    write.csv(hobo_data(), fname)
+
+  })
+######## END HOBO ##########
+    
+})
+
