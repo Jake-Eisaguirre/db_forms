@@ -12,9 +12,44 @@ shinyServer(function(input, output, session) {
              location %in% input$location,
              region %in% input$region,
              site %in% input$site) %>% 
-      select(location, region, site, input$site_cols, input$visit_cols, input$survey_cols, input$capture_cols)
+      left_join(comb_bd, by = c("bd_swab_id")) %>%
+      left_join(serdp_amp, by = c("amp_id")) %>% 
+      left_join(serdp_muc_mic, by = c("mucosome_id", "microbiome_swab_id")) %>% 
+      left_join(serdp_bd_genom, by = c("genetic_id")) %>% 
+      select(location, region, site, input$site_cols, input$visit_cols, input$survey_cols, 
+             input$capture_cols, input$comb_bd_cols, input$amp_cols, input$muc_mic_cols,
+             input$genom_cols)
 
   })
+  
+  # render data selection
+  output$cap_table <- renderDataTable(cap_data(), extensions= 'Buttons', options = list(scrollX = T, TRUEom = 'Bfrtip',
+                                                                                        buttons = c('copy', 'csv', 'excel', 
+                                                                                                    'pdf', 'print')))
+  
+  
+  
+  # observe({
+  #   
+  #   serd_out <- cap %>% 
+  #     filter(year <= input$year[2] & year>= input$year[1],
+  #            location %in% input$location,
+  #            region %in% input$region,
+  #            site %in% input$site) %>% 
+  #     left_join(serdp_bd, by = c("bd_swab_id")) %>% 
+  #     select(location, region, site, input$site_cols, input$visit_cols, input$survey_cols, 
+  #                                                     input$capture_cols, input$serdp_bd_cols)
+  #   
+  #   
+  #   
+  #   output$cap_table <- renderDataTable(serd_out, extensions= 'Buttons', options = list(scrollX = T, TRUEom = 'Bfrtip',
+  #                                                                                         buttons = c('copy', 'csv', 'excel', 
+  #                                                                                                     'pdf', 'print')))
+  #   
+  # 
+  #  })
+ 
+ 
   
   
   # update location options based on year selection
@@ -49,11 +84,7 @@ shinyServer(function(input, output, session) {
       })
   
   
-  # render data selection
-  output$cap_table <- renderDataTable(cap_data(), extensions= 'Buttons', options = list(scrollX = T, TRUEom = 'Bfrtip',
-                                                                                        buttons = c('copy', 'csv', 'excel', 
-                                                                                                    'pdf', 'print')))
-  
+
   
 
   # Data download

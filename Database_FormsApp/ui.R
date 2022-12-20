@@ -132,15 +132,42 @@ ui <- fluidPage(tags$style('body {
                           ),
                           multiple = TRUE)),
               column(12, hr(style = "border-top: 1px solid #000000;")),
-              column(12, pickerInput(inputId = "serdp_bd_cols",
-                          label = "Select SERDP Bd Variables of Interest",
-                          choices = colnames(serdp_bd),
+              column(12, pickerInput(inputId = "comb_bd_cols",
+                          label = "Select Bd Load Variables of Interest",
+                          choices = colnames(comb_bd),
                           options = list(
                             `actions-box` = TRUE, 
                             size = 10,
                             `selected-text-format` = "count > 3"
                           ), 
-                          multiple = TRUE)))),
+                          multiple = TRUE)),
+              column(12, pickerInput(inputId = 'amp_cols',
+                                     label = "Select AMP Variables of Interest",
+                                     choices = colnames(serdp_amp),
+                                     options = list(
+                                       `actions-box` = TRUE, 
+                                       size = 10,
+                                       `selected-text-format` = "count > 3"
+                                     ), 
+                                     multiple = TRUE)),
+              column(12, pickerInput(inputId = 'muc_mic_cols',
+                                     label = "Select Mucosome/Microbiome Variables of Interest",
+                                     choices = colnames(serdp_muc_mic),
+                                     options = list(
+                                       `actions-box` = TRUE, 
+                                       size = 10,
+                                       `selected-text-format` = "count > 3"
+                                     ), 
+                                     multiple = TRUE)),
+              column(12, pickerInput(inputId = "genom_cols",
+                                     label = "Select Bd Genomic Variables of Interest",
+                                     choices = colnames(serdp_bd_genom),
+                                     options = list(
+                                       `actions-box` = TRUE, 
+                                       size = 10,
+                                       `selected-text-format` = "count > 3"
+                                     ), 
+                                     multiple = TRUE)))),
            
 
             # Show a plot of the generated distribution

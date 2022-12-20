@@ -61,9 +61,23 @@ cap <- raw_cap %>%
 
 ##### Proccesed swabs ########
 
+# BD #
 serdp_bd <- dbGetQuery(connection, "select * from serdp_bd")
 
+sn_bd <- dbGetQuery(connection, "select * from sierra_nevada_bd")
 
+pan_bd <- dbGetQuery(connection, "select * from panama_bd_temp")
+
+comb_bd <- plyr::rbind.fill(serdp_bd, sn_bd, pan_bd) 
+
+# AMP #
+serdp_amp <- dbGetQuery(connection, "select * from serdp_amp")
+
+# Muc/microbiome #
+serdp_muc_mic <- dbGetQuery(connection, "select * from serdp_newt_microbiome_mucosome_antifungal") 
+
+# Bd GENETIC #
+serdp_bd_genom <- dbGetQuery(connection, "select * from serdp_bd_genomic")
 
 ##### VES #######
 raw_ves <- dbGetQuery(connection, "select l.*, r.*, s.*, v.*, su.*, c.*
