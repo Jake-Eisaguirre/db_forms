@@ -26,31 +26,7 @@ shinyServer(function(input, output, session) {
   output$cap_table <- renderDataTable(cap_data(), extensions= 'Buttons', options = list(scrollX = T, TRUEom = 'Bfrtip',
                                                                                         buttons = c('copy', 'csv', 'excel', 
                                                                                                     'pdf', 'print')))
-  
-  
-  
-  # observe({
-  #   
-  #   serd_out <- cap %>% 
-  #     filter(year <= input$year[2] & year>= input$year[1],
-  #            location %in% input$location,
-  #            region %in% input$region,
-  #            site %in% input$site) %>% 
-  #     left_join(serdp_bd, by = c("bd_swab_id")) %>% 
-  #     select(location, region, site, input$site_cols, input$visit_cols, input$survey_cols, 
-  #                                                     input$capture_cols, input$serdp_bd_cols)
-  #   
-  #   
-  #   
-  #   output$cap_table <- renderDataTable(serd_out, extensions= 'Buttons', options = list(scrollX = T, TRUEom = 'Bfrtip',
-  #                                                                                         buttons = c('copy', 'csv', 'excel', 
-  #                                                                                                     'pdf', 'print')))
-  #   
-  # 
-  #  })
- 
- 
-  
+
   
   # update location options based on year selection
   observe(
@@ -84,7 +60,23 @@ shinyServer(function(input, output, session) {
       })
   
   
-
+ # clear button
+  observeEvent(input$cap_clear,
+               {
+                 updatePickerInput(session, inputId = "year", selected = c(max(visit$year) - 5, max(visit$year)))
+                 updatePickerInput(session, inputId = "location", selected = "")
+                 updatePickerInput(session, inputId = "region", selected = "")
+                 updatePickerInput(session, inputId = "site_cols", selected = "")
+                 updatePickerInput(session, inputId = "visit_cols", selected = "")
+                 updatePickerInput(session, inputId = "survey_cols", selected = "")
+                 updatePickerInput(session, inputId = "capture_cols", selected = "")
+                 updatePickerInput(session, inputId = "comb_bd_cols", selected = "")
+                 updatePickerInput(session, inputId = "amp_cols", selected = "")
+                 updatePickerInput(session, inputId = "muc_mic_cols", selected = "")
+                 updatePickerInput(session, inputId = "genom_cols", selected = "")
+                 
+    }
+  )
   
 
   # Data download
@@ -156,6 +148,20 @@ shinyServer(function(input, output, session) {
       
     })
   
+  # clear button
+  observeEvent(input$ves_clear,
+               {
+                 updatePickerInput(session, inputId = "year_ves", selected = c(max(visit$year) - 5, max(visit$year)))
+                 updatePickerInput(session, inputId = "location_ves", selected = "")
+                 updatePickerInput(session, inputId = "region_ves", selected = "")
+                 updatePickerInput(session, inputId = "site_cols_ves", selected = "")
+                 updatePickerInput(session, inputId = "visit_cols_ves", selected = "")
+                 updatePickerInput(session, inputId = "survey_cols_ves", selected = "")
+                 updatePickerInput(session, inputId = "ves_cols", selected = "")
+                 
+               }
+  )
+  
   
   # render data selection
   output$ves_table <- renderDataTable(ves_data(), extensions= 'Buttons', options = list(scrollX = T, TRUEom = 'Bfrtip',
@@ -226,6 +232,20 @@ shinyServer(function(input, output, session) {
                                                   & aural$region %in% input$region_a]))
       
     })
+  
+  # clear button
+  observeEvent(input$aural_clear,
+               {
+                 updatePickerInput(session, inputId = "year_a", selected = c(max(visit$year) - 5, max(visit$year)))
+                 updatePickerInput(session, inputId = "location_a", selected = "")
+                 updatePickerInput(session, inputId = "region_a", selected = "")
+                 updatePickerInput(session, inputId = "site_cols_a", selected = "")
+                 updatePickerInput(session, inputId = "visit_cols_a", selected = "")
+                 updatePickerInput(session, inputId = "survey_cols_a", selected = "")
+                 updatePickerInput(session, inputId = "aural_cols", selected = "")
+                 
+               }
+  )
   
   
   # render data selection
@@ -299,6 +319,18 @@ hobo_data <- reactive({
                                                     & hobo$region %in% input$region_hobo]))
       
     })
+  
+  # clear button
+  observeEvent(input$hobo_clear,
+               {
+                 updatePickerInput(session, inputId = "year_hobo", selected = c(max(visit$year) - 3, max(visit$year)))
+                 updatePickerInput(session, inputId = "location_hobo", selected = "")
+                 updatePickerInput(session, inputId = "region_hobo", selected = "")
+                 updatePickerInput(session, inputId = "site_hobo", selected = "")
+                 updatePickerInput(session, inputId = "hobo_cols", selected = "")
+                 
+               }
+  )
   
 
 

@@ -176,7 +176,10 @@ ui <- fluidPage(tags$style('body {
                 headerPanel(""),
                 actionButton('cap_download',"Download the data",
                              icon("download"), 
-                             style="color: #fff; background-color: #337ab7; border-color: #2e6da4"))),
+                             style="color: #fff; background-color: #337ab7; border-color: #2e6da4"),
+                actionButton('cap_clear', "Clear Selection",
+                             icon("trash"),
+                             style="color: #fff; background-color: red; border-color: black"))),
          hr(style = "border-top: 1px solid #000000;")),
 
 ######## END CAPTURE ##############
@@ -265,7 +268,10 @@ ui <- fluidPage(tags$style('body {
             headerPanel(""),
             actionButton('ves_download',"Download the data",
                          icon("download"), 
-                         style="color: #fff; background-color: #337ab7; border-color: #2e6da4"))),
+                         style="color: #fff; background-color: #337ab7; border-color: #2e6da4"),
+            actionButton('ves_clear', "Clear Selection",
+                         icon("trash"),
+                         style="color: #fff; background-color: red; border-color: black"))),
         hr(style = "border-top: 1px solid #000000;")),
 
 ####### END VES ##########
@@ -354,7 +360,10 @@ ui <- fluidPage(tags$style('body {
                          headerPanel(""),
                          actionButton('aural_download',"Download the data",
                                       icon("download"), 
-                                      style="color: #fff; background-color: #337ab7; border-color: #2e6da4"))),
+                                      style="color: #fff; background-color: #337ab7; border-color: #2e6da4"),
+                         actionButton('aural_clear', "Clear Selection",
+                                      icon("trash"),
+                                      style="color: #fff; background-color: red; border-color: black"))),
              hr(style = "border-top: 1px solid #000000;")),
 
 ########## END Aural Tab ##########
@@ -416,7 +425,10 @@ ui <- fluidPage(tags$style('body {
                          headerPanel(""),
                          actionButton('hobo_download',"Download the data",
                                       icon("download"), 
-                                      style="color: #fff; background-color: #337ab7; border-color: #2e6da4"))),
+                                      style="color: #fff; background-color: #337ab7; border-color: #2e6da4"),
+                         actionButton('hobo_clear', "Clear Selection",
+                                      icon("trash"),
+                                      style="color: #fff; background-color: red; border-color: black"))),
              hr(style = "border-top: 1px solid #000000;")),
 
 ######## END HOBO Tab ##########
