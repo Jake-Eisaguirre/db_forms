@@ -54,7 +54,9 @@ ui <- fluidPage(tags$style('body {
                                     height = 300,
                                     width = 1000)))))),
 ######## CAPTURE TAB ##############
-    tabPanel(title = "Capture", icon = icon("frog"),
+    navbarMenu(title = "Capture", icon = icon("frog"),
+      
+      tabPanel(title = "Data",
 
          sidebarLayout(
           
@@ -181,11 +183,26 @@ ui <- fluidPage(tags$style('body {
                              icon("trash"),
                              style="color: #fff; background-color: red; border-color: black"))),
          hr(style = "border-top: 1px solid #000000;")),
+      
+      tabPanel(title = "Metadata",
+        
+        tabsetPanel(
+          tabPanel(title = "Pennsylvania"),
+          tabPanel(title = "Sierra Nevadas"),
+          tabPanel(title = "Panama"),
+          tabPanel(title = "Brazil"),
+          tabPanel(title = "SERDP")
+        
+        )
+      )),
 
 ######## END CAPTURE ##############
 
 ######## VES TAB ################
-    tabPanel(title = "VES", icon = icon("eye"),
+
+navbarMenu(title = "VES", icon = icon("eye"),
+           
+    tabPanel(title = "Data",
              
         sidebarLayout(
           
@@ -274,11 +291,23 @@ ui <- fluidPage(tags$style('body {
                          style="color: #fff; background-color: red; border-color: black"))),
         hr(style = "border-top: 1px solid #000000;")),
 
+     tabPanel(title = "Metadata",
+              
+              tabsetPanel(
+                tabPanel(title = "Pennsylvania"),
+                tabPanel(title = "Sierra Nevadas"),
+                tabPanel(title = "Panama")
+                
+              )
+     )),
+
 ####### END VES ##########
 
 ####### Aural Tab ##########
-    
-    tabPanel(title = "Aural", icon = icon("music"),
+
+    navbarMenu(title = "Aural", icon = icon("music"),
+           
+          tabPanel(title = "Data",
              
              sidebarLayout(
                
@@ -366,11 +395,22 @@ ui <- fluidPage(tags$style('body {
                                       style="color: #fff; background-color: red; border-color: black"))),
              hr(style = "border-top: 1px solid #000000;")),
 
+       tabPanel(title = "Metadata",
+                
+                tabsetPanel(
+                  tabPanel(title = "Pennsylvania"),
+                  tabPanel(title = "Panama")
+                  
+                )
+       )),
+
 ########## END Aural Tab ##########
 
 ########## HOBO TAB ##########
-    
-    tabPanel(title = "Hobo Sensor", icon = icon("thermometer"),
+
+    navbarMenu(title = "Hobo Sensor", icon = icon("thermometer"),
+           
+           tabPanel(title = "Data",
              
              sidebarLayout(
                
@@ -430,6 +470,19 @@ ui <- fluidPage(tags$style('body {
                                       icon("trash"),
                                       style="color: #fff; background-color: red; border-color: black"))),
              hr(style = "border-top: 1px solid #000000;")),
+
+      tabPanel(title = "Metadata",
+               
+               tabsetPanel(
+                 tabPanel(title = "Pennsylvania"),
+                 tabPanel(title = "Sierra Nevadas"),
+                 tabPanel(title = "Panama"),
+                 tabPanel(title = "Brazil"),
+                 tabPanel(title = "SERDP")
+                 
+               )
+      )),
+
 
 ######## END HOBO Tab ##########
 

@@ -82,14 +82,16 @@ shinyServer(function(input, output, session) {
   # Data download
   observeEvent(input$cap_download, {
     
-    shinyalert(title = "Pump the breaks!", text = "Did you get approval for data use from the data owners?",
+    shinyalert(title = "Pump the breaks!", 
+               text = "Did you get approval for data use from the data owners?",
                type = "warning", closeOnClickOutside = T, showCancelButton = T, inputId = "cap_download_btn",
-               showConfirmButton = T, confirmButtonText = "Yes", cancelButtonText = "No")
+               showConfirmButton = T, confirmButtonText = "Yes", cancelButtonText = "No", 
+               animation = "slide-from-top")
   })
   
   observeEvent(input$cap_download_btn,{
     if(input$cap_download_btn == T)
-      showModal(modalDialog(downloadButton("cap_dwnld", "download"), footer = NULL, easyClose = T, size = "s"))
+      showModal(modalDialog(downloadButton("cap_dwnld", "Download"), footer = NULL, easyClose = T, size = "s"))
   })
   
   output$cap_dwnld <- downloadHandler(
@@ -380,5 +382,8 @@ hobo_data <- reactive({
 
 ######## END HOBO ##########
     
+  
+track_usage(storage_mode = store_googledrive(path = "https://drive.google.com/drive/folders/1UeEAlxbToJCM3bb-6AW8R-L8m66oIz-M"))  
+
 })
 

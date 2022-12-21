@@ -6,7 +6,9 @@ if (!require(librarian)){
 # librarian downloads, if not already downloaded, and reads in needed packages
 
 librarian::shelf(tidyverse, here, janitor, shiny, lubridate, RPostgres, rstudioapi, shinyWidgets, DT, glue, shinycssloaders, DBI,
-                 shinyalert)
+                 shinyalert, googledrive, shinylogs)
+
+drive_auth(email = Sys.getenv("goog_email"))
 
 
 #connect to database
