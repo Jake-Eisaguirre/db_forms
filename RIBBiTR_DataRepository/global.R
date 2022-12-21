@@ -6,7 +6,7 @@ if (!require(librarian)){
 # librarian downloads, if not already downloaded, and reads in needed packages
 
 librarian::shelf(tidyverse, here, janitor, shiny, lubridate, RPostgres, rstudioapi, shinyWidgets, DT, glue, shinycssloaders, DBI,
-                 shinyalert, googledrive, shinylogs)
+                 shinyalert, googledrive, shinylogs, cachem, shinymanager)
 
 drive_auth(email = Sys.getenv("goog_email"))
 
@@ -56,8 +56,8 @@ raw_cap  <- dbGetQuery(connection, "select l.*, r.*, s.*, v.*, su.*, c.*
                                     join visit v on s.site_id = v.site_id 
                                     join survey su on v.visit_id = su.visit_id 
                                     join capture c on su.survey_id = c.survey_id;")
-  
-  
+
+
 cap <- raw_cap %>%
   select(!c(location_id, region_id, site_id, visit_id, survey_id)) %>% 
   drop_na(date) %>% 
@@ -135,3 +135,26 @@ hobo_site <- select(hobo_site, !c(hobo_site_id, hobo_region_id))
 hobo_cols <- dbGetQuery(connection, "select * from hobo")
 hobo_cols <- select(hobo_cols, !c(hobo_id, hobo_site_id)) %>% 
   mutate(year = year(date_time))
+
+#################
+
+
+#### Login ######
+inactivity <- "function idleTimer() {
+var t = setTimeout(logout, 120000);
+window.onmousemove = resetTimer; // catches mouse movements
+window.onmousedown = resetTimer; // catches mouse movements
+window.onclick = resetTimer;     // catches mouse clicks
+window.onscroll = resetTimer;    // catches scrolling
+window.onkeypress = resetTimer;  //catches keyboard actions
+
+function logout() {
+window.close();  //close the window
+}
+
+function resetTimer() {
+clearTimeout(t);
+t = setTimeout(logout, 120000);  // time is in milliseconds (1000 is 1 second)
+}
+}
+idleTimer();"

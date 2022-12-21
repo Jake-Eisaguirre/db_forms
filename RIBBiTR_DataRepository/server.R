@@ -1,13 +1,21 @@
-source(here("Database_FormsApp", "global.R"))
+source(here("RIBBiTR_DataRepository", "global.R"))
+source(here("RIBBiTR_DataRepository", "creds.R"))
 
 
 shinyServer(function(input, output, session) {
   
-###### Capture Data #########
+  result_auth <- secure_server(check_credentials = check_credentials(credentials))
+  
+  output$res_auth <- renderPrint({
+    reactiveValuesToList(result_auth)
+  })
+  
+  
+  ###### Capture Data #########
   #r eactive capture data
   cap_data <- reactive({
-
-  cap %>% 
+    
+    cap %>% 
       filter(year <= input$year[2] & year>= input$year[1],
              location %in% input$location,
              region %in% input$region,
@@ -19,7 +27,7 @@ shinyServer(function(input, output, session) {
       select(location, region, site, input$site_cols, input$visit_cols, input$survey_cols, 
              input$capture_cols, input$comb_bd_cols, input$amp_cols, input$muc_mic_cols,
              input$genom_cols)
-
+    
   }) %>% 
     bindCache(input$year, input$location, input$region, input$site, input$site_cols, input$visit_cols,
               input$survey_cols, input$capture_cols, input$comb_bd_cols, input$amp_cols, input$muc_mic_cols,
@@ -29,7 +37,7 @@ shinyServer(function(input, output, session) {
   output$cap_table <- renderDataTable(cap_data(), extensions= 'Buttons', options = list(scrollX = T, TRUEom = 'Bfrtip',
                                                                                         buttons = c('copy', 'csv', 'excel', 
                                                                                                     'pdf', 'print')))
-
+  
   
   # update location options based on year selection
   observe(
@@ -37,8 +45,8 @@ shinyServer(function(input, output, session) {
       
       updatePickerInput(session, inputId = "location",
                         choices = unique(cap$location[cap$year <= input$year[2] 
-                                                          & cap$year>=input$year[1]]))
-      })
+                                                      & cap$year>=input$year[1]]))
+    })
   
   # update region options based on location selection
   observe(
@@ -46,9 +54,9 @@ shinyServer(function(input, output, session) {
       
       updatePickerInput(session, inputId = "region",
                         choices = unique(cap$region[cap$year <= input$year[2] 
-                                                        & cap$year>=input$year[1]
-                                                        & cap$location %in% input$location]))
-      })
+                                                    & cap$year>=input$year[1]
+                                                    & cap$location %in% input$location]))
+    })
   
   # update site options based on region selection
   observe(
@@ -56,14 +64,14 @@ shinyServer(function(input, output, session) {
       
       updatePickerInput(session, inputId = "site",
                         choices = unique(cap$site[cap$year <= input$year[2] 
-                                                        & cap$year>=input$year[1]
-                                                        & cap$location %in% input$location
-                                                        & cap$region %in% input$region]))
+                                                  & cap$year>=input$year[1]
+                                                  & cap$location %in% input$location
+                                                  & cap$region %in% input$region]))
       
-      })
+    })
   
   
- # clear button
+  # clear button
   observeEvent(input$cap_clear,
                {
                  updatePickerInput(session, inputId = "year", selected = c(max(visit$year) - 5, max(visit$year)))
@@ -78,10 +86,10 @@ shinyServer(function(input, output, session) {
                  updatePickerInput(session, inputId = "muc_mic_cols", selected = "")
                  updatePickerInput(session, inputId = "genom_cols", selected = "")
                  
-    }
+               }
   )
   
-
+  
   # Data download
   observeEvent(input$cap_download, {
     
@@ -104,11 +112,11 @@ shinyServer(function(input, output, session) {
       write.csv(cap_data(), fname)
     })
   
-
-
-####### End Capture Data ########
   
-###### VES DATA ########
+  
+  ####### End Capture Data ########
+  
+  ###### VES DATA ########
   
   ves_data <- reactive({
     
@@ -120,7 +128,7 @@ shinyServer(function(input, output, session) {
       select(location, region, site, input$site_cols_ves, input$visit_cols_ves, input$survey_cols_ves, input$ves_cols)
     
   }) %>% bindCache(input$year_ves, input$location_ves, input$region_ves, input$site_ves, input$site_cols_ves, input$visit_cols_ves,
-              input$survey_cols_ves, input$ves_cols)
+                   input$survey_cols_ves, input$ves_cols)
   
   
   # update location options based on year selection
@@ -193,9 +201,9 @@ shinyServer(function(input, output, session) {
       write.csv(ves_data(), fname)
     })
   
-######## END VES Data ##########
+  ######## END VES Data ##########
   
-######## Aural ################
+  ######## Aural ################
   
   aural_data <- reactive({
     
@@ -215,7 +223,7 @@ shinyServer(function(input, output, session) {
       
       updatePickerInput(session, inputId = "location_a",
                         choices = unique(aural$location[aural$year <= input$year_a[2] 
-                                                      & aural$year>=input$year_a[1]]))
+                                                        & aural$year>=input$year_a[1]]))
     })
   
   # update region options based on location selection
@@ -224,8 +232,8 @@ shinyServer(function(input, output, session) {
       
       updatePickerInput(session, inputId = "region_a",
                         choices = unique(aural$region[aural$year <= input$year_a[2] 
-                                                    & aural$year>=input$year_a[1]
-                                                    & aural$location %in% input$location_a]))
+                                                      & aural$year>=input$year_a[1]
+                                                      & aural$location %in% input$location_a]))
     })
   
   # update site options based on region selection
@@ -234,9 +242,9 @@ shinyServer(function(input, output, session) {
       
       updatePickerInput(session, inputId = "site_a",
                         choices = unique(aural$site[aural$year <= input$year_a[2] 
-                                                  & aural$year >= input$year_a[1]
-                                                  & aural$location %in% input$location_a
-                                                  & aural$region %in% input$region_a]))
+                                                    & aural$year >= input$year_a[1]
+                                                    & aural$location %in% input$location_a
+                                                    & aural$region %in% input$region_a]))
       
     })
   
@@ -257,8 +265,8 @@ shinyServer(function(input, output, session) {
   
   # render data selection
   output$aural_table <- renderDataTable(aural_data(), extensions= 'Buttons', options = list(scrollX = T, TRUEom = 'Bfrtip',
-                                                                                        buttons = c('copy', 'csv', 'excel', 
-                                                                                                    'pdf', 'print')))
+                                                                                            buttons = c('copy', 'csv', 'excel', 
+                                                                                                        'pdf', 'print')))
   # Data download
   observeEvent(input$aural_download, {
     
@@ -278,22 +286,22 @@ shinyServer(function(input, output, session) {
       removeModal()
       write.csv(aural_data(), fname)
     })
-
-
-######## END AURAL##########
-
-######## HOBO ##########
-
-hobo_data <- reactive({
   
-  hobo %>% 
-    filter(year <= input$date_hobo[2] & year>= input$date_hobo[1],
-           location %in% input$location_hobo,
-           region %in% input$region_hobo,
-           site %in% input$site_hobo) %>% 
-    select(location, region, site, input$hobo_cols)
   
-})%>% bindCache(input$date_hobo, input$location_hobo, input$region_hobo, input$site_hobo, input$site_hobo, input$hobo_cols)
+  ######## END AURAL##########
+  
+  ######## HOBO ##########
+  
+  hobo_data <- reactive({
+    
+    hobo %>% 
+      filter(year <= input$date_hobo[2] & year>= input$date_hobo[1],
+             location %in% input$location_hobo,
+             region %in% input$region_hobo,
+             site %in% input$site_hobo) %>% 
+      select(location, region, site, input$hobo_cols)
+    
+  })%>% bindCache(input$date_hobo, input$location_hobo, input$region_hobo, input$site_hobo, input$site_hobo, input$hobo_cols)
   
   
   # update location options based on year selection
@@ -302,7 +310,7 @@ hobo_data <- reactive({
       
       updatePickerInput(session, inputId = "location_hobo",
                         choices = unique(hobo$location[hobo$year <= input$date_hobo[2] 
-                                                        & hobo$year>=input$date_hobo[1]]))
+                                                       & hobo$year>=input$date_hobo[1]]))
     })
   
   # update region options based on location selection
@@ -311,8 +319,8 @@ hobo_data <- reactive({
       
       updatePickerInput(session, inputId = "region_hobo",
                         choices = unique(hobo$region[hobo$year <= input$date_hobo[2] 
-                                                      & hobo$year>=input$date_hobo[1]
-                                                      & hobo$location %in% input$location_hobo]))
+                                                     & hobo$year>=input$date_hobo[1]
+                                                     & hobo$location %in% input$location_hobo]))
     })
   
   # update site options based on region selection
@@ -321,9 +329,9 @@ hobo_data <- reactive({
       
       updatePickerInput(session, inputId = "site_hobo",
                         choices = unique(hobo$site[hobo$year <= input$date_hobo[2] 
-                                                    & hobo$year >= input$date_hobo[1]
-                                                    & hobo$location %in% input$location_hobo
-                                                    & hobo$region %in% input$region_hobo]))
+                                                   & hobo$year >= input$date_hobo[1]
+                                                   & hobo$location %in% input$location_hobo
+                                                   & hobo$region %in% input$region_hobo]))
       
     })
   
@@ -339,14 +347,14 @@ hobo_data <- reactive({
                }
   )
   
-
-
-# render data selection
+  
+  
+  # render data selection
   output$hobo_t <- renderDataTable(hobo_data(), extensions= 'Buttons', options = list(scrollX = T, TRUEom = 'Bfrtip',
-                                                                                          buttons = c('copy', 'csv', 'excel',
-                                                                                                      'pdf', 'print')))
-
-    # Data download
+                                                                                      buttons = c('copy', 'csv', 'excel',
+                                                                                                  'pdf', 'print')))
+  
+  # Data download
   observeEvent(input$hobo_download, {
     
     shinyalert(title = "Pump the breaks!", text = "Did you get approval for data use from the data owners?",
@@ -384,11 +392,11 @@ hobo_data <- reactive({
   #   write.csv(hobo_data(), fname)
   # }
   
-
-######## END HOBO ##########
-    
   
-track_usage(storage_mode = store_googledrive(path = "https://drive.google.com/drive/folders/1UeEAlxbToJCM3bb-6AW8R-L8m66oIz-M"))  
-
+  ######## END HOBO ##########
+  
+  
+  track_usage(storage_mode = store_googledrive(path = "https://drive.google.com/drive/folders/1UeEAlxbToJCM3bb-6AW8R-L8m66oIz-M"))  
+  
 })
 
