@@ -20,7 +20,10 @@ shinyServer(function(input, output, session) {
              input$capture_cols, input$comb_bd_cols, input$amp_cols, input$muc_mic_cols,
              input$genom_cols)
 
-  })
+  }) %>% 
+    bindCache(input$year, input$location, input$region, input$site, input$site_cols, input$visit_cols,
+              input$survey_cols, input$capture_cols, input$comb_bd_cols, input$amp_cols, input$muc_mic_cols,
+              input$genom_cols)
   
   # render data selection
   output$cap_table <- renderDataTable(cap_data(), extensions= 'Buttons', options = list(scrollX = T, TRUEom = 'Bfrtip',
@@ -116,7 +119,8 @@ shinyServer(function(input, output, session) {
              site %in% input$site_ves) %>% 
       select(location, region, site, input$site_cols_ves, input$visit_cols_ves, input$survey_cols_ves, input$ves_cols)
     
-  })
+  }) %>% bindCache(input$year_ves, input$location_ves, input$region_ves, input$site_ves, input$site_cols_ves, input$visit_cols_ves,
+              input$survey_cols_ves, input$ves_cols)
   
   
   # update location options based on year selection
@@ -202,7 +206,8 @@ shinyServer(function(input, output, session) {
              site %in% input$site_a) %>% 
       select(location, region, site, input$site_cols_a, input$visit_cols_a, input$survey_cols_a, input$aural_cols)
     
-  })
+  }) %>% bindCache(input$year_a, input$location_a, input$region_a, input$site_a, input$site_cols_a, input$visit_cols_a,
+                   input$survey_cols_a, input$aural_cols)
   
   # update location options based on year selection
   observe(
@@ -288,7 +293,7 @@ hobo_data <- reactive({
            site %in% input$site_hobo) %>% 
     select(location, region, site, input$hobo_cols)
   
-})
+})%>% bindCache(input$date_hobo, input$location_hobo, input$region_hobo, input$site_hobo, input$site_hobo, input$hobo_cols)
   
   
   # update location options based on year selection

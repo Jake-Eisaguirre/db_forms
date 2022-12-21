@@ -10,6 +10,9 @@ librarian::shelf(tidyverse, here, janitor, shiny, lubridate, RPostgres, rstudioa
 
 drive_auth(email = Sys.getenv("goog_email"))
 
+shinyOptions(cache = cachem::cache_disk("./app_cache"))
+#shinyOptions(cache = cachem::cache_mem(max_size = 1000e6))
+
 
 #connect to database
 connection <- dbConnect(dbDriver("Postgres"),
