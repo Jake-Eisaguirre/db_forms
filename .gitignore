@@ -3,3 +3,6 @@
 .RData
 .Ruserdata
 data/
+RIBBiTR_DataRepository/creds.R
+RIBBiTR_DataRepository/www/
+RIBBiTR_DataRepository/app_cache/
