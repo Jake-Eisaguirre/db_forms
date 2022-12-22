@@ -190,14 +190,17 @@ ui <- secure_app(head_auth = tags$script(inactivity),
                    tabPanel(title = "Metadata",
                             
                             tabsetPanel(
-                              tabPanel(title = "Pennsylvania"),
-                              tabPanel(title = "Sierra Nevadas"),
-                              tabPanel(title = "Panama"),
-                              tabPanel(title = "Brazil"),
-                              tabPanel(title = "SERDP")
-                              
-                            )
-                   )),
+                              tabPanel(title = "Pennsylvania",
+                                       img(src = "yoda.jpeg", height = "400", width = "500")),
+                              tabPanel(title = "Sierra Nevadas",
+                                       img(src = "homer.jpeg", height = "400", width = "500")),
+                              tabPanel(title = "Panama",
+                                       img(src = "yoda.jpeg", height = "400", width = "500")),
+                              tabPanel(title = "Brazil",
+                                       img(src = "homer.jpeg", height = "400", width = "500")),
+                              tabPanel(title = "SERDP",
+                                       img(src = "yoda.jpeg", height = "400", width = "500"))),
+                            hr(style = "border-top: 1px solid #000000;"))),
         
         ######## END CAPTURE ##############
         
@@ -297,12 +300,14 @@ ui <- secure_app(head_auth = tags$script(inactivity),
                    tabPanel(title = "Metadata",
                             
                             tabsetPanel(
-                              tabPanel(title = "Pennsylvania"),
-                              tabPanel(title = "Sierra Nevadas"),
-                              tabPanel(title = "Panama")
-                              
-                            )
-                   )),
+                              tabsetPanel(
+                                tabPanel(title = "Pennsylvania",
+                                         img(src = "yoda.jpeg", height = "400", width = "500")),
+                                tabPanel(title = "Sierra Nevadas",
+                                         img(src = "homer.jpeg", height = "400", width = "500")),
+                                tabPanel(title = "Panama",
+                                         img(src = "yoda.jpeg", height = "400", width = "500"))),
+                              hr(style = "border-top: 1px solid #000000;")))),
         
         ####### END VES ##########
         
@@ -401,11 +406,12 @@ ui <- secure_app(head_auth = tags$script(inactivity),
                    tabPanel(title = "Metadata",
                             
                             tabsetPanel(
-                              tabPanel(title = "Pennsylvania"),
-                              tabPanel(title = "Panama")
-                              
-                            )
-                   )),
+                              tabsetPanel(
+                                tabPanel(title = "Pennsylvania",
+                                         img(src = "yoda.jpeg", height = "400", width = "500")),
+                                tabPanel(title = "Panama",
+                                         img(src = "homer.jpeg", height = "400", width = "500"))),
+                              hr(style = "border-top: 1px solid #000000;")))),
         
         ########## END Aural Tab ##########
         

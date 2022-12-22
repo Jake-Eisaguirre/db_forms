@@ -107,10 +107,20 @@ shinyServer(function(input, output, session) {
   
   output$cap_dwnld <- downloadHandler(
     filename = function(){"insert_name.csv"},
-    content = function(fname){
-      removeModal()
-      write.csv(cap_data(), fname)
-    })
+    
+    content = function(file) {
+      shiny::withProgress(
+        message = paste0("Downloading Aural Data"),
+        value = 0,
+        {
+          shiny::incProgress(3/10)
+          Sys.sleep(1)
+          shiny::incProgress(9/10)
+          write.csv(cap_data(), file, row.names = FALSE)
+        }
+      )
+    }
+  )
   
   
   
@@ -196,10 +206,19 @@ shinyServer(function(input, output, session) {
   
   output$ves_dwnld <- downloadHandler(
     filename = function(){"insert_name.csv"},
-    content = function(fname){
-      removeModal()
-      write.csv(ves_data(), fname)
-    })
+    
+    content = function(file) {
+      shiny::withProgress(
+        message = paste0("Downloading VES Data"),
+        value = 0,
+        {
+          shiny::incProgress(10/10)
+          write.csv(ves_data(), file, row.names = FALSE)
+        }
+      )
+    }
+  )
+  
   
   ######## END VES Data ##########
   
@@ -282,10 +301,18 @@ shinyServer(function(input, output, session) {
   
   output$aural_dwnld <- downloadHandler(
     filename = function(){"insert_name.csv"},
-    content = function(fname){
-      removeModal()
-      write.csv(aural_data(), fname)
-    })
+    
+    content = function(file) {
+      shiny::withProgress(
+        message = paste0("Downloading Aural Data"),
+        value = 0,
+        {
+          shiny::incProgress(10/10)
+          write.csv(aural_data(), file, row.names = FALSE)
+        }
+      )
+    }
+  )
   
   
   ######## END AURAL##########
@@ -372,14 +399,20 @@ shinyServer(function(input, output, session) {
     
     content = function(file) {
       shiny::withProgress(
-        message = paste0("Downloading", input$dataset, " Data"),
+        message = paste0("Downloading Hobo Sensor Data"),
         value = 0,
         {
           shiny::incProgress(1/10)
           Sys.sleep(1)
+          shiny::incProgress(3/10)
+          Sys.sleep(2)
           shiny::incProgress(5/10)
+          Sys.sleep(2)
+          shiny::incProgress(7/10)
+          Sys.sleep(2)
+          shiny::incProgress(7/10)
           Sys.sleep(1)
-          shiny::incProgress(10/10)
+          shiny::incProgress(9/10)
           write.csv(hobo_data(), file, row.names = FALSE)
         }
       )
