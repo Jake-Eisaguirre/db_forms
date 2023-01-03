@@ -9,7 +9,7 @@ if (!require(librarian)){
 librarian::shelf(tidyverse, here, janitor, shiny, lubridate, RPostgres, rstudioapi, shinyWidgets, DT, glue, shinycssloaders, DBI,
                  shinyalert, googledrive, shinylogs, cachem, shinymanager)
 
-source(here("RIBBiTR_DataRepository", "db_goog_cred.R"))
+source(here("RIBBiTR_DataRepository", "db_creds_goog.R"))
 
 drive_auth(email = goog_email)
 
