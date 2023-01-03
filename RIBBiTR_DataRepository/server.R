@@ -70,6 +70,16 @@ shinyServer(function(input, output, session) {
       
     })
   
+  # update site variables of interest
+  # observe(
+  #   {input$site
+  #     
+  #     updatePickerInput(session, inputId = "site_cols",
+  #                       choices = cap %>% 
+  #                         select(is.na(input$site_cols)))
+  #     
+  #     })
+  # 
   
   # clear button
   observeEvent(input$cap_clear,

@@ -6,10 +6,14 @@ if (!require(librarian)){
 
 # librarian downloads, if not already downloaded, and reads in needed packages
 
-librarian::shelf(tidyverse, here, janitor, shiny, lubridate, RPostgres, rstudioapi, shinyWidgets, DT, glue, shinycssloaders, DBI,
+librarian::shelf(tidyverse, here, janitor, shiny, lubridate, RPostgres, rstudioapi, shinyWidgets, DT, glue, shinycssloaders, DBI, gargle,
                  shinyalert, googledrive, shinylogs, cachem, shinymanager)
 
 source(here("RIBBiTR_DataRepository", "db_creds_goog.R"))
+
+# options(gargle_oauth_email = TRUE,
+#          # specify auth tokens should be stored in a hidden directory ".secrets"
+#          gargle_oauth_cache = "RIBBiTR_DataRepository/db_creds_goog.R")
 
 drive_auth(email = goog_email)
 
