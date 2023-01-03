@@ -1,3 +1,4 @@
+
 if (!require(librarian)){
   install.packages("librarian")
   library(librarian)
@@ -8,7 +9,9 @@ if (!require(librarian)){
 librarian::shelf(tidyverse, here, janitor, shiny, lubridate, RPostgres, rstudioapi, shinyWidgets, DT, glue, shinycssloaders, DBI,
                  shinyalert, googledrive, shinylogs, cachem, shinymanager)
 
-drive_auth(email = Sys.getenv("goog_email"))
+source(here("RIBBiTR_DataRepository", "db_goog_cred.R"))
+
+drive_auth(email = goog_email)
 
 shinyOptions(cache = cachem::cache_disk("./app_cache"))
 #shinyOptions(cache = cachem::cache_mem(max_size = 1000e6))
@@ -16,11 +19,11 @@ shinyOptions(cache = cachem::cache_disk("./app_cache"))
 
 #connect to database
 connection <- dbConnect(dbDriver("Postgres"),
-                        dbname = Sys.getenv("dbname"),
-                        host = Sys.getenv("host"),
-                        port = Sys.getenv("port"),
-                        user = Sys.getenv("user"),
-                        password = Sys.getenv("password"))
+                        dbname = dbname,
+                        host = host,
+                        port = port,
+                        user = user,
+                        password = password)
 
 dbExecute(connection, "set search_path = survey_data")
 
