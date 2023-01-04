@@ -112,3 +112,15 @@ a <- t %>%
       left_join(capture, by = c("survey_id"))
 ```
 
+
+```{r}
+
+b <- cap %>% 
+  filter(year %in% c(2020:2022),
+             location %in% c("brazil"),
+             region %in% c("boraceia", "santa_virginia"),
+             site %in% c("b3t", "lago_sede_water")) %>% 
+  remove_empty(which = "cols")
+
+```
+

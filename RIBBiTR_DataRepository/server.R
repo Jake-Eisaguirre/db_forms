@@ -10,6 +10,25 @@ shinyServer(function(input, output, session) {
     reactiveValuesToList(result_auth)
   })
   
+  ####### DB refresh ########
+  observeEvent(input$refresh, {
+    
+    shinyalert(title = "Refresh Webpage Following Confirmation", 
+               type = "info", closeOnClickOutside = T, showCancelButton = T, inputId = "refresh_btn",
+               showConfirmButton = T, confirmButtonText = "Confirm", 
+               animation = "slide-from-top")
+    
+    
+    # session$reload()
+    
+  })
+  
+  observeEvent(input$refresh_btn, {
+    
+    file.create("restart.txt")
+    
+  })
+  
   
   ###### Capture Data #########
   #r eactive capture data
@@ -70,16 +89,17 @@ shinyServer(function(input, output, session) {
       
     })
   
-  # update site variables of interest
+  #update site variables of interest
   # observe(
   #   {input$site
-  #     
-  #     updatePickerInput(session, inputId = "site_cols",
-  #                       choices = cap %>% 
-  #                         select(is.na(input$site_cols)))
-  #     
-  #     })
   # 
+  #     updatePickerInput(session, inputId = "site_cols",
+  #                       choices = colnames(cap[cap$year <= input$year[2] 
+  #                                              & cap$year>=input$year[1]
+  #                                              & cap$location %in% input$location
+  #                                              & cap$region %in% input$region]))
+  #     })
+
   
   # clear button
   observeEvent(input$cap_clear,
@@ -120,7 +140,7 @@ shinyServer(function(input, output, session) {
     
     content = function(file) {
       shiny::withProgress(
-        message = paste0("Downloading Aural Data"),
+        message = paste0("Downloading Capture Data"),
         value = 0,
         {
           shiny::incProgress(3/10)
@@ -439,7 +459,7 @@ shinyServer(function(input, output, session) {
   ######## END HOBO ##########
   
   
-  track_usage(storage_mode = store_googledrive(path = "https://drive.google.com/drive/folders/1UeEAlxbToJCM3bb-6AW8R-L8m66oIz-M"))  
-  
+track_usage(storage_mode = store_googledrive(path = "https://drive.google.com/drive/folders/1UeEAlxbToJCM3bb-6AW8R-L8m66oIz-M"))
+
 })
 

@@ -30,7 +30,7 @@ ui <- secure_app(head_auth = tags$script(inactivity),
                            fluidRow(
                              h1(strong("Intended Use"),style = "font-size:20px;"),
                              
-                             column(12, p("The data found within this repository is intended for internal use within", 
+                             column(11, p("The data found within this repository is intended for internal use within", 
                                           tags$a(href = "https://ribbitr.com/", "RIBBiTR"), "and under no circumstances shall user login credentials be shared to outside participants. All users must adhear to data acuisition and data sharing protocols as stated in the", 
                                                    tags$a(href = "https://docs.google.com/document/d/1m1EEuUH3ioVVXtFkDaWFHITddPcmputEhZxfW_omtrI
                                                 /edit", "RIBBiTR Pre-collaboration Agreement"), "and", 
@@ -40,18 +40,24 @@ ui <- secure_app(head_auth = tags$script(inactivity),
                                     fluidRow(
                                       h1(strong("Acknowledgements"), style = "font-size:20px;"),
                                       
-                                      column(12, p("This web-based application was created by ",tags$a(href = "https://jake-eisaguirre.github.io/", "Jake Eisaguirre"), ", Data Manager for the ",tags$a(href ="https://ribbitr.com/", "Resilience Institue Bridging Biological Training and Research"),"(RIBBiTR). Financial support was provided by the", tags$a(href = "https://www.nsf.gov/", "National Science Foundation.")))),
+                                      column(11, p("This web-based application was created by ",tags$a(href = "https://jake-eisaguirre.github.io/", "Jake Eisaguirre"), ", Data Manager for the ",tags$a(href ="https://ribbitr.com/", "Resilience Institue Bridging Biological Training and Research"),"(RIBBiTR). Financial support was provided by the", tags$a(href = "https://www.nsf.gov/", "National Science Foundation.")))),
                    
                    # fluidRow(
                    #   align = "center", div(style = "display: inline", img(src = "ribbitr.png", height = "75", width = "95")),
                    #   img(src = "nsf_logo.png", align = "center", height = "75", width = "75")),
                    
-                   fluidRow(div(style = "height:92.5px")),
+                   fluidRow(div(style = "height:22.5px")),
+                   
+                   fluidRow(column(12, actionButton(inputId = "refresh",
+                                                    label = "Refresh Database",
+                                                    icon = icon("refresh")))),
+                   
+                   fluidRow(div(style = "height:62.5px")),
                    
                    fluidRow(hr(style = "border-top: 1px solid #000000;")),
                    
                    fluidRow(
-                     column(12, align = "center",  
+                     column(11, align = "center",  
                             div(#style = "display: inline;",
                               img(src = "foot.png",
                                   height = 300,

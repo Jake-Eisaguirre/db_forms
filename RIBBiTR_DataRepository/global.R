@@ -6,8 +6,9 @@ if (!require(librarian)){
 
 # librarian downloads, if not already downloaded, and reads in needed packages
 
-librarian::shelf(tidyverse, here, janitor, shiny, lubridate, RPostgres, rstudioapi, shinyWidgets, DT, glue, shinycssloaders, DBI, gargle,
-                 shinyalert, googledrive, shinylogs, cachem, shinymanager)
+librarian::shelf(tidyverse, here, janitor, lubridate, RPostgres, rstudioapi, shinyWidgets, DT, glue, shinycssloaders, DBI, gargle,
+                 shinyalert, googledrive, shinylogs, cachem, shinymanager,
+                 shiny)
 
 source(here("RIBBiTR_DataRepository", "db_creds_goog.R"))
 
