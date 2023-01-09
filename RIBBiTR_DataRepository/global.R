@@ -1,22 +1,52 @@
 
-if (!require(librarian)){
-  install.packages("librarian")
-  library(librarian)
-}
+# if (!require(librarian)){
+#   install.packages("librarian")
+#   library(librarian)
+# }
+# 
+# # librarian downloads, if not already downloaded, and reads in needed packages
+# 
+# librarian::shelf(shiny, tidyverse, here, janitor, lubridate, RPostgres, rstudioapi, shinyWidgets, 
+#                  DT, glue, shinycssloaders, DBI, gargle,
+#                  shinyalert, googledrive, shinylogs, cachem, shinymanager)
 
-# librarian downloads, if not already downloaded, and reads in needed packages
+library(shiny)
+library(tidyverse)
+library(here)
+library(janitor)
+library(lubridate)
+library(RPostgres)
+library(rstudioapi)
+library(shinyWidgets)
+library(DT)
+library(glue)
+library(shinycssloaders)
+library(DBI)
+library(gargle)
+library(shinyalert)
+library(googledrive)
+library(shinylogs)
+library(cachem)
+library(shinymanager)
 
-librarian::shelf(tidyverse, here, janitor, lubridate, RPostgres, rstudioapi, shinyWidgets, DT, glue, shinycssloaders, DBI, gargle,
-                 shinyalert, googledrive, shinylogs, cachem, shinymanager,
-                 shiny)
+source("db_creds_goog.R", local = T)
 
-source(here("RIBBiTR_DataRepository", "db_creds_goog.R"))
+# options(gargle_oob_default = TRUE)
+# 
+# drive_auth(cache = ".secrets", email = T)
+# 
+# # designate project-specific cache
+# options(gargle_oauth_cache = ".secrets")
+# 
+# # check the value of the option, if you like
+# gargle::gargle_oauth_cache()
+# 
+# # trigger auth on purpose --> store a token in the specified cache
+# drive_auth()
+# 
+# # see your token file in the cache, if you like
+# list.files(".secrets/")
 
-# options(gargle_oauth_email = TRUE,
-#          # specify auth tokens should be stored in a hidden directory ".secrets"
-#          gargle_oauth_cache = "RIBBiTR_DataRepository/db_creds_goog.R")
-
-drive_auth(email = goog_email)
 
 shinyOptions(cache = cachem::cache_disk("./app_cache"))
 #shinyOptions(cache = cachem::cache_mem(max_size = 1000e6))

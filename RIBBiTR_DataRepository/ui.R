@@ -1,5 +1,6 @@
-source(here("RIBBiTR_DataRepository", "global.R"))
-source(here("RIBBiTR_DataRepository", "creds.R"))
+source("global.R", local = T)
+source("creds.R", local = T)
+source("db_creds_goog.R", local = T)
 
 
 

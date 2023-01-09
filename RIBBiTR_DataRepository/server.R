@@ -1,5 +1,15 @@
-source(here("RIBBiTR_DataRepository", "global.R"))
-source(here("RIBBiTR_DataRepository", "creds.R"))
+source("global.R", local = T)
+source("creds.R", local = T)
+source("db_creds_goog.R", local = T)
+
+# options(gargle_oob_default = TRUE)
+# 
+# options(
+#   gargle_oauth_cache = ".secrets",
+#   gargle_oauth_email = TRUE
+# )
+
+
 
 
 shinyServer(function(input, output, session) {
@@ -53,7 +63,7 @@ shinyServer(function(input, output, session) {
               input$genom_cols)
   
   # render data selection
-  output$cap_table <- renderDataTable(cap_data(), extensions= 'Buttons', options = list(scrollX = T, TRUEom = 'Bfrtip',
+  output$cap_table <- DT::renderDataTable(cap_data(), extensions= 'Buttons', options = list(scrollX = T, TRUEom = 'Bfrtip',
                                                                                         buttons = c('copy', 'csv', 'excel', 
                                                                                                     'pdf', 'print')))
   
@@ -218,7 +228,7 @@ shinyServer(function(input, output, session) {
   
   
   # render data selection
-  output$ves_table <- renderDataTable(ves_data(), extensions= 'Buttons', options = list(scrollX = T, TRUEom = 'Bfrtip',
+  output$ves_table <- DT::renderDataTable(ves_data(), extensions= 'Buttons', options = list(scrollX = T, TRUEom = 'Bfrtip',
                                                                                         buttons = c('copy', 'csv', 'excel', 
                                                                                                     'pdf', 'print')))
   # Data download
@@ -313,7 +323,7 @@ shinyServer(function(input, output, session) {
   
   
   # render data selection
-  output$aural_table <- renderDataTable(aural_data(), extensions= 'Buttons', options = list(scrollX = T, TRUEom = 'Bfrtip',
+  output$aural_table <- DT::renderDataTable(aural_data(), extensions= 'Buttons', options = list(scrollX = T, TRUEom = 'Bfrtip',
                                                                                             buttons = c('copy', 'csv', 'excel', 
                                                                                                         'pdf', 'print')))
   # Data download
@@ -407,7 +417,7 @@ shinyServer(function(input, output, session) {
   
   
   # render data selection
-  output$hobo_t <- renderDataTable(hobo_data(), extensions= 'Buttons', options = list(scrollX = T, TRUEom = 'Bfrtip',
+  output$hobo_t <- DT::renderDataTable(hobo_data(), extensions= 'Buttons', options = list(scrollX = T, TRUEom = 'Bfrtip',
                                                                                       buttons = c('copy', 'csv', 'excel',
                                                                                                   'pdf', 'print')))
   
@@ -459,7 +469,7 @@ shinyServer(function(input, output, session) {
   ######## END HOBO ##########
   
   
-track_usage(storage_mode = store_googledrive(path = "https://drive.google.com/drive/folders/1UeEAlxbToJCM3bb-6AW8R-L8m66oIz-M"))
-
+# track_usage(storage_mode = store_googledrive(path = "https://drive.google.com/drive/folders/1UeEAlxbToJCM3bb-6AW8R-L8m66oIz-M"))
+# 
 })
 
