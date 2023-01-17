@@ -13,9 +13,9 @@ ui <- secure_app(head_auth = tags$script(inactivity),
      tags$style(HTML(".well {
         border: 1px solid #000000;
       }")), 
-     tags$style(HTML(".col-sm-8 {
-        border: 1px solid #000000;
-      }")),
+     # tags$style(HTML(".col-sm-8 {
+     #    border: 1px solid #000000;
+     #  }")),
      
      
      # Application title
