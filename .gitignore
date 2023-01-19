@@ -3,6 +3,7 @@
 .RData
 .Ruserdata
 data/
+RIBiTR_DataRepository/data/
 RIBBiTR_DataRepository/creds.R
 RIBBiTR_DataRepository/db_creds_goog.R
 RIBBiTR_DataRepository/app_cache/

@@ -1,6 +1,6 @@
 source("global.R", local = T)
 source("creds.R", local = T)
-source("db_creds_goog.R", local = T)
+# source("db_creds_goog.R", local = T)
 
 
 
@@ -56,10 +56,6 @@ ui <- secure_app(head_auth = tags$script(inactivity),
                    
                    fluidRow(div(style = "height:22.5px")),
                    
-                   fluidRow(column(12, actionButton(inputId = "refresh",
-                                                    label = "Refresh Database",
-                                                    icon = icon("refresh")))),
-                   
                    fluidRow(div(style = "height:62.5px")),
                    
                    fluidRow(hr(style = "border-top: 1px solid #000000;")),
@@ -83,7 +79,8 @@ ui <- secure_app(head_auth = tags$script(inactivity),
                                                          label = "Select Annual Range:",
                                                          min = min(visit$year), max(visit$year),
                                                          sep = "",
-                                                         value = c(max(visit$year) - 5, max(visit$year)))),
+                                                         value = c(max(visit$year) - 5, max(visit$year)),
+                                                         step = 1)),
                                   column(5, pickerInput(inputId = "location",
                                                         label = "Select Locations:",
                                                         choices = unique(location$location),
@@ -232,7 +229,8 @@ ui <- secure_app(head_auth = tags$script(inactivity),
                                                          label = "Select Annual Range:",
                                                          min = min(visit$year), max(visit$year),
                                                          sep = "",
-                                                         value = c(max(visit$year) - 5, max(visit$year)))),
+                                                         value = c(max(visit$year) - 5, max(visit$year)),
+                                                         step = 1)),
                                   column(5, pickerInput(inputId = "location_ves",
                                                         label = "Select Locations:",
                                                         choices = unique(location$location),
@@ -339,7 +337,8 @@ ui <- secure_app(head_auth = tags$script(inactivity),
                                                          label = "Select Annual Range:",
                                                          min = min(visit$year), max(visit$year),
                                                          sep = "",
-                                                         value = c(max(visit$year) - 5, max(visit$year)))),
+                                                         value = c(max(visit$year) - 5, max(visit$year)),
+                                                         step = 1)),
                                   column(5, pickerInput(inputId = "location_a",
                                                         label = "Select Locations:",
                                                         choices = unique(location$location),
@@ -443,7 +442,8 @@ ui <- secure_app(head_auth = tags$script(inactivity),
                                                          label = "Select Annual Range:",
                                                          min = min(hobo_cols$year), max(hobo_cols$year),
                                                          sep = "",
-                                                         value = c(max(hobo_cols$year) - 3, max(hobo_cols$year)))),
+                                                         value = c(max(hobo_cols$year) - 3, max(hobo_cols$year)),
+                                                         step = 1)),
                                   column(5, pickerInput(inputId = "location_hobo",
                                                         label = "Select Locations:",
                                                         choices = unique(hobo_location$location),

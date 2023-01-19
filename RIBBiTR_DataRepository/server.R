@@ -1,6 +1,6 @@
 source("global.R", local = T)
 source("creds.R", local = T)
-source("db_creds_goog.R", local = T)
+# source("db_creds_goog.R", local = T)
 
 # options(gargle_oob_default = TRUE)
 # 
@@ -19,26 +19,7 @@ shinyServer(function(input, output, session) {
   output$res_auth <- renderPrint({
     reactiveValuesToList(result_auth)
   })
-  
-  ####### DB refresh ########
-  observeEvent(input$refresh, {
-    
-    shinyalert(title = "Refresh Webpage Following Confirmation", 
-               type = "info", closeOnClickOutside = T, showCancelButton = T, inputId = "refresh_btn",
-               showConfirmButton = T, confirmButtonText = "Confirm", 
-               animation = "slide-from-top")
-    
-    
-    # session$reload()
-    
-  })
-  
-  observeEvent(input$refresh_btn, {
-    
-    file.create("restart.txt")
-    
-  })
-  
+
   
   ###### Capture Data #########
   #r eactive capture data
