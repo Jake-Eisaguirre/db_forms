@@ -10,7 +10,7 @@
 #                  DT, glue, shinycssloaders, DBI, gargle,
 #                  shinyalert, googledrive, shinylogs, cachem, shinymanager)
 
-library(shiny)
+
 library(tidyverse)
 library(here)
 library(janitor)
@@ -54,10 +54,10 @@ shinyOptions(cache = cachem::cache_disk("./app_cache"))
 
 # slow method for reading in all csv files
 
-filenames <- gsub("\\.csv$","", list.files(here("data")))
+filenames <- gsub("\\.csv$","", list.files(here("RIBBiTR_DataRepository/data")))
 
 for(i in filenames){
-  assign(i, read.csv(here("data", paste(i, ".csv", sep=""))))
+  assign(i, read_csv(here("RIBBiTR_DataRepository/data", paste(i, ".csv", sep=""))))
 }
 
 

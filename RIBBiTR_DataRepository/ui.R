@@ -1,5 +1,5 @@
-source("global.R", local = T)
-source("creds.R", local = T)
+source(("global.R"), local = T)
+source(("creds.R"), local = T)
 # source("db_creds_goog.R", local = T)
 
 
@@ -521,9 +521,24 @@ ui <- secure_app(head_auth = tags$script(inactivity),
                    mainPanel(img(src = "homer.jpeg", height = "600", width = "700")
                    )
                    
-                 ))
+                 )),
         
         ######### END eDNA Tab #########    
+        
+        ######### Audio tab ############3
+        tabPanel(title = "Audio", icon = icon("microphone"),
+                 
+                 sidebarLayout(
+                   
+                   sidebarPanel(
+                     
+                   ),
+                   mainPanel(img(src = "homer.jpeg", height = "600", width = "700")
+                   )
+                   
+                 ))
+        
+        ########### END Audio #########
                          
   )
  )

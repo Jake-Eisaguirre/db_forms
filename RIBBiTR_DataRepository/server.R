@@ -1,5 +1,5 @@
-source("global.R", local = T)
-source("creds.R", local = T)
+source(("global.R"), local = T)
+source(("creds.R"), local = T)
 # source("db_creds_goog.R", local = T)
 
 # options(gargle_oob_default = TRUE)
