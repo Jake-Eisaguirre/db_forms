@@ -534,14 +534,15 @@ ui <- secure_app(head_auth = tags$script(inactivity),
                               
                               sidebarPanel(
                                 fluidRow(   
-                                  column(12, sliderInput(inputId = "date_audio",
-                                                         label = "Select Annual Range:",
-                                                         min = min(as.Date(audio_visit$date_of_deployment, "%Y-%m-%d")), 
-                                                         max = max(as.Date(audio_visit$date_of_deployment, "%Y-%m-%d")),
-                                                         sep = "",
-                                                         value = c(max(audio_visit$date_of_deployment) - 15, max(audio_visit$date_of_deployment)),
-                                                         step = 1,
-                                                         timeFormat = "%Y-%m-%d")),
+                                  # column(12, sliderInput(inputId = "date_audio",
+                                  #                        label = "Select Annual Range:",
+                                  #                        min = min(as.Date(audio_visit$date_of_deployment, "%Y-%m-%d")), 
+                                  #                        max = max(as.Date(audio_visit$date_of_deployment, "%Y-%m-%d")),
+                                  #                        sep = "",
+                                  #                        value = c(max(as.Date(audio_visit$date_of_deployment, "%Y-%m-%d")) - 
+                                  #                                    15, max(as.Date(audio_visit$date_of_deployment, "%Y-%m-%d"))),
+                                  #                        
+                                  #                        timeFormat = "%Y-%m-%d")),
                                   column(5, pickerInput(inputId = "location_audio",
                                                         label = "Select Locations:",
                                                         choices = unique(audio_location$location),

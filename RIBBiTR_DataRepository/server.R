@@ -449,6 +449,86 @@ shinyServer(function(input, output, session) {
   
   ######## END HOBO ##########
   
+  ######## Audio #############
+  
+  audio_data <- reactive({
+    
+    audio %>% 
+      filter(location %in% input$location_audio, region %in% input$region_audio, site %in% input$site_audio) %>% 
+      select(location, region, site, date_of_deployment, input$audio_cols)
+    
+  }) %>% bindCache(input$location_audio, input$region_audio, input$site_audio, input$audio_cols)
+  
+  
+  # render data selection
+  output$audio_t <- DT::renderDataTable(audio_data(), extensions= 'Buttons', options = list(scrollX = T, TRUEom = 'Bfrtip',
+                                                                                          buttons = c('copy', 'csv', 'excel',
+                                                                                                      'pdf', 'print')))
+  
+  
+  
+  # Data download
+  observeEvent(input$audio_download, {
+    
+    shinyalert(title = "Pump the breaks!", text = "Did you get approval for data use from the data owners?",
+               type = "warning", closeOnClickOutside = T, showCancelButton = T, inputId = "audio_download_btn",
+               showConfirmButton = T, confirmButtonText = "Yes", cancelButtonText = "No")
+  })
+  
+  observeEvent(input$audio_download_btn,{
+    if(input$audio_download_btn == T)
+      showModal(modalDialog(downloadButton("audio_dwnld", "download"), footer = NULL, easyClose = T, size = "s"))
+  })
+  
+  output$hobo_dwnld <- downloadHandler(
+    filename = function(){"insert_name.csv"},
+    
+    content = function(file) {
+      shiny::withProgress(
+        message = paste0("Downloading Audio Data"),
+        value = 0,
+        {
+          shiny::incProgress(3/10)
+          Sys.sleep(1)
+          shiny::incProgress(9/10)
+          write.csv(audio_data(), file, row.names = FALSE)
+        }
+      )
+    }
+  )
+  
+  
+  
+  # update region options based on location selection
+  observe(
+    {input$location_audio
+      
+      updatePickerInput(session, inputId = "region_audio",
+                        choices = unique(audio$region[audio$location %in% input$location_audio]))
+    })
+  
+  # update site options based on region selection
+  observe(
+    {input$region_audio
+      
+      updatePickerInput(session, inputId = "site_audio",
+                        choices = unique(audio$site[audio$location %in% input$location_audio
+                                                   & audio$region %in% input$region_audio]))
+      
+    })
+  
+  
+  # clear button
+  observeEvent(input$audio_clear,
+               {
+                 updatePickerInput(session, inputId = "location_audio", selected = "")
+                 updatePickerInput(session, inputId = "region_audio", selected = "")
+                 updatePickerInput(session, inputId = "site_audio", selected = "")
+                 updatePickerInput(session, inputId = "audio_cols", selected = "")
+                 
+               })
+  
+  ############### END Audio ###################
   
 # track_usage(storage_mode = store_googledrive(path = "https://drive.google.com/drive/folders/1UeEAlxbToJCM3bb-6AW8R-L8m66oIz-M"))
 # 
