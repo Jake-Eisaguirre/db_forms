@@ -54,52 +54,51 @@ shinyOptions(cache = cachem::cache_disk("./app_cache"))
 
 # slow method for reading in all csv files
 
-# loop not working for read in maybe
-# filenames <- gsub("\\.csv$","", list.files(here("RIBBiTR_DataRepository/data")))
+filenames <- gsub("\\.csv$","", list.files(here("RIBBiTR_DataRepository/data")))
+
+for(i in filenames){
+  assign(i, read_csv(here("RIBBiTR_DataRepository/data", paste(i, ".csv", sep=""))))
+}
+
+# visit <- read_csv(here("data/visit.csv"))
 # 
-# for(i in filenames){
-#   assign(i, read_csv(here("RIBBiTR_DataRepository/data", paste(i, ".csv", sep=""))))
-# }
-
-visit <- read_csv(here("data/visit.csv"))
-
-ves <- read_csv(here("data/ves.csv"))
-
-ves_cols <- read_csv(here("data/ves_cols.csv"))
-
-survey <- read_csv(here("data/survey.csv"))
-
-site <- read_csv(here("data/site.csv"))
-
-serdp_muc_mic <- read_csv(here("data/serdp_muc_mic.csv"))
-
-serdp_bd_genom <- read_csv(here("data/serdp_bd_genom.csv"))
-
-serdp_amp <- read_csv(here("data/serdp_amp.csv"))
-
-region <- read_csv(here("data/region.csv"))
-
-location <- read_csv(here("data/location.csv"))
-
-hobo <- read_csv(here("data/hobo.csv"))
-
-hobo_site <- read_csv(here("data/hobo_site.csv"))
-
-hobo_region <- read_csv(here("data/hobo_region.csv"))
-
-hobo_location <- read_csv(here("data/hobo_location.csv"))
-
-hobo_cols <- read_csv(here("data/hobo_cols.csv"))
-
-comb_bd <- read_csv(here("data/comb_bd.csv"))
-
-capture <- read_csv(here("data/capture.csv"))
-
-aural <- read_csv(here("data/aural.csv"))
-
-cap <- read_csv(here("data/cap.csv"))
-
-aural_cols <- read_csv(here("data/aural_cols.csv"))
+# ves <- read_csv(here("data/ves.csv"))
+# 
+# ves_cols <- read_csv(here("data/ves_cols.csv"))
+# 
+# survey <- read_csv(here("data/survey.csv"))
+# 
+# site <- read_csv(here("data/site.csv"))
+# 
+# serdp_muc_mic <- read_csv(here("data/serdp_muc_mic.csv"))
+# 
+# serdp_bd_genom <- read_csv(here("data/serdp_bd_genom.csv"))
+# 
+# serdp_amp <- read_csv(here("data/serdp_amp.csv"))
+# 
+# region <- read_csv(here("data/region.csv"))
+# 
+# location <- read_csv(here("data/location.csv"))
+# 
+# hobo <- read_csv(here("data/hobo.csv"))
+# 
+# hobo_site <- read_csv(here("data/hobo_site.csv"))
+# 
+# hobo_region <- read_csv(here("data/hobo_region.csv"))
+# 
+# hobo_location <- read_csv(here("data/hobo_location.csv"))
+# 
+# hobo_cols <- read_csv(here("data/hobo_cols.csv"))
+# 
+# comb_bd <- read_csv(here("data/comb_bd.csv"))
+# 
+# capture <- read_csv(here("data/capture.csv"))
+# 
+# aural <- read_csv(here("data/aural.csv"))
+# 
+# cap <- read_csv(here("data/cap.csv"))
+# 
+# aural_cols <- read_csv(here("data/aural_cols.csv"))
 
 
 

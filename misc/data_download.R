@@ -39,8 +39,7 @@ write_csv(site, here("RIBBiTR_DataRepository", "data", "site.csv"))
 
 visit <- dbGetQuery(connection, "select * from visit") %>% 
   drop_na(date) %>% 
-  mutate(year = year(date),
-         year = )
+  mutate(year = year(date))
 visit <- select(visit, !c(site_id, visit_id))
 write_csv(visit, here("RIBBiTR_DataRepository", "data", "visit.csv"))
 
@@ -188,11 +187,14 @@ write_csv(audio_region, here("RIBBiTR_DataRepository", "data", "audio_region.csv
 audio_site <- dbGetQuery(connection, "select site from audio_site;")
 write_csv(audio_site, here("RIBBiTR_DataRepository", "data", "audio_site.csv"))
 
-audio_visit <- dbGetQuery(connection, "select date_of_deployment from audio_visit;")
+audio_visit <- dbGetQuery(connection, "select date_of_deployment from audio_visit;") %>% 
+  drop_na()
+#audio_visit <- mutate(audio_visit, date_of_deployment = year(date_of_deployment))
 write_csv(audio_visit, here("RIBBiTR_DataRepository", "data", "audio_visit.csv"))
 
 audio_cols <- dbGetQuery(connection, "select * from audio_info")
-audio_cols <- select(audio_cols, !c(audio_id, visit_id))
+audio_cols <- select(audio_cols, !c(audio_id, visit_id))%>% 
+  mutate(year = year(date_of_deployment))
 write_csv(audio_cols, here("RIBBiTR_DataRepository", "data", "audio_cols.csv"))
 
 ############# END Audio ############################
