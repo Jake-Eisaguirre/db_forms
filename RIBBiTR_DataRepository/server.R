@@ -465,22 +465,22 @@ shinyServer(function(input, output, session) {
                                                                                           buttons = c('copy', 'csv', 'excel',
                                                                                                       'pdf', 'print')))
   
-  
-  
   # Data download
   observeEvent(input$audio_download, {
     
-    shinyalert(title = "Pump the breaks!", text = "Did you get approval for data use from the data owners?",
+    shinyalert(title = "Pump the breaks!", 
+               text = "Did you get approval for data use from the data owners?",
                type = "warning", closeOnClickOutside = T, showCancelButton = T, inputId = "audio_download_btn",
-               showConfirmButton = T, confirmButtonText = "Yes", cancelButtonText = "No")
+               showConfirmButton = T, confirmButtonText = "Yes", cancelButtonText = "No", 
+               animation = "slide-from-top")
   })
   
   observeEvent(input$audio_download_btn,{
     if(input$audio_download_btn == T)
-      showModal(modalDialog(downloadButton("audio_dwnld", "download"), footer = NULL, easyClose = T, size = "s"))
+      showModal(modalDialog(downloadButton("audio_dwnld", "Download"), footer = NULL, easyClose = T, size = "s"))
   })
   
-  output$hobo_dwnld <- downloadHandler(
+  output$audio_dwnld <- downloadHandler(
     filename = function(){"insert_name.csv"},
     
     content = function(file) {
