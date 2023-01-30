@@ -6,16 +6,19 @@ source(("creds.R"), local = T)
 
 ui <- secure_app(head_auth = tags$script(inactivity), 
         
-        fluidPage(tags$style('body {
-                    background-color: #c7c7c7;
-     }'
-        ),
-     tags$style(HTML(".well {
-        border: 1px solid #000000;
-      }")), 
-     # tags$style(HTML(".col-sm-8 {
-     #    border: 1px solid #000000;
-     #  }")),
+        fluidPage(
+          
+          # Styling 
+          tags$style('body {
+                    background-color: #c7c7c7;}'),
+          tags$style(HTML(".well {
+                    border: 1px solid #000000;}")), 
+          tags$style(HTML(".tabbable > .nav > li > a {
+                    background-color: #222; color: #9d9d9d;}")),
+          tags$style(HTML(".tabbable > .nav > li[class=active] > a {
+                      background-color: #080808 ; color: #FFF;}")),
+          tags$style(HTML(".dropdown-menu > .active > a {
+                          background-color: #080808 ; color: #FFF;}")),
      
      
      # Application title
@@ -201,6 +204,18 @@ ui <- secure_app(head_auth = tags$script(inactivity),
                    tabPanel(title = "Metadata",
                             
                             tabsetPanel(
+                              tabPanel(title = "Schema",
+                                       tags$iframe(style="height:800px; 
+                                             width:100%; 
+                                             scrolling=yes;
+                                             zoom=yes", 
+                                             src= "schema.pdf")),
+                              tabPanel(title = "Legacy Schema",
+                                       tags$iframe(style="height:800px; 
+                                             width:100%; 
+                                             scrolling=yes;
+                                             zoom=yes", 
+                                             src= "legacy_survey_data.pdf")),
                               tabPanel(title = "Pennsylvania",
                                        img(src = "yoda.jpeg", height = "400", width = "500")),
                               tabPanel(title = "Sierra Nevadas",
@@ -312,14 +327,25 @@ ui <- secure_app(head_auth = tags$script(inactivity),
                    tabPanel(title = "Metadata",
                             
                             tabsetPanel(
-                              tabsetPanel(
+                              tabPanel(title = "Schema",
+                                       tags$iframe(style="height:800px; 
+                                             width:100%; 
+                                             scrolling=yes;
+                                             zoom=yes", 
+                                             src= "schema.pdf")),
+                              tabPanel(title = "Legacy Schema",
+                                       tags$iframe(style="height:800px; 
+                                             width:100%; 
+                                             scrolling=yes;
+                                             zoom=yes", 
+                                             src= "legacy_survey_data.pdf")),
                                 tabPanel(title = "Pennsylvania",
                                          img(src = "yoda.jpeg", height = "400", width = "500")),
                                 tabPanel(title = "Sierra Nevadas",
                                          img(src = "homer.jpeg", height = "400", width = "500")),
                                 tabPanel(title = "Panama",
                                          img(src = "yoda.jpeg", height = "400", width = "500"))),
-                              hr(style = "border-top: 1px solid #000000;")))),
+                              hr(style = "border-top: 1px solid #000000;"))),
         
         ####### END VES ##########
         
@@ -419,12 +445,23 @@ ui <- secure_app(head_auth = tags$script(inactivity),
                    tabPanel(title = "Metadata",
                             
                             tabsetPanel(
-                              tabsetPanel(
+                              tabPanel(title = "Schema",
+                                       tags$iframe(style="height:800px; 
+                                             width:100%; 
+                                             scrolling=yes;
+                                             zoom=yes", 
+                                             src= "schema.pdf")),
+                              tabPanel(title = "Legacy Schema",
+                                       tags$iframe(style="height:800px; 
+                                             width:100%; 
+                                             scrolling=yes;
+                                             zoom=yes", 
+                                             src= "legacy_survey_data.pdf")),
                                 tabPanel(title = "Pennsylvania",
                                          img(src = "yoda.jpeg", height = "400", width = "500")),
                                 tabPanel(title = "Panama",
                                          img(src = "homer.jpeg", height = "400", width = "500"))),
-                              hr(style = "border-top: 1px solid #000000;")))),
+                              hr(style = "border-top: 1px solid #000000;"))),
         
         ########## END Aural Tab ##########
         
@@ -497,6 +534,12 @@ ui <- secure_app(head_auth = tags$script(inactivity),
                    tabPanel(title = "Metadata",
                             
                             tabsetPanel(
+                              tabPanel(title = "Schema",
+                                       tags$iframe(style="height:800px; 
+                                             width:100%; 
+                                             scrolling=yes;
+                                             zoom=yes", 
+                                             src= "hobo.pdf")),
                               tabPanel(title = "Pennsylvania"),
                               tabPanel(title = "Sierra Nevadas"),
                               tabPanel(title = "Panama"),
@@ -596,6 +639,12 @@ ui <- secure_app(head_auth = tags$script(inactivity),
                    tabPanel(title = "Metadata",
                             
                             tabsetPanel(
+                              tabPanel(title = "Schema",
+                                       tags$iframe(style="height:800px; 
+                                             width:100%; 
+                                             scrolling=yes;
+                                             zoom=yes", 
+                                             src= "audio.pdf")),
                               tabPanel(title = "Pennsylvania"),
                               tabPanel(title = "Sierra Nevadas"),
                               tabPanel(title = "Panama"),
