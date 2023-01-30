@@ -193,8 +193,7 @@ audio_visit <- dbGetQuery(connection, "select date_of_deployment from audio_visi
 write_csv(audio_visit, here("RIBBiTR_DataRepository", "data", "audio_visit.csv"))
 
 audio_cols <- dbGetQuery(connection, "select * from audio_info")
-audio_cols <- select(audio_cols, !c(audio_id, visit_id))%>% 
-  mutate(year = year(date_of_deployment))
+audio_cols <- select(audio_cols, !c(audio_id, visit_id))
 write_csv(audio_cols, here("RIBBiTR_DataRepository", "data", "audio_cols.csv"))
 
 ############# END Audio ############################

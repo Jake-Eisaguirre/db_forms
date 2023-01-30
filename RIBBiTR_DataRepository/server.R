@@ -44,9 +44,9 @@ shinyServer(function(input, output, session) {
               input$genom_cols)
   
   # render data selection
-  output$cap_table <- DT::renderDataTable(cap_data(), extensions= 'Buttons', options = list(scrollX = T, TRUEom = 'Bfrtip',
-                                                                                        buttons = c('copy', 'csv', 'excel', 
-                                                                                                    'pdf', 'print')))
+  output$cap_table <- DT::renderDataTable(cap_data(), extensions= 'Buttons', rownames = FALSE, 
+                                          options = list(scrollX = T, TRUEom = 'Bfrtip',
+                                                         buttons = c('copy', 'csv', 'excel', 'pdf', 'print')))
   
   
   # update location options based on year selection
@@ -209,9 +209,9 @@ shinyServer(function(input, output, session) {
   
   
   # render data selection
-  output$ves_table <- DT::renderDataTable(ves_data(), extensions= 'Buttons', options = list(scrollX = T, TRUEom = 'Bfrtip',
-                                                                                        buttons = c('copy', 'csv', 'excel', 
-                                                                                                    'pdf', 'print')))
+  output$ves_table <- DT::renderDataTable(ves_data(), extensions= 'Buttons', rownames = FALSE, 
+                                          options = list(scrollX = T, TRUEom = 'Bfrtip', 
+                                                         buttons = c('copy', 'csv', 'excel', 'pdf', 'print')))
   # Data download
   observeEvent(input$ves_download, {
     
@@ -304,9 +304,9 @@ shinyServer(function(input, output, session) {
   
   
   # render data selection
-  output$aural_table <- DT::renderDataTable(aural_data(), extensions= 'Buttons', options = list(scrollX = T, TRUEom = 'Bfrtip',
-                                                                                            buttons = c('copy', 'csv', 'excel', 
-                                                                                                        'pdf', 'print')))
+  output$aural_table <- DT::renderDataTable(aural_data(), extensions= 'Buttons', rownames = FALSE, 
+                                            options = list(scrollX = T, TRUEom = 'Bfrtip', 
+                                                           buttons = c('copy', 'csv', 'excel', 'pdf', 'print')))
   # Data download
   observeEvent(input$aural_download, {
     
@@ -398,9 +398,9 @@ shinyServer(function(input, output, session) {
   
   
   # render data selection
-  output$hobo_t <- DT::renderDataTable(hobo_data(), extensions= 'Buttons', options = list(scrollX = T, TRUEom = 'Bfrtip',
-                                                                                      buttons = c('copy', 'csv', 'excel',
-                                                                                                  'pdf', 'print')))
+  output$hobo_t <- DT::renderDataTable(hobo_data(), extensions= 'Buttons', rownames = FALSE, 
+                                       options = list(scrollX = T, TRUEom = 'Bfrtip', 
+                                                      buttons = c('copy', 'csv', 'excel', 'pdf', 'print')))
   
   # Data download
   observeEvent(input$hobo_download, {
@@ -461,9 +461,9 @@ shinyServer(function(input, output, session) {
   
   
   # render data selection
-  output$audio_t <- DT::renderDataTable(audio_data(), extensions= 'Buttons', options = list(scrollX = T, TRUEom = 'Bfrtip',
-                                                                                          buttons = c('copy', 'csv', 'excel',
-                                                                                                      'pdf', 'print')))
+  output$audio_t <- DT::renderDataTable(audio_data(), extensions= 'Buttons', rownames = FALSE, 
+                                        options = list(scrollX = T, TRUEom = 'Bfrtip', 
+                                                       buttons = c('copy', 'csv', 'excel', 'pdf', 'print')))
   
   # Data download
   observeEvent(input$audio_download, {
