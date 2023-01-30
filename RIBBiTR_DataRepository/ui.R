@@ -47,6 +47,22 @@ ui <- secure_app(head_auth = tags$script(inactivity),
                                                 /edit", "RIBBiTR Pre-collaboration Agreement"), "and", 
                                                 tags$a(href = "https://drive.google.com/drive/folders/1KBkHAjwyaCufJpM1qbcyN6F-pd_uJpxU", 
                                                        "RIBBiTR Schema"), ". As reminder, if you are downloading processed swab data, you must get approval from the data owners that collected the capture level data and the data owners who processed the swab data."))),
+                           
+                           fluidRow(
+                             h1(strong("Data Owners"), style = "font-size:20px;"),
+                             
+                             column(11, tags$ul(p(tags$ul("- Panama Survey Data:", tags$a(href = "jvoyles@unr.edu", "Jamie Voyles")),
+                                                  tags$ul("- SERDP Survey Data:", tags$a(href = "cori.zawacki@pitt.edu", "Cori Richards-Zawacki")),
+                                                  tags$ul("- Pennsylvania Survey Data:", tags$a(href = "cori.zawacki@pitt.edu", "Cori Richards-Zawacki")),
+                                                  tags$ul("- Sierra Nevada Survey Data:", tags$a(href = "roland.knapp@ucsb.edu", "Roland Knapp")), 
+                                                  tags$ul("- Brazil Legacy Survey Data:", tags$a(href = "guibecker@psu.edu", "Gui Becker")),
+                                                  tags$ul("- AMP:", tags$a(href = "louise.rollins-smith@vanderbilt.edu", "Louise Rollins-Smith")),
+                                                  tags$ul("- Microbiome:", tags$a(href = "dwoodhams@gmail.com", "Doug Woodhams")),
+                                                  tags$ul("- Genetic:", tags$a(href = "rosenblum@berkeley.edu", "Bree Rosenblum")),
+                                                  tags$ul("- Antibody:", tags$a(href = "louise.rollins-smith@vanderbilt.edu", "Louise Rollins-Smith")),
+                                                  tags$ul("- Bacterial:", tags$a(href = "dwoodhams@gmail.com", "Doug Woodhams")),
+                                                  tags$ul("- Mucosome:", tags$a(href = "dwoodhams@gmail.com", "Doug Woodhams")),
+                                                  tags$ul("Contact", tags$a(href = "eisaguirre@ucsb.edu", "Jake Eisaguirre"), "to help develop query for variables of interest"))))),
                                     
                                     fluidRow(
                                       h1(strong("Acknowledgements"), style = "font-size:20px;"),
@@ -57,9 +73,8 @@ ui <- secure_app(head_auth = tags$script(inactivity),
                    #   align = "center", div(style = "display: inline", img(src = "ribbitr.png", height = "75", width = "95")),
                    #   img(src = "nsf_logo.png", align = "center", height = "75", width = "75")),
                    
-                   fluidRow(div(style = "height:22.5px")),
                    
-                   fluidRow(div(style = "height:62.5px")),
+                   #fluidRow(div(style = "height:62.5px")),
                    
                    fluidRow(hr(style = "border-top: 1px solid #000000;")),
                    
