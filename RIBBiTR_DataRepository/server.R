@@ -530,7 +530,7 @@ shinyServer(function(input, output, session) {
   
   ############### END Audio ###################
   
-# track_usage(storage_mode = store_googledrive(path = "https://drive.google.com/drive/folders/1UeEAlxbToJCM3bb-6AW8R-L8m66oIz-M"))
-# 
+track_usage(storage_mode = store_googledrive(path = "https://drive.google.com/drive/folders/1UeEAlxbToJCM3bb-6AW8R-L8m66oIz-M"))
+
 })
 

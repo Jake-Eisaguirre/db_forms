@@ -29,24 +29,13 @@ library(shinylogs)
 library(cachem)
 library(shinymanager)
 
+source(("creds.R"), local = T)
 
-
-# options(gargle_oob_default = TRUE)
-# 
-# drive_auth(cache = ".secrets", email = T)
-# 
-# # designate project-specific cache
-# options(gargle_oauth_cache = ".secrets")
-# 
-# # check the value of the option, if you like
-# gargle::gargle_oauth_cache()
-# 
-# # trigger auth on purpose --> store a token in the specified cache
-# drive_auth()
-# 
-# # see your token file in the cache, if you like
-# list.files(".secrets/")
-
+options(
+  gargle_oauth_cache = ".secrets",
+  gargle_oauth_email = TRUE,
+  gargle_oob_default = TRUE
+)
 
 shinyOptions(cache = cachem::cache_disk("./app_cache"))
 #shinyOptions(cache = cachem::cache_mem(max_size = 1000e6))
@@ -54,10 +43,10 @@ shinyOptions(cache = cachem::cache_disk("./app_cache"))
 
 # slow method for reading in all csv files
 
-# filenames <- gsub("\\.csv$","", list.files(here("RIBBiTR_DataRepository/data")))
+# filenames <- gsub("\\.csv$","", list.files(here("data")))
 
  # for(i in filenames){
- #   assign(i, read_csv(here("RIBBiTR_DataRepository/data", paste(i, ".csv", sep=""))))
+ #   assign(i, read_csv(here("data", paste(i, ".csv", sep=""))))
  # }
 
  visit <- read_csv(here("data/visit.csv"))
