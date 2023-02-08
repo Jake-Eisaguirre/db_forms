@@ -13,11 +13,11 @@ tryCatch({
   drv <- dbDriver("Postgres")
   print("Connecting to Database…")
   connection <- dbConnect(drv, 
-                          dbname = Sys.getenv("dbname"),
-                          host = Sys.getenv("host"), 
-                          port = Sys.getenv("port"),
-                          user = Sys.getenv("user"), 
-                          password = Sys.getenv("password"))
+                          dbname = Sys.getenv("aws_dbname"),
+                          host = Sys.getenv("aws_host"), 
+                          port = Sys.getenv("aws_port"),
+                          user = Sys.getenv("aws_user"), 
+                          password = Sys.getenv("aws_password"))
   print("Database Connected!")
 },
 error=function(cond) {
@@ -44,19 +44,23 @@ visit <- select(visit, !c(site_id, visit_id))
 write_csv(visit, here("RIBBiTR_DataRepository", "data", "visit.csv"))
 
 survey <- dbGetQuery(connection, "select * from survey")
-survey <- select(survey, !c(visit_id, survey_id))
+survey <- select(survey, !c(visit_id, survey_id)) %>% 
+  colnames() %>% as.data.frame()
 write_csv(survey, here("RIBBiTR_DataRepository", "data", "survey.csv"))
 
 capture <- dbGetQuery(connection, "select * from capture") 
-capture <- select(capture, !c(survey_id, capture_id))
+capture <- select(capture, !c(survey_id, capture_id)) %>% 
+  colnames() %>% as.data.frame()
 write_csv(capture, here("RIBBiTR_DataRepository", "data", "capture.csv"))
 
 ves_cols <- dbGetQuery(connection, "select * from ves")
-ves_cols <- select(ves_cols, !c(survey_id, ves_id))
+ves_cols <- select(ves_cols, !c(survey_id, ves_id)) %>% 
+  colnames() %>% as.data.frame()
 write_csv(ves_cols, here("RIBBiTR_DataRepository", "data", "ves_cols.csv"))
 
 aural_cols <- dbGetQuery(connection, "select * from aural")
-aural_cols <- select(aural_cols, !c(survey_id, aural_id))
+aural_cols <- select(aural_cols, !c(survey_id, aural_id)) %>% 
+  colnames() %>% as.data.frame()
 write_csv(aural_cols, here("RIBBiTR_DataRepository", "data", "aural_cols.csv"))
 
 ###### CAP ######
@@ -157,7 +161,7 @@ write_csv(hobo_site, here("RIBBiTR_DataRepository", "data", "hobo_site.csv"))
 
 hobo_cols <- dbGetQuery(connection, "select * from hobo")
 hobo_cols <- select(hobo_cols, !c(hobo_id, hobo_site_id)) %>% 
-  mutate(year = year(date_time))
+  colnames() %>% as.data.frame()
 write_csv(hobo_cols, here("RIBBiTR_DataRepository", "data", "hobo_cols.csv"))
 
 #################
@@ -187,13 +191,15 @@ write_csv(audio_region, here("RIBBiTR_DataRepository", "data", "audio_region.csv
 audio_site <- dbGetQuery(connection, "select site from audio_site;")
 write_csv(audio_site, here("RIBBiTR_DataRepository", "data", "audio_site.csv"))
 
-audio_visit <- dbGetQuery(connection, "select date_of_deployment from audio_visit;") %>% 
-  drop_na()
-#audio_visit <- mutate(audio_visit, date_of_deployment = year(date_of_deployment))
-write_csv(audio_visit, here("RIBBiTR_DataRepository", "data", "audio_visit.csv"))
+# audio_visit <- dbGetQuery(connection, "select date_of_deployment from audio_visit;") %>% 
+#   drop_na() %>% 
+#   colnames() %>% as.data.frame()
+# #audio_visit <- mutate(audio_visit, date_of_deployment = year(date_of_deployment))
+# write_csv(audio_visit, here("RIBBiTR_DataRepository", "data", "audio_visit.csv"))
 
 audio_cols <- dbGetQuery(connection, "select * from audio_info")
-audio_cols <- select(audio_cols, !c(audio_id, visit_id))
+audio_cols <- select(audio_cols, !c(audio_id, visit_id)) %>% 
+  colnames() %>% as.data.frame()
 write_csv(audio_cols, here("RIBBiTR_DataRepository", "data", "audio_cols.csv"))
 
 ############# END Audio ############################
