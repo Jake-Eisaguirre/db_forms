@@ -19,6 +19,9 @@ ui <- secure_app(head_auth = tags$script(inactivity),
                       background-color: #080808 ; color: #FFF;}")),
           tags$style(HTML(".dropdown-menu > .active > a {
                           background-color: #080808 ; color: #FFF;}")),
+          # tags$style(HTML('.alert .confirm {background-color: #2874A6;}')),
+          # tags$style(HTML('.alert .cancel {background-color: #2874A6 !important;}')),
+          # tags$style(HTML('.alert .test {background-color: #2874A6 !important;}')),
      
      
      # Application title
@@ -46,7 +49,7 @@ ui <- secure_app(head_auth = tags$script(inactivity),
                                                    tags$a(href = "https://docs.google.com/document/d/1m1EEuUH3ioVVXtFkDaWFHITddPcmputEhZxfW_omtrI
                                                 /edit", "RIBBiTR Pre-collaboration Agreement"), "and", 
                                                 tags$a(href = "https://drive.google.com/drive/folders/1KBkHAjwyaCufJpM1qbcyN6F-pd_uJpxU", 
-                                                       "RIBBiTR Schema"), ". As reminder, if you are downloading processed swab data, you must get approval from the data owners that collected the capture level data and the data owners who processed the swab data."))),
+                                                       "RIBBiTR Schema"), ". As reminder, if you are downloading processed swab data, you must get approval from the data owners that collected the capture level data and the data owners who processed the swab data. Please include the", tags$a(href = "eisaguirre@ucsb.edu", "Data Manager"), "in all data inquiries with data owners."))),
                            
                            fluidRow(
                              h1(strong("Data Owners"), style = "font-size:20px;"),
@@ -55,14 +58,14 @@ ui <- secure_app(head_auth = tags$script(inactivity),
                                                   tags$ul("- SERDP Survey Data:", tags$a(href = "cori.zawacki@pitt.edu", "Cori Richards-Zawacki")),
                                                   tags$ul("- Pennsylvania Survey Data:", tags$a(href = "cori.zawacki@pitt.edu", "Cori Richards-Zawacki")),
                                                   tags$ul("- Sierra Nevada Survey Data:", tags$a(href = "roland.knapp@ucsb.edu", "Roland Knapp")), 
-                                                  tags$ul("- Brazil Legacy Survey Data:", tags$a(href = "guibecker@psu.edu", "Gui Becker")),
+                                                  tags$ul("- Brazil Survey Data:", tags$a(href = "guibecker@psu.edu", "Gui Becker")),
                                                   tags$ul("- AMP:", tags$a(href = "louise.rollins-smith@vanderbilt.edu", "Louise Rollins-Smith")),
                                                   tags$ul("- Microbiome:", tags$a(href = "dwoodhams@gmail.com", "Doug Woodhams")),
                                                   tags$ul("- Genetic:", tags$a(href = "rosenblum@berkeley.edu", "Bree Rosenblum")),
                                                   tags$ul("- Antibody:", tags$a(href = "louise.rollins-smith@vanderbilt.edu", "Louise Rollins-Smith")),
                                                   tags$ul("- Bacterial:", tags$a(href = "dwoodhams@gmail.com", "Doug Woodhams")),
                                                   tags$ul("- Mucosome:", tags$a(href = "dwoodhams@gmail.com", "Doug Woodhams")),
-                                                  tags$ul("Contact", tags$a(href = "eisaguirre@ucsb.edu", "Jake Eisaguirre"), "to help develop query for variables of interest"))))),
+                                                  tags$ul("Contact", tags$a(href = "eisaguirre@ucsb.edu", "Jake Eisaguirre"), ", Data Manager, to help develop query for variables of interest"))))),
                                     
                                     fluidRow(
                                       h1(strong("Acknowledgements"), style = "font-size:20px;"),
@@ -210,7 +213,7 @@ ui <- secure_app(head_auth = tags$script(inactivity),
                                 headerPanel(""),
                                 actionButton('cap_download',"Download the data",
                                              icon("download"), 
-                                             style="color: #fff; background-color: #337ab7; border-color: #2e6da4"),
+                                             style="color: #fff; background-color: #337ab7; border-color: black"),
                                 actionButton('cap_clear', "Clear Selection",
                                              icon("trash"),
                                              style="color: #fff; background-color: red; border-color: black"))),
@@ -225,22 +228,18 @@ ui <- secure_app(head_auth = tags$script(inactivity),
                                              scrolling=yes;
                                              zoom=yes", 
                                              src= "schema.pdf")),
+                              tabPanel(title = "Metadata",
+                                       tags$iframe(style="height:800px; 
+                                             width:100%; 
+                                             scrolling=yes;
+                                             zoom=yes", 
+                                             src= "cap_meta.pdf")),
                               tabPanel(title = "Legacy Schema",
                                        tags$iframe(style="height:800px; 
                                              width:100%; 
                                              scrolling=yes;
                                              zoom=yes", 
-                                             src= "legacy_survey_data.pdf")),
-                              tabPanel(title = "Pennsylvania",
-                                       img(src = "yoda.jpeg", height = "400", width = "500")),
-                              tabPanel(title = "Sierra Nevadas",
-                                       img(src = "homer.jpeg", height = "400", width = "500")),
-                              tabPanel(title = "Panama",
-                                       img(src = "yoda.jpeg", height = "400", width = "500")),
-                              tabPanel(title = "Brazil",
-                                       img(src = "homer.jpeg", height = "400", width = "500")),
-                              tabPanel(title = "SERDP",
-                                       img(src = "yoda.jpeg", height = "400", width = "500"))),
+                                             src= "legacy_survey_data.pdf"))),
                             hr(style = "border-top: 1px solid #000000;"))),
         
         ######## END CAPTURE ##############
@@ -333,7 +332,7 @@ ui <- secure_app(head_auth = tags$script(inactivity),
                                 headerPanel(""),
                                 actionButton('ves_download',"Download the data",
                                              icon("download"), 
-                                             style="color: #fff; background-color: #337ab7; border-color: #2e6da4"),
+                                             style="color: #fff; background-color: #337ab7; border-color: black"),
                                 actionButton('ves_clear', "Clear Selection",
                                              icon("trash"),
                                              style="color: #fff; background-color: red; border-color: black"))),
@@ -354,11 +353,7 @@ ui <- secure_app(head_auth = tags$script(inactivity),
                                              scrolling=yes;
                                              zoom=yes", 
                                              src= "legacy_survey_data.pdf")),
-                                tabPanel(title = "Pennsylvania",
-                                         img(src = "yoda.jpeg", height = "400", width = "500")),
-                                tabPanel(title = "Sierra Nevadas",
-                                         img(src = "homer.jpeg", height = "400", width = "500")),
-                                tabPanel(title = "Panama",
+                                tabPanel(title = "Metadata",
                                          img(src = "yoda.jpeg", height = "400", width = "500"))),
                               hr(style = "border-top: 1px solid #000000;"))),
         
@@ -451,7 +446,7 @@ ui <- secure_app(head_auth = tags$script(inactivity),
                                         headerPanel(""),
                                         actionButton('aural_download',"Download the data",
                                                      icon("download"), 
-                                                     style="color: #fff; background-color: #337ab7; border-color: #2e6da4"),
+                                                     style="color: #fff; background-color: #337ab7; border-color: black"),
                                         actionButton('aural_clear', "Clear Selection",
                                                      icon("trash"),
                                                      style="color: #fff; background-color: red; border-color: black"))),
@@ -472,10 +467,8 @@ ui <- secure_app(head_auth = tags$script(inactivity),
                                              scrolling=yes;
                                              zoom=yes", 
                                              src= "legacy_survey_data.pdf")),
-                                tabPanel(title = "Pennsylvania",
-                                         img(src = "yoda.jpeg", height = "400", width = "500")),
-                                tabPanel(title = "Panama",
-                                         img(src = "homer.jpeg", height = "400", width = "500"))),
+                                tabPanel(title = "Metadata",
+                                         img(src = "yoda.jpeg", height = "400", width = "500"))),
                               hr(style = "border-top: 1px solid #000000;"))),
         
         ########## END Aural Tab ##########
@@ -540,7 +533,7 @@ ui <- secure_app(head_auth = tags$script(inactivity),
                                         headerPanel(""),
                                         actionButton('hobo_download',"Download the data",
                                                      icon("download"), 
-                                                     style="color: #fff; background-color: #337ab7; border-color: #2e6da4"),
+                                                     style="color: #fff; background-color: #337ab7; border-color: black"),
                                         actionButton('hobo_clear', "Clear Selection",
                                                      icon("trash"),
                                                      style="color: #fff; background-color: red; border-color: black"))),
@@ -555,13 +548,7 @@ ui <- secure_app(head_auth = tags$script(inactivity),
                                              scrolling=yes;
                                              zoom=yes", 
                                              src= "hobo.pdf")),
-                              tabPanel(title = "Pennsylvania"),
-                              tabPanel(title = "Sierra Nevadas"),
-                              tabPanel(title = "Panama"),
-                              tabPanel(title = "Brazil"),
-                              tabPanel(title = "SERDP")
-                              
-                            )
+                              tabPanel(title = "Metadata"))
                    )),
         
         
@@ -645,7 +632,7 @@ ui <- secure_app(head_auth = tags$script(inactivity),
                                         headerPanel(""),
                                         actionButton('audio_download',"Download the data",
                                                      icon("download"), 
-                                                     style="color: #fff; background-color: #337ab7; border-color: #2e6da4"),
+                                                     style="color: #fff; background-color: #337ab7; border-color: black"),
                                         actionButton('audio_clear', "Clear Selection",
                                                      icon("trash"),
                                                      style="color: #fff; background-color: red; border-color: black"))),
@@ -660,12 +647,7 @@ ui <- secure_app(head_auth = tags$script(inactivity),
                                              scrolling=yes;
                                              zoom=yes", 
                                              src= "audio.pdf")),
-                              tabPanel(title = "Pennsylvania"),
-                              tabPanel(title = "Sierra Nevadas"),
-                              tabPanel(title = "Panama"),
-                              tabPanel(title = "Brazil")
-                              
-                            )
+                              tabPanel(title = "Metadata"))
                    ))
         
         ########### END Audio #########

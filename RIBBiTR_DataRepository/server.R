@@ -1,15 +1,5 @@
 source(("global.R"), local = T)
 source(("creds.R"), local = T)
-# source("db_creds_goog.R", local = T)
-
-# options(gargle_oob_default = TRUE)
-# 
-# options(
-#   gargle_oauth_cache = ".secrets",
-#   gargle_oauth_email = TRUE
-# )
-
-
 
 
 shinyServer(function(input, output, session) {
@@ -46,7 +36,7 @@ shinyServer(function(input, output, session) {
   # render data selection
   output$cap_table <- DT::renderDataTable(cap_data(), extensions= 'Buttons', rownames = FALSE, 
                                           options = list(scrollX = T, TRUEom = 'Bfrtip',
-                                                         buttons = c('copy', 'csv', 'excel', 'pdf', 'print')))
+                                                         buttons = c('copy', 'csv', 'excel', 'pdf', 'print'))) 
   
   
   # update location options based on year selection
@@ -116,14 +106,19 @@ shinyServer(function(input, output, session) {
     
     shinyalert(title = "Pump the breaks!", 
                text = "Did you get approval for data use from the data owners?",
-               type = "warning", closeOnClickOutside = T, showCancelButton = T, inputId = "cap_download_btn",
-               showConfirmButton = T, confirmButtonText = "Yes", cancelButtonText = "No", 
-               animation = "slide-from-top")
+               type = "input", closeOnClickOutside = T, showCancelButton = T, inputId = "cap_download_btn",
+               showConfirmButton = T, confirmButtonText = "Confirm", cancelButtonText = "Cancel", 
+               animation = "slide-from-top", inputPlaceholder = "enter_username", confirmButtonCol = "#337ab7")
+    
   })
   
   observeEvent(input$cap_download_btn,{
-    if(input$cap_download_btn == T)
+    if(input$cap_download_btn %in% credentials$user)
       showModal(modalDialog(downloadButton("cap_dwnld", "Download"), footer = NULL, easyClose = T, size = "s"))
+    
+    if(!input$cap_download_btn %in% credentials$user)
+      shinyalert(title = "Access Denied", type = "warning", confirmButtonCol = "#337ab7")
+      
   })
   
   output$cap_dwnld <- downloadHandler(
@@ -215,14 +210,19 @@ shinyServer(function(input, output, session) {
   # Data download
   observeEvent(input$ves_download, {
     
-    shinyalert(title = "Pump the breaks!", text = "Did you get approval for data use from the data owners?",
-               type = "warning", closeOnClickOutside = T, showCancelButton = T, inputId = "ves_download_btn",
-               showConfirmButton = T, confirmButtonText = "Yes", cancelButtonText = "No")
+    shinyalert(title = "Pump the breaks!", 
+               text = "Did you get approval for data use from the data owners?",
+               type = "input", closeOnClickOutside = T, showCancelButton = T, inputId = "ves_download_btn",
+               showConfirmButton = T, confirmButtonText = "Confirm", cancelButtonText = "Cancel", 
+               animation = "slide-from-top", inputPlaceholder = "enter_username")
   })
   
   observeEvent(input$ves_download_btn,{
-    if(input$ves_download_btn == T)
+    if(input$ves_download_btn %in% credentials$user)
       showModal(modalDialog(downloadButton("ves_dwnld", "download"), footer = NULL, easyClose = T, size = "s"))
+    
+    if(!input$ves_download_btn %in% credentials$user)
+      shinyalert(title = "Access Denied", type = "warning", confirmButtonCol = "#337ab7")
   })
   
   output$ves_dwnld <- downloadHandler(
@@ -310,14 +310,19 @@ shinyServer(function(input, output, session) {
   # Data download
   observeEvent(input$aural_download, {
     
-    shinyalert(title = "Pump the breaks!", text = "Did you get approval for data use from the data owners?",
-               type = "warning", closeOnClickOutside = T, showCancelButton = T, inputId = "aural_download_btn",
-               showConfirmButton = T, confirmButtonText = "Yes", cancelButtonText = "No")
+    shinyalert(title = "Pump the breaks!", 
+               text = "Did you get approval for data use from the data owners?",
+               type = "input", closeOnClickOutside = T, showCancelButton = T, inputId = "aural_download_btn",
+               showConfirmButton = T, confirmButtonText = "Confirm", cancelButtonText = "Cancel", 
+               animation = "slide-from-top", inputPlaceholder = "enter_username")
   })
   
   observeEvent(input$aural_download_btn,{
-    if(input$aural_download_btn == T)
+    if(input$aural_download_btn %in% credentials$user)
       showModal(modalDialog(downloadButton("aural_dwnld", "download"), footer = NULL, easyClose = T, size = "s"))
+    
+    if(!input$aural_download_btn %in% credentials$user)
+      shinyalert(title = "Access Denied", type = "warning", confirmButtonCol = "#337ab7")
   })
   
   output$aural_dwnld <- downloadHandler(
@@ -405,14 +410,19 @@ shinyServer(function(input, output, session) {
   # Data download
   observeEvent(input$hobo_download, {
     
-    shinyalert(title = "Pump the breaks!", text = "Did you get approval for data use from the data owners?",
-               type = "warning", closeOnClickOutside = T, showCancelButton = T, inputId = "hobo_download_btn",
-               showConfirmButton = T, confirmButtonText = "Yes", cancelButtonText = "No")
+    shinyalert(title = "Pump the breaks!", 
+               text = "Did you get approval for data use from the data owners?",
+               type = "input", closeOnClickOutside = T, showCancelButton = T, inputId = "hobo_download_btn",
+               showConfirmButton = T, confirmButtonText = "Confirm", cancelButtonText = "Cancel", 
+               animation = "slide-from-top", inputPlaceholder = "enter_username")
   })
   
   observeEvent(input$hobo_download_btn,{
-    if(input$hobo_download_btn == T)
+    if(input$hobo_download_btn %in% credentials$user)
       showModal(modalDialog(downloadButton("hobo_dwnld", "download"), footer = NULL, easyClose = T, size = "s"))
+    
+    if(!input$hobo_download_btn %in% credentials$user)
+      shinyalert(title = "Access Denied", type = "warning", confirmButtonCol = "#337ab7")
   })
   
   output$hobo_dwnld <- downloadHandler(
@@ -470,14 +480,17 @@ shinyServer(function(input, output, session) {
     
     shinyalert(title = "Pump the breaks!", 
                text = "Did you get approval for data use from the data owners?",
-               type = "warning", closeOnClickOutside = T, showCancelButton = T, inputId = "audio_download_btn",
-               showConfirmButton = T, confirmButtonText = "Yes", cancelButtonText = "No", 
-               animation = "slide-from-top")
+               type = "input", closeOnClickOutside = T, showCancelButton = T, inputId = "audio_download_btn",
+               showConfirmButton = T, confirmButtonText = "Confirm", cancelButtonText = "Cancel", 
+               animation = "slide-from-top", inputPlaceholder = "enter_username")
   })
   
   observeEvent(input$audio_download_btn,{
-    if(input$audio_download_btn == T)
+    if(input$audio_download_btn %in% credentials$user)
       showModal(modalDialog(downloadButton("audio_dwnld", "Download"), footer = NULL, easyClose = T, size = "s"))
+    
+    if(!input$audio_download_btn %in% credentials$user)
+      shinyalert(title = "Access Denied", type = "warning", confirmButtonCol = "#337ab7")
   })
   
   output$audio_dwnld <- downloadHandler(
@@ -530,7 +543,7 @@ shinyServer(function(input, output, session) {
   
   ############### END Audio ###################
   
-track_usage(storage_mode = store_googledrive(path = "https://drive.google.com/drive/folders/1UeEAlxbToJCM3bb-6AW8R-L8m66oIz-M"))
+track_usage(storage_mode = store_rds(path = "/home/ubuntu/RIBBiTR_DataRepository/logs"))
 
 })
 
