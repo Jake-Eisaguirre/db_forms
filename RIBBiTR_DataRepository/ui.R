@@ -49,7 +49,7 @@ ui <- secure_app(head_auth = tags$script(inactivity),
                                                    tags$a(href = "https://docs.google.com/document/d/1m1EEuUH3ioVVXtFkDaWFHITddPcmputEhZxfW_omtrI
                                                 /edit", "RIBBiTR Pre-collaboration Agreement"), "and", 
                                                 tags$a(href = "https://drive.google.com/drive/folders/1KBkHAjwyaCufJpM1qbcyN6F-pd_uJpxU", 
-                                                       "RIBBiTR Schema"), ". As reminder, if you are downloading processed swab data, you must get approval from the data owners that collected the capture level data and the data owners who processed the swab data. Please include the", tags$a(href = "eisaguirre@ucsb.edu", "Data Manager"), "in all data inquiries with data owners."))),
+                                                       "RIBBiTR Schema"), ". As reminder, if you are downloading processed swab data, you must get approval from the data owners that collected the capture level data and the data owners who processed the swab data. Please include the", tags$a(href = "eisaguirre@ucsb.edu", "Data Manager"), "in all data inquiries with the respected data owners and please clear all data selections following data download to maintain app performance."))),
                            
                            fluidRow(
                              h1(strong("Data Owners"), style = "font-size:20px;"),
@@ -527,7 +527,10 @@ ui <- secure_app(head_auth = tags$script(inactivity),
                                                            size = 10,
                                                            `selected-text-format` = "count > 3"
                                                          ), 
-                                                         multiple = TRUE)))),
+                                                         multiple = TRUE)),
+                                  column(12, hr(style = "border-top: 1px solid #000000;")),
+                                  column(12,  strong(h5("Please be patient with data rendering and download as 
+                                                response time can be delayed with this data set."))))),
                               
                               mainPanel(withSpinner(DT::dataTableOutput("hobo_t")),
                                         headerPanel(""),
