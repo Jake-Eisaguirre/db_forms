@@ -65,6 +65,7 @@ ui <- secure_app(head_auth = tags$script(inactivity),
                                                   tags$ul("- Antibody:", tags$a(href = "louise.rollins-smith@vanderbilt.edu", "Louise Rollins-Smith")),
                                                   tags$ul("- Bacterial:", tags$a(href = "dwoodhams@gmail.com", "Doug Woodhams")),
                                                   tags$ul("- Mucosome:", tags$a(href = "dwoodhams@gmail.com", "Doug Woodhams")),
+                                                  tags$ul("- HOBO:", tags$a(href = "mohmer@olemiss.edu", "Michel Ohmer")),
                                                   tags$ul("Contact", tags$a(href = "eisaguirre@ucsb.edu", "Jake Eisaguirre"), ", Data Manager, to help develop query for variables of interest"))))),
                                     
                                     fluidRow(
