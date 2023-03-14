@@ -99,13 +99,13 @@ ui <- secure_app(head_auth = tags$script(inactivity),
                                 fluidRow(
                                   column(12, sliderInput(inputId = "year",
                                                          label = "Select Annual Range:",
-                                                         min = min(visit$year), max(visit$year),
+                                                         min = min(years$year), max(years$year),
                                                          sep = "",
-                                                         value = c(max(visit$year) - 5, max(visit$year)),
+                                                         value = c(max(years$year) - 5, max(years$year)),
                                                          step = 1)),
                                   column(5, pickerInput(inputId = "location",
                                                         label = "Select Locations:",
-                                                        choices = unique(location$location),
+                                                        choices = "",
                                                         options = list(
                                                           `actions-box` = TRUE, 
                                                           size = 10,
@@ -115,7 +115,7 @@ ui <- secure_app(head_auth = tags$script(inactivity),
                                                         width = "180px")),
                                   column(5, pickerInput(inputId = "region",
                                                         label = "Select Regions:",
-                                                        choices = unique(region$region),
+                                                        choices = "",
                                                         options = list(
                                                           `actions-box` = TRUE, 
                                                           size = 10,
@@ -125,7 +125,7 @@ ui <- secure_app(head_auth = tags$script(inactivity),
                                                         width = "180px"), offset = 1),
                                   column(12, pickerInput(inputId = "site",
                                                          label = "Select Sites:",
-                                                         choices = unique(site$site),
+                                                         choices = "",
                                                          options = list(
                                                            `actions-box` = TRUE, 
                                                            size = 10,
@@ -134,54 +134,28 @@ ui <- secure_app(head_auth = tags$script(inactivity),
                                                          multiple = TRUE)),
                                   column(12, hr(style = "border-top: 1px solid #000000;")),
                                   column(12, pickerInput(inputId = "site_cols",
-                                                         label = "Select Site Variables of Interest:",
-                                                         choices = colnames(site),
+                                                         label = "Select Variables of Interest:",
+                                                         choices = "",
                                                          options = list(
                                                            `actions-box` = TRUE, 
                                                            size = 10,
                                                            `selected-text-format` = "count > 3"
                                                          ), 
                                                          multiple = TRUE)),
-                                  column(12, pickerInput(inputId = "visit_cols",
-                                                         label = "Select Visit Variables of Interest:",
-                                                         choices = colnames(visit),
-                                                         options = list(
-                                                           `actions-box` = TRUE, 
-                                                           size = 10,
-                                                           `selected-text-format` = "count > 3"
-                                                         ), 
-                                                         multiple = TRUE)),
-                                  column(12, pickerInput(inputId = "survey_cols",
-                                                         label = "Select Survey Variables of Interest:",
-                                                         choices = c(survey),
-                                                         options = list(
-                                                           `actions-box` = TRUE, 
-                                                           size = 10,
-                                                           `selected-text-format` = "count > 3"
-                                                         ), 
-                                                         multiple = TRUE)),
-                                  column(12,pickerInput(inputId = "capture_cols",
-                                                        label = "Select Capture Variables of Interest:",
-                                                        choices = c(capture),
-                                                        options = list(
-                                                          `actions-box` = TRUE, 
-                                                          size = 10,
-                                                          `selected-text-format` = "count > 3"
-                                                        ),
-                                                        multiple = TRUE)),
                                   column(12, hr(style = "border-top: 1px solid #000000;")),
-                                  column(12, pickerInput(inputId = "comb_bd_cols",
+                                  column(12, pickerInput(inputId = "shiny_temp",
                                                          label = "Select Bd Load Variables of Interest",
-                                                         choices = colnames(comb_bd),
+                                                         choices = comb_bd,
                                                          options = list(
                                                            `actions-box` = TRUE, 
                                                            size = 10,
                                                            `selected-text-format` = "count > 3"
                                                          ), 
+                                                         
                                                          multiple = TRUE)),
                                   column(12, pickerInput(inputId = 'amp_cols',
                                                          label = "Select AMP Variables of Interest",
-                                                         choices = colnames(serdp_amp),
+                                                         choices = serdp_amp,
                                                          options = list(
                                                            `actions-box` = TRUE, 
                                                            size = 10,
@@ -190,7 +164,7 @@ ui <- secure_app(head_auth = tags$script(inactivity),
                                                          multiple = TRUE)),
                                   column(12, pickerInput(inputId = 'muc_mic_cols',
                                                          label = "Select Mucosome/Microbiome Variables of Interest",
-                                                         choices = colnames(serdp_muc_mic),
+                                                         choices = serdp_muc_mic,
                                                          options = list(
                                                            `actions-box` = TRUE, 
                                                            size = 10,
@@ -199,7 +173,7 @@ ui <- secure_app(head_auth = tags$script(inactivity),
                                                          multiple = TRUE)),
                                   column(12, pickerInput(inputId = "genom_cols",
                                                          label = "Select Bd Genomic Variables of Interest",
-                                                         choices = colnames(serdp_bd_genom),
+                                                         choices = serdp_bd_genom,
                                                          options = list(
                                                            `actions-box` = TRUE, 
                                                            size = 10,
@@ -246,414 +220,414 @@ ui <- secure_app(head_auth = tags$script(inactivity),
         ######## END CAPTURE ##############
         
         ######## VES TAB ################
-        
-        navbarMenu(title = "VES", icon = icon("eye"),
-                   
-                   tabPanel(title = "Data",
-                            
-                            sidebarLayout(
-                              
-                              sidebarPanel(
-                                fluidRow(
-                                  column(12, sliderInput(inputId = "year_ves",
-                                                         label = "Select Annual Range:",
-                                                         min = min(visit$year), max(visit$year),
-                                                         sep = "",
-                                                         value = c(max(visit$year) - 5, max(visit$year)),
-                                                         step = 1)),
-                                  column(5, pickerInput(inputId = "location_ves",
-                                                        label = "Select Locations:",
-                                                        choices = unique(location$location),
-                                                        options = list(
-                                                          `actions-box` = TRUE, 
-                                                          size = 10,
-                                                          `selected-text-format` = "count > 3"
-                                                        ), 
-                                                        multiple = TRUE,
-                                                        width = "180px")),
-                                  column(5, pickerInput(inputId = "region_ves",
-                                                        label = "Select Regions:",
-                                                        choices = unique(region$region),
-                                                        options = list(
-                                                          `actions-box` = TRUE, 
-                                                          size = 10,
-                                                          `selected-text-format` = "count > 3"
-                                                        ),
-                                                        multiple = T,
-                                                        width = "180px"), offset = 1),
-                                  column(12, pickerInput(inputId = "site_ves",
-                                                         label = "Select Sites:",
-                                                         choices = unique(site$site),
-                                                         options = list(
-                                                           `actions-box` = TRUE, 
-                                                           size = 10,
-                                                           `selected-text-format` = "count > 3"
-                                                         ), 
-                                                         multiple = TRUE)),
-                                  column(12, hr(style = "border-top: 1px solid #000000;")),
-                                  column(12, pickerInput(inputId = "site_cols_ves",
-                                                         label = "Select Site Variables of Interest:",
-                                                         choices = colnames(site),
-                                                         options = list(
-                                                           `actions-box` = TRUE, 
-                                                           size = 10,
-                                                           `selected-text-format` = "count > 3"
-                                                         ), 
-                                                         multiple = TRUE)),
-                                  column(12, pickerInput(inputId = "visit_cols_ves",
-                                                         label = "Select Visit Variables of Interest:",
-                                                         choices = colnames(visit),
-                                                         options = list(
-                                                           `actions-box` = TRUE, 
-                                                           size = 10,
-                                                           `selected-text-format` = "count > 3"
-                                                         ), 
-                                                         multiple = TRUE)),
-                                  column(12, pickerInput(inputId = "survey_cols_ves",
-                                                         label = "Select Survey Variables of Interest:",
-                                                         choices = survey,
-                                                         options = list(
-                                                           `actions-box` = TRUE, 
-                                                           size = 10,
-                                                           `selected-text-format` = "count > 3"
-                                                         ), 
-                                                         multiple = TRUE)),
-                                  column(12, pickerInput(inputId = "ves_cols",
-                                                         label = "Select VES Variables of Interest:",
-                                                         choices = ves_cols,
-                                                         options = list(
-                                                           `actions-box` = TRUE, 
-                                                           size = 10,
-                                                           `selected-text-format` = "count > 3"
-                                                         ),
-                                                         multiple = TRUE)))),
-                              
-                              mainPanel(
-                                withSpinner(DT::dataTableOutput("ves_table")),
-                                headerPanel(""),
-                                actionButton('ves_download',"Download the data",
-                                             icon("download"), 
-                                             style="color: #fff; background-color: #337ab7; border-color: black"),
-                                actionButton('ves_clear', "Clear Selection",
-                                             icon("trash"),
-                                             style="color: #fff; background-color: red; border-color: black"))),
-                            hr(style = "border-top: 1px solid #000000;")),
-                   
-                   tabPanel(title = "Metadata",
-                            
-                            tabsetPanel(
-                              tabPanel(title = "Schema",
-                                       tags$iframe(style="height:800px; 
-                                             width:100%; 
-                                             scrolling=yes;
-                                             zoom=yes", 
-                                             src= "schema.pdf")),
-                              tabPanel(title = "Legacy Schema",
-                                       tags$iframe(style="height:800px; 
-                                             width:100%; 
-                                             scrolling=yes;
-                                             zoom=yes", 
-                                             src= "legacy_survey_data.pdf")),
-                                tabPanel(title = "Metadata",
-                                         img(src = "yoda.jpeg", height = "400", width = "500"))),
-                              hr(style = "border-top: 1px solid #000000;"))),
-        
+
+        # navbarMenu(title = "VES", icon = icon("eye"),
+        # 
+        #            tabPanel(title = "Data",
+        # 
+        #                     sidebarLayout(
+        # 
+        #                       sidebarPanel(
+        #                         fluidRow(
+        #                           column(12, sliderInput(inputId = "year_ves",
+        #                                                  label = "Select Annual Range:",
+        #                                                  min = min(years$year), max(years$year),
+        #                                                  sep = "",
+        #                                                  value = c(max(years$year) - 5, max(years$year)),
+        #                                                  step = 1)),
+        #                           column(5, pickerInput(inputId = "location_ves",
+        #                                                 label = "Select Locations:",
+        #                                                 choices = unique(location$location),
+        #                                                 options = list(
+        #                                                   `actions-box` = TRUE, 
+        #                                                   size = 10,
+        #                                                   `selected-text-format` = "count > 3"
+        #                                                 ), 
+        #                                                 multiple = TRUE,
+        #                                                 width = "180px")),
+        #                           column(5, pickerInput(inputId = "region_ves",
+        #                                                 label = "Select Regions:",
+        #                                                 choices = unique(region$region),
+        #                                                 options = list(
+        #                                                   `actions-box` = TRUE, 
+        #                                                   size = 10,
+        #                                                   `selected-text-format` = "count > 3"
+        #                                                 ),
+        #                                                 multiple = T,
+        #                                                 width = "180px"), offset = 1),
+        #                           column(12, pickerInput(inputId = "site_ves",
+        #                                                  label = "Select Sites:",
+        #                                                  choices = unique(site_list$site),
+        #                                                  options = list(
+        #                                                    `actions-box` = TRUE, 
+        #                                                    size = 10,
+        #                                                    `selected-text-format` = "count > 3"
+        #                                                  ), 
+        #                                                  multiple = TRUE)),
+        #                           column(12, hr(style = "border-top: 1px solid #000000;")),
+        #                           column(12, pickerInput(inputId = "site_cols_ves",
+        #                                                  label = "Select Site Variables of Interest:",
+        #                                                  choices = site,
+        #                                                  options = list(
+        #                                                    `actions-box` = TRUE,
+        #                                                    size = 10,
+        #                                                    `selected-text-format` = "count > 3"
+        #                                                  ),
+        #                                                  multiple = TRUE)),
+        #                           column(12, pickerInput(inputId = "visit_cols_ves",
+        #                                                  label = "Select Visit Variables of Interest:",
+        #                                                  choices = visit,
+        #                                                  options = list(
+        #                                                    `actions-box` = TRUE,
+        #                                                    size = 10,
+        #                                                    `selected-text-format` = "count > 3"
+        #                                                  ),
+        #                                                  multiple = TRUE)),
+        #                           column(12, pickerInput(inputId = "survey_cols_ves",
+        #                                                  label = "Select Survey Variables of Interest:",
+        #                                                  choices = survey,
+        #                                                  options = list(
+        #                                                    `actions-box` = TRUE,
+        #                                                    size = 10,
+        #                                                    `selected-text-format` = "count > 3"
+        #                                                  ),
+        #                                                  multiple = TRUE)),
+        #                           column(12, pickerInput(inputId = "ves_cols",
+        #                                                  label = "Select VES Variables of Interest:",
+        #                                                  choices = ves,
+        #                                                  options = list(
+        #                                                    `actions-box` = TRUE,
+        #                                                    size = 10,
+        #                                                    `selected-text-format` = "count > 3"
+        #                                                  ),
+        #                                                  multiple = TRUE)))),
+        # 
+        #                       mainPanel(
+        #                         withSpinner(DT::dataTableOutput("ves_table")),
+        #                         headerPanel(""),
+        #                         actionButton('ves_download',"Download the data",
+        #                                      icon("download"),
+        #                                      style="color: #fff; background-color: #337ab7; border-color: black"),
+        #                         actionButton('ves_clear', "Clear Selection",
+        #                                      icon("trash"),
+        #                                      style="color: #fff; background-color: red; border-color: black"))),
+        #                     hr(style = "border-top: 1px solid #000000;")),
+        # 
+        #            tabPanel(title = "Metadata",
+        # 
+        #                     tabsetPanel(
+        #                       tabPanel(title = "Schema",
+        #                                tags$iframe(style="height:800px;
+        #                                      width:100%;
+        #                                      scrolling=yes;
+        #                                      zoom=yes",
+        #                                      src= "schema.pdf")),
+        #                       tabPanel(title = "Legacy Schema",
+        #                                tags$iframe(style="height:800px;
+        #                                      width:100%;
+        #                                      scrolling=yes;
+        #                                      zoom=yes",
+        #                                      src= "legacy_survey_data.pdf")),
+        #                         tabPanel(title = "Metadata",
+        #                                  img(src = "yoda.jpeg", height = "400", width = "500"))),
+        #                       hr(style = "border-top: 1px solid #000000;"))),
+
         ####### END VES ##########
-        
-        ####### Aural Tab ##########
-        
-        navbarMenu(title = "Aural", icon = icon("music"),
-                   
-                   tabPanel(title = "Data",
-                            
-                            sidebarLayout(
-                              
-                              sidebarPanel(
-                                fluidRow(    
-                                  column(12, sliderInput(inputId = "year_a",
-                                                         label = "Select Annual Range:",
-                                                         min = min(visit$year), max(visit$year),
-                                                         sep = "",
-                                                         value = c(max(visit$year) - 5, max(visit$year)),
-                                                         step = 1)),
-                                  column(5, pickerInput(inputId = "location_a",
-                                                        label = "Select Locations:",
-                                                        choices = unique(location$location),
-                                                        options = list(
-                                                          `actions-box` = TRUE, 
-                                                          size = 10,
-                                                          `selected-text-format` = "count > 3"
-                                                        ), 
-                                                        multiple = TRUE,
-                                                        width = "180px")),
-                                  column(5, pickerInput(inputId = "region_a",
-                                                        label = "Select Regions:",
-                                                        choices = unique(region$region),
-                                                        options = list(
-                                                          `actions-box` = TRUE, 
-                                                          size = 10,
-                                                          `selected-text-format` = "count > 3"
-                                                        ),
-                                                        multiple = T,
-                                                        width = "180px"), offset = 1),
-                                  column(12, pickerInput(inputId = "site_a",
-                                                         label = "Select Sites:",
-                                                         choices = unique(site$site),
-                                                         options = list(
-                                                           `actions-box` = TRUE, 
-                                                           size = 10,
-                                                           `selected-text-format` = "count > 3"
-                                                         ), 
-                                                         multiple = TRUE)),
-                                  column(12, hr(style = "border-top: 1px solid #000000;")),
-                                  column(12, pickerInput(inputId = "site_cols_a",
-                                                         label = "Select Site Variables of Interest:",
-                                                         choices = colnames(site),
-                                                         options = list(
-                                                           `actions-box` = TRUE, 
-                                                           size = 10,
-                                                           `selected-text-format` = "count > 3"
-                                                         ), 
-                                                         multiple = TRUE)),
-                                  column(12, pickerInput(inputId = "visit_cols_a",
-                                                         label = "Select Visit Variables of Interest:",
-                                                         choices = colnames(visit),
-                                                         options = list(
-                                                           `actions-box` = TRUE, 
-                                                           size = 10,
-                                                           `selected-text-format` = "count > 3"
-                                                         ), 
-                                                         multiple = TRUE)),
-                                  column(12, pickerInput(inputId = "survey_cols_a",
-                                                         label = "Select Survey Variables of Interest:",
-                                                         choices = survey,
-                                                         options = list(
-                                                           `actions-box` = TRUE, 
-                                                           size = 10,
-                                                           `selected-text-format` = "count > 3"
-                                                         ), 
-                                                         multiple = TRUE)),
-                                  column(12, pickerInput(inputId = "aural_cols",
-                                                         label = "Select Aural Variables of Interest:",
-                                                         choices = aural_cols,
-                                                         options = list(
-                                                           `actions-box` = TRUE, 
-                                                           size = 10,
-                                                           `selected-text-format` = "count > 3"
-                                                         ),
-                                                         multiple = TRUE)))),
-                              
-                              mainPanel(withSpinner(DT::dataTableOutput("aural_table")),
-                                        headerPanel(""),
-                                        actionButton('aural_download',"Download the data",
-                                                     icon("download"), 
-                                                     style="color: #fff; background-color: #337ab7; border-color: black"),
-                                        actionButton('aural_clear', "Clear Selection",
-                                                     icon("trash"),
-                                                     style="color: #fff; background-color: red; border-color: black"))),
-                            hr(style = "border-top: 1px solid #000000;")),
-                   
-                   tabPanel(title = "Metadata",
-                            
-                            tabsetPanel(
-                              tabPanel(title = "Schema",
-                                       tags$iframe(style="height:800px; 
-                                             width:100%; 
-                                             scrolling=yes;
-                                             zoom=yes", 
-                                             src= "schema.pdf")),
-                              tabPanel(title = "Legacy Schema",
-                                       tags$iframe(style="height:800px; 
-                                             width:100%; 
-                                             scrolling=yes;
-                                             zoom=yes", 
-                                             src= "legacy_survey_data.pdf")),
-                                tabPanel(title = "Metadata",
-                                         img(src = "yoda.jpeg", height = "400", width = "500"))),
-                              hr(style = "border-top: 1px solid #000000;"))),
-        
-        ########## END Aural Tab ##########
-        
-        ########## HOBO TAB ##########
-        
-        navbarMenu(title = "Hobo Sensor", icon = icon("thermometer"),
-                   
-                   tabPanel(title = "Data",
-                            
-                            sidebarLayout(
-                              
-                              sidebarPanel(
-                                fluidRow(   
-                                  column(12, sliderInput(inputId = "date_hobo",
-                                                         label = "Select Annual Range:",
-                                                         min = min(hobo$year), max(hobo$year),
-                                                         sep = "",
-                                                         value = c(max(hobo_cols$year) - 3, max(hobo_cols$year)),
-                                                         step = 1)),
-                                  column(5, pickerInput(inputId = "location_hobo",
-                                                        label = "Select Locations:",
-                                                        choices = unique(hobo_location$location),
-                                                        options = list(
-                                                          `actions-box` = TRUE, 
-                                                          size = 10,
-                                                          `selected-text-format` = "count > 3"
-                                                        ), 
-                                                        multiple = TRUE,
-                                                        width = "180px")),
-                                  column(5, pickerInput(inputId = "region_hobo",
-                                                        label = "Select Regions:",
-                                                        choices = unique(hobo_region$region),
-                                                        options = list(
-                                                          `actions-box` = TRUE, 
-                                                          size = 10,
-                                                          `selected-text-format` = "count > 3"
-                                                        ),
-                                                        multiple = T,
-                                                        width = "180px"), offset = 1),
-                                  column(12, pickerInput(inputId = "site_hobo",
-                                                         label = "Select Sites:",
-                                                         choices = unique(hobo_site$site),
-                                                         options = list(
-                                                           `actions-box` = TRUE, 
-                                                           size = 10,
-                                                           `selected-text-format` = "count > 3"
-                                                         ), 
-                                                         multiple = TRUE)),
-                                  column(12, hr(style = "border-top: 1px solid #000000;")),
-                                  column(12, pickerInput(inputId = "hobo_cols",
-                                                         label = "Select Hobo Sensors Variables of Interest:",
-                                                         choices = hobo_cols,
-                                                         options = list(
-                                                           `actions-box` = TRUE, 
-                                                           size = 10,
-                                                           `selected-text-format` = "count > 3"
-                                                         ), 
-                                                         multiple = TRUE)),
-                                  column(12, hr(style = "border-top: 1px solid #000000;")),
-                                  column(12,  strong(h5("Please be patient with data rendering and download as 
-                                                response time can be delayed with this data set."))))),
-                              
-                              mainPanel(withSpinner(DT::dataTableOutput("hobo_t")),
-                                        headerPanel(""),
-                                        actionButton('hobo_download',"Download the data",
-                                                     icon("download"), 
-                                                     style="color: #fff; background-color: #337ab7; border-color: black"),
-                                        actionButton('hobo_clear', "Clear Selection",
-                                                     icon("trash"),
-                                                     style="color: #fff; background-color: red; border-color: black"))),
-                            hr(style = "border-top: 1px solid #000000;")),
-                   
-                   tabPanel(title = "Metadata",
-                            
-                            tabsetPanel(
-                              tabPanel(title = "Schema",
-                                       tags$iframe(style="height:800px; 
-                                             width:100%; 
-                                             scrolling=yes;
-                                             zoom=yes", 
-                                             src= "hobo.pdf")),
-                              tabPanel(title = "Metadata"))
-                   )),
-        
-        
-        ######## END HOBO Tab ##########
-        
-        ######## eDNA TAB ############
-        
-        tabPanel(title = "eDNA", icon = icon("dna"),
-                 
-                 sidebarLayout(
-                   
-                   sidebarPanel(
-                     
-                   ),
-                   mainPanel(img(src = "homer.jpeg", height = "600", width = "700")
-                   )
-                   
-                 )),
-        
-        ######### END eDNA Tab #########    
-        
-        ######### Audio tab ############3
-        navbarMenu(title = "Audio", icon = icon("microphone"),
-                   
-                   tabPanel(title = "Data",
-                            
-                            sidebarLayout(
-                              
-                              sidebarPanel(
-                                fluidRow(   
-                                  # column(12, sliderInput(inputId = "date_audio",
-                                  #                        label = "Select Annual Range:",
-                                  #                        min = min(as.Date(audio_visit$date_of_deployment, "%Y-%m-%d")), 
-                                  #                        max = max(as.Date(audio_visit$date_of_deployment, "%Y-%m-%d")),
-                                  #                        sep = "",
-                                  #                        value = c(max(as.Date(audio_visit$date_of_deployment, "%Y-%m-%d")) - 
-                                  #                                    15, max(as.Date(audio_visit$date_of_deployment, "%Y-%m-%d"))),
-                                  #                        
-                                  #                        timeFormat = "%Y-%m-%d")),
-                                  column(5, pickerInput(inputId = "location_audio",
-                                                        label = "Select Locations:",
-                                                        choices = unique(audio_location$location),
-                                                        options = list(
-                                                          `actions-box` = TRUE, 
-                                                          size = 10,
-                                                          `selected-text-format` = "count > 3"
-                                                        ), 
-                                                        multiple = TRUE,
-                                                        width = "180px")),
-                                  column(5, pickerInput(inputId = "region_audio",
-                                                        label = "Select Regions:",
-                                                        choices = unique(audio_region$region),
-                                                        options = list(
-                                                          `actions-box` = TRUE, 
-                                                          size = 10,
-                                                          `selected-text-format` = "count > 3"
-                                                        ),
-                                                        multiple = T,
-                                                        width = "180px"), offset = 1),
-                                  column(12, pickerInput(inputId = "site_audio",
-                                                         label = "Select Sites:",
-                                                         choices = unique(audio_site$site),
-                                                         options = list(
-                                                           `actions-box` = TRUE, 
-                                                           size = 10,
-                                                           `selected-text-format` = "count > 3"
-                                                         ), 
-                                                         multiple = TRUE)),
-                                  column(12, hr(style = "border-top: 1px solid #000000;")),
-                                  column(12, pickerInput(inputId = "audio_cols",
-                                                         label = "Select Hobo Sensors Variables of Interest:",
-                                                         choices = audio_cols,
-                                                         options = list(
-                                                           `actions-box` = TRUE, 
-                                                           size = 10,
-                                                           `selected-text-format` = "count > 3"
-                                                         ), 
-                                                         multiple = TRUE)))),
-                              
-                              mainPanel(withSpinner(DT::dataTableOutput("audio_t")),
-                                        headerPanel(""),
-                                        actionButton('audio_download',"Download the data",
-                                                     icon("download"), 
-                                                     style="color: #fff; background-color: #337ab7; border-color: black"),
-                                        actionButton('audio_clear', "Clear Selection",
-                                                     icon("trash"),
-                                                     style="color: #fff; background-color: red; border-color: black"))),
-                            hr(style = "border-top: 1px solid #000000;")),
-                   
-                   tabPanel(title = "Metadata",
-                            
-                            tabsetPanel(
-                              tabPanel(title = "Schema",
-                                       tags$iframe(style="height:800px; 
-                                             width:100%; 
-                                             scrolling=yes;
-                                             zoom=yes", 
-                                             src= "audio.pdf")),
-                              tabPanel(title = "Metadata"))
-                   ))
-        
+        # 
+        # ####### Aural Tab ##########
+        # 
+        # navbarMenu(title = "Aural", icon = icon("music"),
+        #            
+        #            tabPanel(title = "Data",
+        #                     
+        #                     sidebarLayout(
+        #                       
+        #                       sidebarPanel(
+        #                         fluidRow(    
+        #                           column(12, sliderInput(inputId = "year_a",
+        #                                                  label = "Select Annual Range:",
+        #                                                  min = min(visit$year), max(visit$year),
+        #                                                  sep = "",
+        #                                                  value = c(max(visit$year) - 5, max(visit$year)),
+        #                                                  step = 1)),
+        #                           column(5, pickerInput(inputId = "location_a",
+        #                                                 label = "Select Locations:",
+        #                                                 choices = unique(location$location),
+        #                                                 options = list(
+        #                                                   `actions-box` = TRUE, 
+        #                                                   size = 10,
+        #                                                   `selected-text-format` = "count > 3"
+        #                                                 ), 
+        #                                                 multiple = TRUE,
+        #                                                 width = "180px")),
+        #                           column(5, pickerInput(inputId = "region_a",
+        #                                                 label = "Select Regions:",
+        #                                                 choices = unique(region$region),
+        #                                                 options = list(
+        #                                                   `actions-box` = TRUE, 
+        #                                                   size = 10,
+        #                                                   `selected-text-format` = "count > 3"
+        #                                                 ),
+        #                                                 multiple = T,
+        #                                                 width = "180px"), offset = 1),
+        #                           column(12, pickerInput(inputId = "site_a",
+        #                                                  label = "Select Sites:",
+        #                                                  choices = unique(site$site),
+        #                                                  options = list(
+        #                                                    `actions-box` = TRUE, 
+        #                                                    size = 10,
+        #                                                    `selected-text-format` = "count > 3"
+        #                                                  ), 
+        #                                                  multiple = TRUE)),
+        #                           column(12, hr(style = "border-top: 1px solid #000000;")),
+        #                           column(12, pickerInput(inputId = "site_cols_a",
+        #                                                  label = "Select Site Variables of Interest:",
+        #                                                  choices = colnames(site),
+        #                                                  options = list(
+        #                                                    `actions-box` = TRUE, 
+        #                                                    size = 10,
+        #                                                    `selected-text-format` = "count > 3"
+        #                                                  ), 
+        #                                                  multiple = TRUE)),
+        #                           column(12, pickerInput(inputId = "visit_cols_a",
+        #                                                  label = "Select Visit Variables of Interest:",
+        #                                                  choices = colnames(visit),
+        #                                                  options = list(
+        #                                                    `actions-box` = TRUE, 
+        #                                                    size = 10,
+        #                                                    `selected-text-format` = "count > 3"
+        #                                                  ), 
+        #                                                  multiple = TRUE)),
+        #                           column(12, pickerInput(inputId = "survey_cols_a",
+        #                                                  label = "Select Survey Variables of Interest:",
+        #                                                  choices = survey,
+        #                                                  options = list(
+        #                                                    `actions-box` = TRUE, 
+        #                                                    size = 10,
+        #                                                    `selected-text-format` = "count > 3"
+        #                                                  ), 
+        #                                                  multiple = TRUE)),
+        #                           column(12, pickerInput(inputId = "aural_cols",
+        #                                                  label = "Select Aural Variables of Interest:",
+        #                                                  choices = aural_cols,
+        #                                                  options = list(
+        #                                                    `actions-box` = TRUE, 
+        #                                                    size = 10,
+        #                                                    `selected-text-format` = "count > 3"
+        #                                                  ),
+        #                                                  multiple = TRUE)))),
+        #                       
+        #                       mainPanel(withSpinner(DT::dataTableOutput("aural_table")),
+        #                                 headerPanel(""),
+        #                                 actionButton('aural_download',"Download the data",
+        #                                              icon("download"), 
+        #                                              style="color: #fff; background-color: #337ab7; border-color: black"),
+        #                                 actionButton('aural_clear', "Clear Selection",
+        #                                              icon("trash"),
+        #                                              style="color: #fff; background-color: red; border-color: black"))),
+        #                     hr(style = "border-top: 1px solid #000000;")),
+        #            
+        #            tabPanel(title = "Metadata",
+        #                     
+        #                     tabsetPanel(
+        #                       tabPanel(title = "Schema",
+        #                                tags$iframe(style="height:800px; 
+        #                                      width:100%; 
+        #                                      scrolling=yes;
+        #                                      zoom=yes", 
+        #                                      src= "schema.pdf")),
+        #                       tabPanel(title = "Legacy Schema",
+        #                                tags$iframe(style="height:800px; 
+        #                                      width:100%; 
+        #                                      scrolling=yes;
+        #                                      zoom=yes", 
+        #                                      src= "legacy_survey_data.pdf")),
+        #                         tabPanel(title = "Metadata",
+        #                                  img(src = "yoda.jpeg", height = "400", width = "500"))),
+        #                       hr(style = "border-top: 1px solid #000000;"))),
+        # 
+        # ########## END Aural Tab ##########
+        # 
+        # ########## HOBO TAB ##########
+        # 
+        # navbarMenu(title = "Hobo Sensor", icon = icon("thermometer"),
+        #            
+        #            tabPanel(title = "Data",
+        #                     
+        #                     sidebarLayout(
+        #                       
+        #                       sidebarPanel(
+        #                         fluidRow(   
+        #                           column(12, sliderInput(inputId = "date_hobo",
+        #                                                  label = "Select Annual Range:",
+        #                                                  min = min(hobo$year), max(hobo$year),
+        #                                                  sep = "",
+        #                                                  value = c(max(hobo_cols$year) - 3, max(hobo_cols$year)),
+        #                                                  step = 1)),
+        #                           column(5, pickerInput(inputId = "location_hobo",
+        #                                                 label = "Select Locations:",
+        #                                                 choices = unique(hobo_location$location),
+        #                                                 options = list(
+        #                                                   `actions-box` = TRUE, 
+        #                                                   size = 10,
+        #                                                   `selected-text-format` = "count > 3"
+        #                                                 ), 
+        #                                                 multiple = TRUE,
+        #                                                 width = "180px")),
+        #                           column(5, pickerInput(inputId = "region_hobo",
+        #                                                 label = "Select Regions:",
+        #                                                 choices = unique(hobo_region$region),
+        #                                                 options = list(
+        #                                                   `actions-box` = TRUE, 
+        #                                                   size = 10,
+        #                                                   `selected-text-format` = "count > 3"
+        #                                                 ),
+        #                                                 multiple = T,
+        #                                                 width = "180px"), offset = 1),
+        #                           column(12, pickerInput(inputId = "site_hobo",
+        #                                                  label = "Select Sites:",
+        #                                                  choices = unique(hobo_site$site),
+        #                                                  options = list(
+        #                                                    `actions-box` = TRUE, 
+        #                                                    size = 10,
+        #                                                    `selected-text-format` = "count > 3"
+        #                                                  ), 
+        #                                                  multiple = TRUE)),
+        #                           column(12, hr(style = "border-top: 1px solid #000000;")),
+        #                           column(12, pickerInput(inputId = "hobo_cols",
+        #                                                  label = "Select Hobo Sensors Variables of Interest:",
+        #                                                  choices = hobo_cols,
+        #                                                  options = list(
+        #                                                    `actions-box` = TRUE, 
+        #                                                    size = 10,
+        #                                                    `selected-text-format` = "count > 3"
+        #                                                  ), 
+        #                                                  multiple = TRUE)),
+        #                           column(12, hr(style = "border-top: 1px solid #000000;")),
+        #                           column(12,  strong(h5("Please be patient with data rendering and download as 
+        #                                         response time can be delayed with this data set."))))),
+        #                       
+        #                       mainPanel(withSpinner(DT::dataTableOutput("hobo_t")),
+        #                                 headerPanel(""),
+        #                                 actionButton('hobo_download',"Download the data",
+        #                                              icon("download"), 
+        #                                              style="color: #fff; background-color: #337ab7; border-color: black"),
+        #                                 actionButton('hobo_clear', "Clear Selection",
+        #                                              icon("trash"),
+        #                                              style="color: #fff; background-color: red; border-color: black"))),
+        #                     hr(style = "border-top: 1px solid #000000;")),
+        #            
+        #            tabPanel(title = "Metadata",
+        #                     
+        #                     tabsetPanel(
+        #                       tabPanel(title = "Schema",
+        #                                tags$iframe(style="height:800px; 
+        #                                      width:100%; 
+        #                                      scrolling=yes;
+        #                                      zoom=yes", 
+        #                                      src= "hobo.pdf")),
+        #                       tabPanel(title = "Metadata"))
+        #            )),
+        # 
+        # 
+        # ######## END HOBO Tab ##########
+        # 
+        # ######## eDNA TAB ############
+        # 
+        # tabPanel(title = "eDNA", icon = icon("dna"),
+        #          
+        #          sidebarLayout(
+        #            
+        #            sidebarPanel(
+        #              
+        #            ),
+        #            mainPanel(img(src = "homer.jpeg", height = "600", width = "700")
+        #            )
+        #            
+        #          )),
+        # 
+        # ######### END eDNA Tab #########    
+        # 
+        # ######### Audio tab ############3
+        # navbarMenu(title = "Audio", icon = icon("microphone"),
+        #            
+        #            tabPanel(title = "Data",
+        #                     
+        #                     sidebarLayout(
+        #                       
+        #                       sidebarPanel(
+        #                         fluidRow(   
+        #                           # column(12, sliderInput(inputId = "date_audio",
+        #                           #                        label = "Select Annual Range:",
+        #                           #                        min = min(as.Date(audio_visit$date_of_deployment, "%Y-%m-%d")), 
+        #                           #                        max = max(as.Date(audio_visit$date_of_deployment, "%Y-%m-%d")),
+        #                           #                        sep = "",
+        #                           #                        value = c(max(as.Date(audio_visit$date_of_deployment, "%Y-%m-%d")) - 
+        #                           #                                    15, max(as.Date(audio_visit$date_of_deployment, "%Y-%m-%d"))),
+        #                           #                        
+        #                           #                        timeFormat = "%Y-%m-%d")),
+        #                           column(5, pickerInput(inputId = "location_audio",
+        #                                                 label = "Select Locations:",
+        #                                                 choices = unique(audio_location$location),
+        #                                                 options = list(
+        #                                                   `actions-box` = TRUE, 
+        #                                                   size = 10,
+        #                                                   `selected-text-format` = "count > 3"
+        #                                                 ), 
+        #                                                 multiple = TRUE,
+        #                                                 width = "180px")),
+        #                           column(5, pickerInput(inputId = "region_audio",
+        #                                                 label = "Select Regions:",
+        #                                                 choices = unique(audio_region$region),
+        #                                                 options = list(
+        #                                                   `actions-box` = TRUE, 
+        #                                                   size = 10,
+        #                                                   `selected-text-format` = "count > 3"
+        #                                                 ),
+        #                                                 multiple = T,
+        #                                                 width = "180px"), offset = 1),
+        #                           column(12, pickerInput(inputId = "site_audio",
+        #                                                  label = "Select Sites:",
+        #                                                  choices = unique(audio_site$site),
+        #                                                  options = list(
+        #                                                    `actions-box` = TRUE, 
+        #                                                    size = 10,
+        #                                                    `selected-text-format` = "count > 3"
+        #                                                  ), 
+        #                                                  multiple = TRUE)),
+        #                           column(12, hr(style = "border-top: 1px solid #000000;")),
+        #                           column(12, pickerInput(inputId = "audio_cols",
+        #                                                  label = "Select Hobo Sensors Variables of Interest:",
+        #                                                  choices = audio_cols,
+        #                                                  options = list(
+        #                                                    `actions-box` = TRUE, 
+        #                                                    size = 10,
+        #                                                    `selected-text-format` = "count > 3"
+        #                                                  ), 
+        #                                                  multiple = TRUE)))),
+        #                       
+        #                       mainPanel(withSpinner(DT::dataTableOutput("audio_t")),
+        #                                 headerPanel(""),
+        #                                 actionButton('audio_download',"Download the data",
+        #                                              icon("download"), 
+        #                                              style="color: #fff; background-color: #337ab7; border-color: black"),
+        #                                 actionButton('audio_clear', "Clear Selection",
+        #                                              icon("trash"),
+        #                                              style="color: #fff; background-color: red; border-color: black"))),
+        #                     hr(style = "border-top: 1px solid #000000;")),
+        #            
+        #            tabPanel(title = "Metadata",
+        #                     
+        #                     tabsetPanel(
+        #                       tabPanel(title = "Schema",
+        #                                tags$iframe(style="height:800px; 
+        #                                      width:100%; 
+        #                                      scrolling=yes;
+        #                                      zoom=yes", 
+        #                                      src= "audio.pdf")),
+        #                       tabPanel(title = "Metadata"))
+        #            ))
+        # 
         ########### END Audio #########
                          
   )

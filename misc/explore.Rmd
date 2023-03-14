@@ -124,3 +124,13 @@ b <- cap %>%
 
 ```
 
+```{r}
+
+update_cap_locations <- full_cap_data %>% 
+  filter(year %in% c(2015:2019)) %>% 
+  select(location) %>% 
+  distinct(location) %>% 
+  collect()
+
+```
+
