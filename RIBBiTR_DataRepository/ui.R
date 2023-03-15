@@ -220,116 +220,88 @@ ui <- secure_app(head_auth = tags$script(inactivity),
         
         ######## VES TAB ################
 
-        # navbarMenu(title = "VES", icon = icon("eye"),
-        # 
-        #            tabPanel(title = "Data",
-        # 
-        #                     sidebarLayout(
-        # 
-        #                       sidebarPanel(
-        #                         fluidRow(
-        #                           column(12, sliderInput(inputId = "year_ves",
-        #                                                  label = "Select Annual Range:",
-        #                                                  min = min(years$year), max(years$year),
-        #                                                  sep = "",
-        #                                                  value = c(max(years$year) - 5, max(years$year)),
-        #                                                  step = 1)),
-        #                           column(5, pickerInput(inputId = "location_ves",
-        #                                                 label = "Select Locations:",
-        #                                                 choices = unique(location$location),
-        #                                                 options = list(
-        #                                                   `actions-box` = TRUE, 
-        #                                                   size = 10,
-        #                                                   `selected-text-format` = "count > 3"
-        #                                                 ), 
-        #                                                 multiple = TRUE,
-        #                                                 width = "180px")),
-        #                           column(5, pickerInput(inputId = "region_ves",
-        #                                                 label = "Select Regions:",
-        #                                                 choices = unique(region$region),
-        #                                                 options = list(
-        #                                                   `actions-box` = TRUE, 
-        #                                                   size = 10,
-        #                                                   `selected-text-format` = "count > 3"
-        #                                                 ),
-        #                                                 multiple = T,
-        #                                                 width = "180px"), offset = 1),
-        #                           column(12, pickerInput(inputId = "site_ves",
-        #                                                  label = "Select Sites:",
-        #                                                  choices = unique(site_list$site),
-        #                                                  options = list(
-        #                                                    `actions-box` = TRUE, 
-        #                                                    size = 10,
-        #                                                    `selected-text-format` = "count > 3"
-        #                                                  ), 
-        #                                                  multiple = TRUE)),
-        #                           column(12, hr(style = "border-top: 1px solid #000000;")),
-        #                           column(12, pickerInput(inputId = "site_cols_ves",
-        #                                                  label = "Select Site Variables of Interest:",
-        #                                                  choices = site,
-        #                                                  options = list(
-        #                                                    `actions-box` = TRUE,
-        #                                                    size = 10,
-        #                                                    `selected-text-format` = "count > 3"
-        #                                                  ),
-        #                                                  multiple = TRUE)),
-        #                           column(12, pickerInput(inputId = "visit_cols_ves",
-        #                                                  label = "Select Visit Variables of Interest:",
-        #                                                  choices = visit,
-        #                                                  options = list(
-        #                                                    `actions-box` = TRUE,
-        #                                                    size = 10,
-        #                                                    `selected-text-format` = "count > 3"
-        #                                                  ),
-        #                                                  multiple = TRUE)),
-        #                           column(12, pickerInput(inputId = "survey_cols_ves",
-        #                                                  label = "Select Survey Variables of Interest:",
-        #                                                  choices = survey,
-        #                                                  options = list(
-        #                                                    `actions-box` = TRUE,
-        #                                                    size = 10,
-        #                                                    `selected-text-format` = "count > 3"
-        #                                                  ),
-        #                                                  multiple = TRUE)),
-        #                           column(12, pickerInput(inputId = "ves_cols",
-        #                                                  label = "Select VES Variables of Interest:",
-        #                                                  choices = ves,
-        #                                                  options = list(
-        #                                                    `actions-box` = TRUE,
-        #                                                    size = 10,
-        #                                                    `selected-text-format` = "count > 3"
-        #                                                  ),
-        #                                                  multiple = TRUE)))),
-        # 
-        #                       mainPanel(
-        #                         withSpinner(DT::dataTableOutput("ves_table")),
-        #                         headerPanel(""),
-        #                         actionButton('ves_download',"Download the data",
-        #                                      icon("download"),
-        #                                      style="color: #fff; background-color: #337ab7; border-color: black"),
-        #                         actionButton('ves_clear', "Clear Selection",
-        #                                      icon("trash"),
-        #                                      style="color: #fff; background-color: red; border-color: black"))),
-        #                     hr(style = "border-top: 1px solid #000000;")),
-        # 
-        #            tabPanel(title = "Metadata",
-        # 
-        #                     tabsetPanel(
-        #                       tabPanel(title = "Schema",
-        #                                tags$iframe(style="height:800px;
-        #                                      width:100%;
-        #                                      scrolling=yes;
-        #                                      zoom=yes",
-        #                                      src= "schema.pdf")),
-        #                       tabPanel(title = "Legacy Schema",
-        #                                tags$iframe(style="height:800px;
-        #                                      width:100%;
-        #                                      scrolling=yes;
-        #                                      zoom=yes",
-        #                                      src= "legacy_survey_data.pdf")),
-        #                         tabPanel(title = "Metadata",
-        #                                  img(src = "yoda.jpeg", height = "400", width = "500"))),
-        #                       hr(style = "border-top: 1px solid #000000;"))),
+        navbarMenu(title = "VES", icon = icon("eye"),
+
+                   tabPanel(title = "Data",
+
+                            sidebarLayout(
+
+                              sidebarPanel(
+                                fluidRow(
+                                  column(12, sliderInput(inputId = "year_ves",
+                                                         label = "Select Annual Range:",
+                                                         min = min(years$year), max(years$year),
+                                                         sep = "",
+                                                         value = c(max(years$year) - 5, max(years$year)),
+                                                         step = 1)),
+                                  column(5, pickerInput(inputId = "location_ves",
+                                                        label = "Select Locations:",
+                                                        choices = "",
+                                                        options = list(
+                                                          `actions-box` = TRUE,
+                                                          size = 10,
+                                                          `selected-text-format` = "count > 3"
+                                                        ),
+                                                        multiple = TRUE,
+                                                        width = "180px")),
+                                  column(5, pickerInput(inputId = "region_ves",
+                                                        label = "Select Regions:",
+                                                        choices = "",
+                                                        options = list(
+                                                          `actions-box` = TRUE,
+                                                          size = 10,
+                                                          `selected-text-format` = "count > 3"
+                                                        ),
+                                                        multiple = T,
+                                                        width = "180px"), offset = 1),
+                                  column(12, pickerInput(inputId = "site_ves",
+                                                         label = "Select Sites:",
+                                                         choices = "",
+                                                         options = list(
+                                                           `actions-box` = TRUE,
+                                                           size = 10,
+                                                           `selected-text-format` = "count > 3"
+                                                         ),
+                                                         multiple = TRUE)),
+                                  column(12, hr(style = "border-top: 1px solid #000000;")),
+                                  column(12, pickerInput(inputId = "ves_cols",
+                                                         label = "Select Variables of Interest:",
+                                                         choices = "",
+                                                         options = list(
+                                                           `actions-box` = TRUE,
+                                                           size = 10,
+                                                           `selected-text-format` = "count > 3"
+                                                         ),
+                                                         multiple = TRUE)))),
+                              mainPanel(
+                                withSpinner(DT::dataTableOutput("ves_table")),
+                                headerPanel(""),
+                                actionButton('ves_download',"Download the data",
+                                             icon("download"),
+                                             style="color: #fff; background-color: #337ab7; border-color: black"),
+                                actionButton('ves_clear', "Clear Selection",
+                                             icon("trash"),
+                                             style="color: #fff; background-color: red; border-color: black"))),
+                            hr(style = "border-top: 1px solid #000000;")),
+
+                   tabPanel(title = "Metadata",
+
+                            tabsetPanel(
+                              tabPanel(title = "Schema",
+                                       tags$iframe(style="height:800px;
+                                             width:100%;
+                                             scrolling=yes;
+                                             zoom=yes",
+                                             src= "schema.pdf")),
+                              tabPanel(title = "Legacy Schema",
+                                       tags$iframe(style="height:800px;
+                                             width:100%;
+                                             scrolling=yes;
+                                             zoom=yes",
+                                             src= "legacy_survey_data.pdf")),
+                                tabPanel(title = "Metadata",
+                                         img(src = "yoda.jpeg", height = "400", width = "500"))),
+                              hr(style = "border-top: 1px solid #000000;"))),
 
         ####### END VES ##########
         # 

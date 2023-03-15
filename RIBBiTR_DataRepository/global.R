@@ -55,7 +55,7 @@ error=function(cond) {
 
 ######### survey_data #########
 
-dbExecute(connection, "set search_path = survey_data")
+dbExecute(connection, "set search_path = 'survey_data'")
 
 # # location
 # location <- dbGetQuery(connection, "select location from location;") %>%
@@ -141,9 +141,9 @@ no_pros_cap_data <- tbl(connection, "location") %>%
 
 
 # ves
-ves <- dbGetQuery(connection, "select * from ves") 
-ves <- select(ves, !c(survey_id, ves_id)) %>% 
-  colnames() %>% as.data.frame()
+# ves <- dbGetQuery(connection, "select * from ves") 
+# ves <- select(ves, !c(survey_id, ves_id)) %>% 
+#   colnames() %>% as.data.frame()
 
 # full in memory ves table
 full_ves_data <- tbl(connection, "location") %>%
@@ -155,9 +155,10 @@ full_ves_data <- tbl(connection, "location") %>%
   mutate(year = year(date)) %>% 
   select(!c(location_id, region_id, site_id, visit_id, survey_id))
 
-
-
-
+# a <- full_ves_data %>% filter(year %in% c(2017:2022),
+#                               location %in% c("usa"),
+#                               region %in% c("california"),
+#                               site %in% c("70449")) %>%  collect()
 
 # dbExecute(connection, "set search_path = survey_data")
 # 

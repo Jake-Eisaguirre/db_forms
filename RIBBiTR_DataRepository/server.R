@@ -22,8 +22,8 @@ shinyServer(function(input, output, session) {
              location %in% !!input$location,
              region %in% !!input$region,
              site %in% !!input$site) %>%
-      select(location, region, site, input$site_cols, input$bd_temp,
-             input$amp_cols, input$muc_mic_cols, input$genom_cols) %>% 
+      select(location, region, site, !!input$site_cols, !!input$bd_temp,
+             !!input$amp_cols, !!input$muc_mic_cols, !!input$genom_cols) %>% 
       collect()
       
     
@@ -173,109 +173,131 @@ shinyServer(function(input, output, session) {
 
   ###### VES DATA ########
 
-# ves_data <- reactive({
-# 
-# 
-#   tbl(connection, "location") %>%
-#     inner_join(tbl(connection, "region"), by = c("location_id")) %>%
-#     inner_join(tbl(connection, "site"), by = c("region_id")) %>%
-#     inner_join(tbl(connection, "visit"), by = c("site_id")) %>%
-#     inner_join(tbl(connection, "survey"), by = c("visit_id")) %>%
-#     inner_join(tbl(connection, "ves"), by = c("survey_id")) %>%
-#     mutate(year = year(date)) %>%
-#     filter(year <= !!input$year_ves[2] & !!year >= input$year_ves[1],
-#            location %in% !!input$location_ves,
-#            region %in% !!input$region_ves,
-#            site %in% !!input$site_ves) %>%
-#     select(location, region, site, !!input$site_cols_ves, !!input$visit_cols_ves, !!input$survey_cols_ves, !!input$ves_cols) %>%
-#     collect()
-# 
-# }) %>% bindCache(input$year_ves, input$location_ves, input$region_ves, input$site_ves, input$site_cols_ves, input$visit_cols_ves,
-#                  input$survey_cols_ves, input$ves_cols)
-# 
-# 
-# # update location options based on year selection
-# observe(
-#   {input$year_ves
-# 
-#     updatePickerInput(session, inputId = "location_ves",
-#                       choices = unique(filt_select$location[filt_select$year <= input$year_ves[2]
-#                                                     & filt_select$year>=input$year_ves[1]]))
-#   })
-# 
-# # update region options based on location selection
-# observe(
-#   {input$location_ves
-# 
-#     updatePickerInput(session, inputId = "region_ves",
-#                       choices = unique(filt_select$region[filt_select$year <= input$year_ves[2]
-#                                                   & filt_select$year>=input$year_ves[1]
-#                                                   & filt_select$location %in% input$location_ves]))
-#   })
-# 
-# # update site options based on region selection
-# observe(
-#   {input$region_ves
-# 
-#     updatePickerInput(session, inputId = "site_ves",
-#                       choices = unique(filt_select$site[filt_select$year <= input$year_ves[2]
-#                                                 & filt_select$year >= input$year_ves[1]
-#                                                 & filt_select$location %in% input$location_ves
-#                                                 & filt_select$region %in% input$region_ves]))
-# 
-#   })
-# 
-# # clear button
-# observeEvent(input$ves_clear,
-#              {
-#                updatePickerInput(session, inputId = "year_ves", selected = c(max(visit$year) - 5, max(visit$year)))
-#                updatePickerInput(session, inputId = "location_ves", selected = "")
-#                updatePickerInput(session, inputId = "region_ves", selected = "")
-#                updatePickerInput(session, inputId = "site_cols_ves", selected = "")
-#                updatePickerInput(session, inputId = "visit_cols_ves", selected = "")
-#                updatePickerInput(session, inputId = "survey_cols_ves", selected = "")
-#                updatePickerInput(session, inputId = "ves_cols", selected = "")
-# 
-#              }
-# )
-# 
-# 
-# # render data selection
-# output$ves_table <- DT::renderDataTable(ves_data(), extensions= 'Buttons', rownames = FALSE,
-#                                         options = list(scrollX = T, TRUEom = 'Bfrtip',
-#                                                        buttons = c('copy', 'csv', 'excel', 'pdf', 'print')))
-# # Data download
-# observeEvent(input$ves_download, {
-# 
-#   shinyalert(title = "Pump the breaks!",
-#              text = "Did you get approval for data use from the data owners?",
-#              type = "input", closeOnClickOutside = T, showCancelButton = T, inputId = "ves_download_btn",
-#              showConfirmButton = T, confirmButtonText = "Confirm", cancelButtonText = "Cancel",
-#              animation = "slide-from-top", inputPlaceholder = "enter_username")
-# })
-# 
-# observeEvent(input$ves_download_btn,{
-#   if(input$ves_download_btn %in% credentials$user)
-#     showModal(modalDialog(downloadButton("ves_dwnld", "download"), footer = NULL, easyClose = T, size = "s"))
-# 
-#   if(!input$ves_download_btn %in% credentials$user)
-#     shinyalert(title = "Access Denied", type = "warning", confirmButtonCol = "#337ab7")
-# })
-# 
-# output$ves_dwnld <- downloadHandler(
-#   filename = function(){"insert_name.csv"},
-# 
-#   content = function(file) {
-#     shiny::withProgress(
-#       message = paste0("Downloading VES Data"),
-#       value = 0,
-#       {
-#         shiny::incProgress(10/10)
-#         write.csv(ves_data(), file, row.names = FALSE)
-#       }
-#     )
-#   }
-# )
+  ves_data <- reactive({
+    
+    full_ves_data %>%
+      filter(year <= !!input$year_ves[2] & year >= !!input$year_ves[1],
+             location %in% c(!!input$location_ves),
+             region %in% c(!!input$region_ves),
+             site %in% c(!!input$site_ves)) %>%
+      select(location, region, site, !!input$ves_cols) %>%
+      collect()
+    
+    }) %>% bindCache(input$year_ves, input$location_ves, input$region_ves, input$site_ves, input$ves_cols)
+  
+  
+  # update location options based on year selection
+  observeEvent(input$year_ves,
+    {
+      
+      update_ves_locations <- full_ves_data %>% 
+        filter(year <= !!input$year_ves[2] & year >= !!input$year_ves[1]) %>% 
+        select(location) %>% 
+        distinct(location) %>% 
+        collect()
+  
+      updatePickerInput(session, inputId = "location_ves",
+                        choices = update_ves_locations)
+    })
+  
+  # update region options based on location selection
+  observeEvent(input$location_ves,
+    {
+      
+      update_ves_regions <- full_ves_data %>% 
+        filter(year <= !!input$year_ves[2] & year >= !!input$year_ves[1],
+               location %in% !!input$location_ves) %>% 
+        select(region) %>% 
+        distinct(region) %>% 
+        collect()
+      
+  
+      updatePickerInput(session, inputId = "region_ves",
+                        choices = update_ves_regions)
+    })
+  
+  # update site options based on region selection
+  observeEvent(input$region_ves,
+    {
+      
+      update_ves_sites <- full_ves_data %>% 
+        filter(year <= !!input$year_ves[2] & year >= !!input$year_ves[1],
+               location %in% !!input$location_ves,
+               region %in% !!input$region_ves) %>% 
+        select(site) %>%
+        distinct(site) %>% 
+        collect()
+  
+      updatePickerInput(session, inputId = "site_ves",
+                        choices = update_ves_sites)
+  
+    })
+  
+  observeEvent(input$site_ves,
+               {
+                 
+                 site_ves_cols_update <- full_ves_data %>% 
+                   filter(year <= !!input$year_ves[2] & year >= !!input$year_ves[1],
+                          location %in% !!input$location_ves,
+                          region %in% !!input$region_ves,
+                          site %in% !!input$site_ves) %>% 
+                   collect() %>% 
+                   janitor::remove_empty(which = "cols") %>% 
+                   colnames() %>% 
+                   as.data.frame()
+                 
+                 updatePickerInput(session, inputId = "ves_cols",
+                                   choices = site_ves_cols_update)
+               })
+  
+  # clear button
+  observeEvent(input$ves_clear,
+               {
+                 updatePickerInput(session, inputId = "year_ves", selected = c(max(years$year) - 5, max(years$year)))
+                 updatePickerInput(session, inputId = "location_ves", selected = "")
+                 updatePickerInput(session, inputId = "region_ves", selected = "")
+                 updatePickerInput(session, inputId = "site_ves", selected = "")
+                 updatePickerInput(session, inputId = "ves_cols", selected = "")
+  
+               })
+  
+  
+  # render data selection
+  output$ves_table <- DT::renderDataTable(ves_data(), extensions= 'Buttons', rownames = FALSE,
+                                          options = list(scrollX = T, TRUEom = 'Bfrtip',
+                                                         buttons = c('copy', 'csv', 'excel', 'pdf', 'print')))
+  # Data download
+  observeEvent(input$ves_download, {
+  
+    shinyalert(title = "Pump the breaks!",
+               text = "Did you get approval for data use from the data owners?",
+               type = "input", closeOnClickOutside = T, showCancelButton = T, inputId = "ves_download_btn",
+               showConfirmButton = T, confirmButtonText = "Confirm", cancelButtonText = "Cancel",
+               animation = "slide-from-top", inputPlaceholder = "enter_username")
+  })
+  
+  observeEvent(input$ves_download_btn,{
+    if(input$ves_download_btn %in% credentials$user)
+      showModal(modalDialog(downloadButton("ves_dwnld", "download"), footer = NULL, easyClose = T, size = "s"))
+  
+    if(!input$ves_download_btn %in% credentials$user)
+      shinyalert(title = "Access Denied", type = "warning", confirmButtonCol = "#337ab7")
+  })
+  
+  output$ves_dwnld <- downloadHandler(
+    filename = function(){"insert_name.csv"},
+  
+    content = function(file) {
+      shiny::withProgress(
+        message = paste0("Downloading VES Data"),
+        value = 0,
+        {
+          shiny::incProgress(10/10)
+          write.csv(ves_data(), file, row.names = FALSE)
+        }
+      )
+    }
+  )
 
 
   ######## END VES Data ##########
