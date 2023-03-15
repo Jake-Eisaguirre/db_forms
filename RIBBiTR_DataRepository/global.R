@@ -127,7 +127,7 @@ full_cap_data <- tbl(connection, "location") %>%
   mutate(year = year(date)) %>% 
   select(!c(location_id, region_id, site_id, visit_id, survey_id, capture_id))
 
-#a <- full_cap_data %>% collect()
+
 
 # full cap minus processed data
 no_pros_cap_data <- tbl(connection, "location") %>%
