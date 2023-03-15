@@ -173,6 +173,48 @@ full_hobo_data <- tbl(hobo_connection, "hobo_location") %>%
   mutate(year = year(date_time)) %>% 
   select(!c(hobo_location_id, hobo_region_id, hobo_site_id, hobo_id))
 
+########## END HOBO ###################
+
+########## Audio #####################
+
+# DB conection
+tryCatch({
+  drv <- dbDriver("Postgres")
+  print("Connecting to Database…")
+  audio_connection <- dbConnect(drv, 
+                               dbname = Sys.getenv("aws_dbname"),
+                               host = Sys.getenv("aws_host"), 
+                               port = Sys.getenv("aws_port"),
+                               user = Sys.getenv("aws_user"), 
+                               password = Sys.getenv("aws_password"))
+  dbExecute(audio_connection, "set search_path = 'audio'")
+  print("Database Connected!")
+},
+error=function(cond) {
+  print("Unable to connect to Database.")
+})
+
+# full in memory audio table
+full_audio_data <- tbl(audio_connection, "audio_location") %>% 
+  inner_join(tbl(audio_connection, "audio_region"), by = c("location_id")) %>% 
+  inner_join(tbl(audio_connection, "audio_site"), by = c("region_id")) %>% 
+  inner_join(tbl(audio_connection, "audio_visit"), by = c("site_id")) %>%
+  inner_join(tbl(audio_connection, "audio_info"), by  = c("visit_id")) %>% 
+  mutate(year = year(date_of_deployment)) %>% 
+  select(!c(location_id, region_id, site_id, visit_id, audio_id))
+
+audio_locations <- tbl(audio_connection, "audio_location") %>% 
+  select(location) %>% 
+  distinct(location) %>% 
+  collect()
+
+# audio_years <- tbl(audio_connection, "audio_visit") %>% 
+#   mutate(year = year(date_of_deployment)) %>% 
+#   select(year) %>%
+#   distinct(year) %>%
+#   collect() %>% 
+#   drop_na()
+
 # updated_hobo_locations <- full_hobo_data %>% 
 #   filter(year %in% c(2017:2019)) %>% 
 #   select(location) %>% 

@@ -476,102 +476,102 @@ ui <- secure_app(head_auth = tags$script(inactivity),
 
         ######## END HOBO Tab ##########
 
-        # ######## eDNA TAB ############
-        # 
-        # tabPanel(title = "eDNA", icon = icon("dna"),
-        #          
-        #          sidebarLayout(
-        #            
-        #            sidebarPanel(
-        #              
-        #            ),
-        #            mainPanel(img(src = "homer.jpeg", height = "600", width = "700")
-        #            )
-        #            
-        #          )),
-        # 
-        # ######### END eDNA Tab #########    
-        # 
-        # ######### Audio tab ############3
-        # navbarMenu(title = "Audio", icon = icon("microphone"),
-        #            
-        #            tabPanel(title = "Data",
-        #                     
-        #                     sidebarLayout(
-        #                       
-        #                       sidebarPanel(
-        #                         fluidRow(   
-        #                           # column(12, sliderInput(inputId = "date_audio",
-        #                           #                        label = "Select Annual Range:",
-        #                           #                        min = min(as.Date(audio_visit$date_of_deployment, "%Y-%m-%d")), 
-        #                           #                        max = max(as.Date(audio_visit$date_of_deployment, "%Y-%m-%d")),
-        #                           #                        sep = "",
-        #                           #                        value = c(max(as.Date(audio_visit$date_of_deployment, "%Y-%m-%d")) - 
-        #                           #                                    15, max(as.Date(audio_visit$date_of_deployment, "%Y-%m-%d"))),
-        #                           #                        
-        #                           #                        timeFormat = "%Y-%m-%d")),
-        #                           column(5, pickerInput(inputId = "location_audio",
-        #                                                 label = "Select Locations:",
-        #                                                 choices = unique(audio_location$location),
-        #                                                 options = list(
-        #                                                   `actions-box` = TRUE, 
-        #                                                   size = 10,
-        #                                                   `selected-text-format` = "count > 3"
-        #                                                 ), 
-        #                                                 multiple = TRUE,
-        #                                                 width = "180px")),
-        #                           column(5, pickerInput(inputId = "region_audio",
-        #                                                 label = "Select Regions:",
-        #                                                 choices = unique(audio_region$region),
-        #                                                 options = list(
-        #                                                   `actions-box` = TRUE, 
-        #                                                   size = 10,
-        #                                                   `selected-text-format` = "count > 3"
-        #                                                 ),
-        #                                                 multiple = T,
-        #                                                 width = "180px"), offset = 1),
-        #                           column(12, pickerInput(inputId = "site_audio",
-        #                                                  label = "Select Sites:",
-        #                                                  choices = unique(audio_site$site),
-        #                                                  options = list(
-        #                                                    `actions-box` = TRUE, 
-        #                                                    size = 10,
-        #                                                    `selected-text-format` = "count > 3"
-        #                                                  ), 
-        #                                                  multiple = TRUE)),
-        #                           column(12, hr(style = "border-top: 1px solid #000000;")),
-        #                           column(12, pickerInput(inputId = "audio_cols",
-        #                                                  label = "Select Hobo Sensors Variables of Interest:",
-        #                                                  choices = audio_cols,
-        #                                                  options = list(
-        #                                                    `actions-box` = TRUE, 
-        #                                                    size = 10,
-        #                                                    `selected-text-format` = "count > 3"
-        #                                                  ), 
-        #                                                  multiple = TRUE)))),
-        #                       
-        #                       mainPanel(withSpinner(DT::dataTableOutput("audio_t")),
-        #                                 headerPanel(""),
-        #                                 actionButton('audio_download',"Download the data",
-        #                                              icon("download"), 
-        #                                              style="color: #fff; background-color: #337ab7; border-color: black"),
-        #                                 actionButton('audio_clear', "Clear Selection",
-        #                                              icon("trash"),
-        #                                              style="color: #fff; background-color: red; border-color: black"))),
-        #                     hr(style = "border-top: 1px solid #000000;")),
-        #            
-        #            tabPanel(title = "Metadata",
-        #                     
-        #                     tabsetPanel(
-        #                       tabPanel(title = "Schema",
-        #                                tags$iframe(style="height:800px; 
-        #                                      width:100%; 
-        #                                      scrolling=yes;
-        #                                      zoom=yes", 
-        #                                      src= "audio.pdf")),
-        #                       tabPanel(title = "Metadata"))
-        #            ))
-        # 
+        ######## eDNA TAB ############
+
+        tabPanel(title = "eDNA", icon = icon("dna"),
+
+                 sidebarLayout(
+
+                   sidebarPanel(
+
+                   ),
+                   mainPanel(img(src = "homer.jpeg", height = "600", width = "700")
+                   )
+
+                 )),
+
+        ######### END eDNA Tab #########
+
+        ######### Audio tab ############3
+        navbarMenu(title = "Audio", icon = icon("microphone"),
+
+                   tabPanel(title = "Data",
+
+                            sidebarLayout(
+
+                              sidebarPanel(
+                                fluidRow(
+                                  # column(12, sliderInput(inputId = "date_audio",
+                                  #                        label = "Select Annual Range:",
+                                  #                        min = min(as.Date(audio_visit$date_of_deployment, "%Y-%m-%d")),
+                                  #                        max = max(as.Date(audio_visit$date_of_deployment, "%Y-%m-%d")),
+                                  #                        sep = "",
+                                  #                        value = c(max(as.Date(audio_visit$date_of_deployment, "%Y-%m-%d")) -
+                                  #                                    15, max(as.Date(audio_visit$date_of_deployment, "%Y-%m-%d"))),
+                                  #
+                                  #                        timeFormat = "%Y-%m-%d")),
+                                  column(5, pickerInput(inputId = "location_audio",
+                                                        label = "Select Locations:",
+                                                        choices = audio_locations,
+                                                        options = list(
+                                                          `actions-box` = TRUE,
+                                                          size = 10,
+                                                          `selected-text-format` = "count > 3"
+                                                        ),
+                                                        multiple = TRUE,
+                                                        width = "180px")),
+                                  column(5, pickerInput(inputId = "region_audio",
+                                                        label = "Select Regions:",
+                                                        choices = "",
+                                                        options = list(
+                                                          `actions-box` = TRUE,
+                                                          size = 10,
+                                                          `selected-text-format` = "count > 3"
+                                                        ),
+                                                        multiple = T,
+                                                        width = "180px"), offset = 1),
+                                  column(12, pickerInput(inputId = "site_audio",
+                                                         label = "Select Sites:",
+                                                         choices = "",
+                                                         options = list(
+                                                           `actions-box` = TRUE,
+                                                           size = 10,
+                                                           `selected-text-format` = "count > 3"
+                                                         ),
+                                                         multiple = TRUE)),
+                                  column(12, hr(style = "border-top: 1px solid #000000;")),
+                                  column(12, pickerInput(inputId = "audio_cols",
+                                                         label = "Select Hobo Sensors Variables of Interest:",
+                                                         choices = "",
+                                                         options = list(
+                                                           `actions-box` = TRUE,
+                                                           size = 10,
+                                                           `selected-text-format` = "count > 3"
+                                                         ),
+                                                         multiple = TRUE)))),
+
+                              mainPanel(withSpinner(DT::dataTableOutput("audio_t")),
+                                        headerPanel(""),
+                                        actionButton('audio_download',"Download the data",
+                                                     icon("download"),
+                                                     style="color: #fff; background-color: #337ab7; border-color: black"),
+                                        actionButton('audio_clear', "Clear Selection",
+                                                     icon("trash"),
+                                                     style="color: #fff; background-color: red; border-color: black"))),
+                            hr(style = "border-top: 1px solid #000000;")),
+
+                   tabPanel(title = "Metadata",
+
+                            tabsetPanel(
+                              tabPanel(title = "Schema",
+                                       tags$iframe(style="height:800px;
+                                             width:100%;
+                                             scrolling=yes;
+                                             zoom=yes",
+                                             src= "audio.pdf")),
+                              tabPanel(title = "Metadata"))
+                   ))
+
         ########### END Audio #########
                          
   )
