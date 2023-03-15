@@ -362,6 +362,7 @@ shinyServer(function(input, output, session) {
 
     })
   
+  # update aural col options
   observeEvent(input$site_a,
                {
                  
@@ -432,122 +433,144 @@ shinyServer(function(input, output, session) {
 
   ######## END AURAL##########
 
-  # ######## HOBO ##########
-  # 
-  # hobo_data <- reactive({
-  #   
-  #   hobo %>% 
-  #     filter(year <= input$date_hobo[2] & year>= input$date_hobo[1],
-  #            location %in% input$location_hobo,
-  #            region %in% input$region_hobo,
-  #            site %in% input$site_hobo) %>% 
-  #     select(location, region, site, input$hobo_cols)
-  #   
-  # })%>% bindCache(input$date_hobo, input$location_hobo, input$region_hobo, input$site_hobo, input$site_hobo, input$hobo_cols)
-  # 
-  # 
-  # # update location options based on year selection
-  # observe(
-  #   {input$date_hobo
-  #     
-  #     updatePickerInput(session, inputId = "location_hobo",
-  #                       choices = unique(hobo$location[hobo$year <= input$date_hobo[2] 
-  #                                                      & hobo$year>=input$date_hobo[1]]))
-  #   })
-  # 
-  # # update region options based on location selection
-  # observe(
-  #   {input$location_hobo
-  #     
-  #     updatePickerInput(session, inputId = "region_hobo",
-  #                       choices = unique(hobo$region[hobo$year <= input$date_hobo[2] 
-  #                                                    & hobo$year>=input$date_hobo[1]
-  #                                                    & hobo$location %in% input$location_hobo]))
-  #   })
-  # 
-  # # update site options based on region selection
-  # observe(
-  #   {input$region_hobo
-  #     
-  #     updatePickerInput(session, inputId = "site_hobo",
-  #                       choices = unique(hobo$site[hobo$year <= input$date_hobo[2] 
-  #                                                  & hobo$year >= input$date_hobo[1]
-  #                                                  & hobo$location %in% input$location_hobo
-  #                                                  & hobo$region %in% input$region_hobo]))
-  #     
-  #   })
-  # 
-  # # clear button
-  # observeEvent(input$hobo_clear,
-  #              {
-  #                updatePickerInput(session, inputId = "year_hobo", selected = c(max(visit$year) - 3, max(visit$year)))
-  #                updatePickerInput(session, inputId = "location_hobo", selected = "")
-  #                updatePickerInput(session, inputId = "region_hobo", selected = "")
-  #                updatePickerInput(session, inputId = "site_hobo", selected = "")
-  #                updatePickerInput(session, inputId = "hobo_cols", selected = "")
-  #                
-  #              }
-  # )
-  # 
-  # 
-  # 
-  # # render data selection
-  # output$hobo_t <- DT::renderDataTable(hobo_data(), extensions= 'Buttons', rownames = FALSE, 
-  #                                      options = list(scrollX = T, TRUEom = 'Bfrtip', 
-  #                                                     buttons = c('copy', 'csv', 'excel', 'pdf', 'print')))
-  # 
-  # # Data download
-  # observeEvent(input$hobo_download, {
-  #   
-  #   shinyalert(title = "Pump the breaks!", 
-  #              text = "Did you get approval for data use from the data owners?",
-  #              type = "input", closeOnClickOutside = T, showCancelButton = T, inputId = "hobo_download_btn",
-  #              showConfirmButton = T, confirmButtonText = "Confirm", cancelButtonText = "Cancel", 
-  #              animation = "slide-from-top", inputPlaceholder = "enter_username")
-  # })
-  # 
-  # observeEvent(input$hobo_download_btn,{
-  #   if(input$hobo_download_btn %in% credentials$user)
-  #     showModal(modalDialog(downloadButton("hobo_dwnld", "download"), footer = NULL, easyClose = T, size = "s"))
-  #   
-  #   if(!input$hobo_download_btn %in% credentials$user)
-  #     shinyalert(title = "Access Denied", type = "warning", confirmButtonCol = "#337ab7")
-  # })
-  # 
-  # output$hobo_dwnld <- downloadHandler(
-  #   filename = function(){"insert_name.csv"},
-  #   
-  #   content = function(file) {
-  #     shiny::withProgress(
-  #       message = paste0("Downloading Hobo Sensor Data"),
-  #       value = 0,
-  #       {
-  #         shiny::incProgress(1/10)
-  #         Sys.sleep(1)
-  #         shiny::incProgress(3/10)
-  #         Sys.sleep(2)
-  #         shiny::incProgress(5/10)
-  #         Sys.sleep(2)
-  #         shiny::incProgress(7/10)
-  #         Sys.sleep(2)
-  #         shiny::incProgress(7/10)
-  #         Sys.sleep(1)
-  #         shiny::incProgress(9/10)
-  #         write.csv(hobo_data(), file, row.names = FALSE)
-  #       }
-  #     )
-  #   }
-  # )
-  # 
-  # 
-  # # content = function(fname){
-  # #   removeModal()
-  # #   write.csv(hobo_data(), fname)
-  # # }
-  # 
-  # 
-  # ######## END HOBO ##########
-  # 
+  ######## HOBO ##########
+
+  hobo_data <- reactive({
+
+    full_hobo_data %>%
+      filter(year <= !!input$date_hobo[2] & year>= !!input$date_hobo[1],
+             location %in% (!!input$location_hobo),
+             region %in% (!!input$region_hobo),
+             site %in% c(!!input$site_hobo)) %>%
+      select(location, region, site, !!input$hobo_cols) %>% 
+      collect()
+
+  })%>% bindCache(input$date_hobo, input$location_hobo, input$region_hobo, input$site_hobo, input$hobo_cols)
+
+
+  # update location options based on year selection
+  observeEvent(input$date_hobo,
+    {
+      updated_hobo_locations <- full_hobo_data %>% 
+        filter(year <= !!input$date_hobo[2] & year>= !!input$date_hobo[1]) %>% 
+        select(location) %>% 
+        distinct(location) %>% 
+        collect()
+
+      updatePickerInput(session, inputId = "location_hobo",
+                        choices = updated_hobo_locations$location)
+    })
+
+  # update region options based on location selection
+  observeEvent(input$location_hobo,
+    {
+      
+      updated_hobo_region <- full_hobo_data %>% 
+        filter(year <= !!input$date_hobo[2] & year>= !!input$date_hobo[1],
+               location %in% !!c(input$location_hobo)) %>% 
+        select(region) %>% 
+        distinct(region) %>% 
+        collect()
+
+      updatePickerInput(session, inputId = "region_hobo",
+                        choices = updated_hobo_region)
+    })
+
+  # update site options based on region selection
+  observeEvent(input$region_hobo,
+    {
+      
+      updated_hobo_sites <-  full_hobo_data %>% 
+        filter(year <= !!input$date_hobo[2] & year>= !!input$date_hobo[1],
+               location %in% !!c(input$location_hobo),
+               region %in% !!c(input$region_hobo)) %>% 
+        select(site) %>% 
+        distinct(site) %>% 
+        collect()
+
+      updatePickerInput(session, inputId = "site_hobo",
+                        choices = updated_hobo_sites)
+
+    })
+  
+  # update aural col options
+  observeEvent(input$site_hobo,
+               {
+                 
+                 site_hobo_cols_update <- full_hobo_data %>% 
+                   collect() %>% 
+                   colnames() %>% 
+                   as.data.frame()
+                 
+                 updatePickerInput(session, inputId = "hobo_cols",
+                                   choices = site_hobo_cols_update)
+               })
+
+  # clear button
+  observeEvent(input$hobo_clear,
+               {
+                 updatePickerInput(session, inputId = "year_hobo", selected = c(max(hobo_years$year) - 3, max(hobo_years$year)))
+                 updatePickerInput(session, inputId = "location_hobo", selected = "")
+                 updatePickerInput(session, inputId = "region_hobo", selected = "")
+                 updatePickerInput(session, inputId = "site_hobo", selected = "")
+                 updatePickerInput(session, inputId = "hobo_cols", selected = "")
+
+               }
+  )
+
+
+
+  # render data selection
+  output$hobo_t <- DT::renderDataTable(hobo_data(), extensions= 'Buttons', rownames = FALSE,
+                                       options = list(scrollX = T, TRUEom = 'Bfrtip',
+                                                      buttons = c('copy', 'csv', 'excel', 'pdf', 'print')))
+
+  # Data download
+  observeEvent(input$hobo_download, {
+
+    shinyalert(title = "Pump the breaks!",
+               text = "Did you get approval for data use from the data owners?",
+               type = "input", closeOnClickOutside = T, showCancelButton = T, inputId = "hobo_download_btn",
+               showConfirmButton = T, confirmButtonText = "Confirm", cancelButtonText = "Cancel",
+               animation = "slide-from-top", inputPlaceholder = "enter_username")
+  })
+
+  observeEvent(input$hobo_download_btn,{
+    if(input$hobo_download_btn %in% credentials$user)
+      showModal(modalDialog(downloadButton("hobo_dwnld", "download"), footer = NULL, easyClose = T, size = "s"))
+
+    if(!input$hobo_download_btn %in% credentials$user)
+      shinyalert(title = "Access Denied", type = "warning", confirmButtonCol = "#337ab7")
+  })
+
+  output$hobo_dwnld <- downloadHandler(
+    filename = function(){"insert_name.csv"},
+
+    content = function(file) {
+      shiny::withProgress(
+        message = paste0("Downloading Hobo Sensor Data"),
+        value = 0,
+        {
+          shiny::incProgress(1/10)
+          Sys.sleep(1)
+          shiny::incProgress(3/10)
+          Sys.sleep(2)
+          shiny::incProgress(5/10)
+          Sys.sleep(2)
+          shiny::incProgress(7/10)
+          Sys.sleep(2)
+          shiny::incProgress(7/10)
+          Sys.sleep(1)
+          shiny::incProgress(9/10)
+          write.csv(hobo_data(), file, row.names = FALSE)
+        }
+      )
+    }
+  )
+
+
+  ######## END HOBO ##########
+
   # ######## Audio #############
   # 
   # audio_data <- reactive({

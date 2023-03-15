@@ -391,91 +391,91 @@ ui <- secure_app(head_auth = tags$script(inactivity),
                               hr(style = "border-top: 1px solid #000000;"))),
 
         ########## END Aural Tab ##########
-        # 
-        # ########## HOBO TAB ##########
-        # 
-        # navbarMenu(title = "Hobo Sensor", icon = icon("thermometer"),
-        #            
-        #            tabPanel(title = "Data",
-        #                     
-        #                     sidebarLayout(
-        #                       
-        #                       sidebarPanel(
-        #                         fluidRow(   
-        #                           column(12, sliderInput(inputId = "date_hobo",
-        #                                                  label = "Select Annual Range:",
-        #                                                  min = min(hobo$year), max(hobo$year),
-        #                                                  sep = "",
-        #                                                  value = c(max(hobo_cols$year) - 3, max(hobo_cols$year)),
-        #                                                  step = 1)),
-        #                           column(5, pickerInput(inputId = "location_hobo",
-        #                                                 label = "Select Locations:",
-        #                                                 choices = unique(hobo_location$location),
-        #                                                 options = list(
-        #                                                   `actions-box` = TRUE, 
-        #                                                   size = 10,
-        #                                                   `selected-text-format` = "count > 3"
-        #                                                 ), 
-        #                                                 multiple = TRUE,
-        #                                                 width = "180px")),
-        #                           column(5, pickerInput(inputId = "region_hobo",
-        #                                                 label = "Select Regions:",
-        #                                                 choices = unique(hobo_region$region),
-        #                                                 options = list(
-        #                                                   `actions-box` = TRUE, 
-        #                                                   size = 10,
-        #                                                   `selected-text-format` = "count > 3"
-        #                                                 ),
-        #                                                 multiple = T,
-        #                                                 width = "180px"), offset = 1),
-        #                           column(12, pickerInput(inputId = "site_hobo",
-        #                                                  label = "Select Sites:",
-        #                                                  choices = unique(hobo_site$site),
-        #                                                  options = list(
-        #                                                    `actions-box` = TRUE, 
-        #                                                    size = 10,
-        #                                                    `selected-text-format` = "count > 3"
-        #                                                  ), 
-        #                                                  multiple = TRUE)),
-        #                           column(12, hr(style = "border-top: 1px solid #000000;")),
-        #                           column(12, pickerInput(inputId = "hobo_cols",
-        #                                                  label = "Select Hobo Sensors Variables of Interest:",
-        #                                                  choices = hobo_cols,
-        #                                                  options = list(
-        #                                                    `actions-box` = TRUE, 
-        #                                                    size = 10,
-        #                                                    `selected-text-format` = "count > 3"
-        #                                                  ), 
-        #                                                  multiple = TRUE)),
-        #                           column(12, hr(style = "border-top: 1px solid #000000;")),
-        #                           column(12,  strong(h5("Please be patient with data rendering and download as 
-        #                                         response time can be delayed with this data set."))))),
-        #                       
-        #                       mainPanel(withSpinner(DT::dataTableOutput("hobo_t")),
-        #                                 headerPanel(""),
-        #                                 actionButton('hobo_download',"Download the data",
-        #                                              icon("download"), 
-        #                                              style="color: #fff; background-color: #337ab7; border-color: black"),
-        #                                 actionButton('hobo_clear', "Clear Selection",
-        #                                              icon("trash"),
-        #                                              style="color: #fff; background-color: red; border-color: black"))),
-        #                     hr(style = "border-top: 1px solid #000000;")),
-        #            
-        #            tabPanel(title = "Metadata",
-        #                     
-        #                     tabsetPanel(
-        #                       tabPanel(title = "Schema",
-        #                                tags$iframe(style="height:800px; 
-        #                                      width:100%; 
-        #                                      scrolling=yes;
-        #                                      zoom=yes", 
-        #                                      src= "hobo.pdf")),
-        #                       tabPanel(title = "Metadata"))
-        #            )),
-        # 
-        # 
-        # ######## END HOBO Tab ##########
-        # 
+
+        ########## HOBO TAB ##########
+
+        navbarMenu(title = "Hobo Sensor", icon = icon("thermometer"),
+
+                   tabPanel(title = "Data",
+
+                            sidebarLayout(
+
+                              sidebarPanel(
+                                fluidRow(
+                                  column(12, sliderInput(inputId = "date_hobo",
+                                                         label = "Select Annual Range:",
+                                                         min = min(hobo_years$year), max(hobo_years$year),
+                                                         sep = "",
+                                                         value = c(max(hobo_years$year) - 3, max(hobo_years$year)),
+                                                         step = 1)),
+                                  column(5, pickerInput(inputId = "location_hobo",
+                                                        label = "Select Locations:",
+                                                        choices = "",
+                                                        options = list(
+                                                          `actions-box` = TRUE,
+                                                          size = 10,
+                                                          `selected-text-format` = "count > 3"
+                                                        ),
+                                                        multiple = TRUE,
+                                                        width = "180px")),
+                                  column(5, pickerInput(inputId = "region_hobo",
+                                                        label = "Select Regions:",
+                                                        choices = "",
+                                                        options = list(
+                                                          `actions-box` = TRUE,
+                                                          size = 10,
+                                                          `selected-text-format` = "count > 3"
+                                                        ),
+                                                        multiple = T,
+                                                        width = "180px"), offset = 1),
+                                  column(12, pickerInput(inputId = "site_hobo",
+                                                         label = "Select Sites:",
+                                                         choices = "",
+                                                         options = list(
+                                                           `actions-box` = TRUE,
+                                                           size = 10,
+                                                           `selected-text-format` = "count > 3"
+                                                         ),
+                                                         multiple = TRUE)),
+                                  column(12, hr(style = "border-top: 1px solid #000000;")),
+                                  column(12, pickerInput(inputId = "hobo_cols",
+                                                         label = "Select Hobo Sensors Variables of Interest:",
+                                                         choices = "",
+                                                         options = list(
+                                                           `actions-box` = TRUE,
+                                                           size = 10,
+                                                           `selected-text-format` = "count > 3"
+                                                         ),
+                                                         multiple = TRUE)),
+                                  column(12, hr(style = "border-top: 1px solid #000000;")),
+                                  column(12,  strong(h5("Please be patient with data rendering and download as
+                                                response time can be delayed with this data set."))))),
+
+                              mainPanel(withSpinner(DT::dataTableOutput("hobo_t")),
+                                        headerPanel(""),
+                                        actionButton('hobo_download',"Download the data",
+                                                     icon("download"),
+                                                     style="color: #fff; background-color: #337ab7; border-color: black"),
+                                        actionButton('hobo_clear', "Clear Selection",
+                                                     icon("trash"),
+                                                     style="color: #fff; background-color: red; border-color: black"))),
+                            hr(style = "border-top: 1px solid #000000;")),
+
+                   tabPanel(title = "Metadata",
+
+                            tabsetPanel(
+                              tabPanel(title = "Schema",
+                                       tags$iframe(style="height:800px;
+                                             width:100%;
+                                             scrolling=yes;
+                                             zoom=yes",
+                                             src= "hobo.pdf")),
+                              tabPanel(title = "Metadata"))
+                   )),
+
+
+        ######## END HOBO Tab ##########
+
         # ######## eDNA TAB ############
         # 
         # tabPanel(title = "eDNA", icon = icon("dna"),

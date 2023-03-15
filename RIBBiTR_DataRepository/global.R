@@ -34,138 +34,152 @@ library(dbplyr) # new
 shinyOptions(cache = cachem::cache_disk("./app_cache"))
 #shinyOptions(cache = cachem::cache_mem(max_size = 1000e6))
 
-# DB conection
-tryCatch({
-  drv <- dbDriver("Postgres")
-  print("Connecting to Database…")
-  connection <- dbConnect(drv, 
-                          dbname = Sys.getenv("aws_dbname"),
-                          host = Sys.getenv("aws_host"), 
-                          port = Sys.getenv("aws_port"),
-                          user = Sys.getenv("aws_user"), 
-                          password = Sys.getenv("aws_password"))
-  print("Database Connected!")
-},
-error=function(cond) {
-  print("Unable to connect to Database.")
-})
+
 
 
 ########## survey_data ##########
 
 ######### survey_data #########
 
-dbExecute(connection, "set search_path = 'survey_data'")
-
-# # location
-# location <- dbGetQuery(connection, "select location from location;") %>%
-#   drop_na()
-# 
-# # region
-# region <- dbGetQuery(connection, "select region from region;") %>%
-#   drop_na()
-# 
-# # site list
-# site_list <- dbGetQuery(connection, "select site from site") %>%
-#   drop_na()
-
-# # site
-# site <- dbGetQuery(connection, "select * from site") %>%
-#   select(!c(site_id, region_id)) %>%
-#   colnames() %>% as.data.frame()
+# DB conection
+tryCatch({
+  drv <- dbDriver("Postgres")
+  print("Connecting to Database…")
+  survey_data_connection <- dbConnect(drv, 
+                                      dbname = Sys.getenv("aws_dbname"),
+                                      host = Sys.getenv("aws_host"), 
+                                      port = Sys.getenv("aws_port"),
+                                      user = Sys.getenv("aws_user"), 
+                                      password = Sys.getenv("aws_password"))
+  dbExecute(survey_data_connection, "set search_path = 'survey_data'")
+  print("Database Connected!")
+},
+error=function(cond) {
+  print("Unable to connect to Database.")
+})
 
 # years slider
-years <- dbGetQuery(connection, "select date from visit") %>% 
+years <- dbGetQuery(survey_data_connection, "select date from visit") %>% 
   mutate(year = year(date)) %>% 
   filter(!duplicated(year)) %>% 
   select(!c(date)) %>% 
   drop_na()
 
-# # visit
-# visit <- dbGetQuery(connection, "select * from visit") %>% 
-#   select(!c(visit_id, site_id)) %>% 
-#   colnames() %>%  data.frame()
-# 
-# # survey
-# survey <- dbGetQuery(connection, "select * from survey")
-# survey <- select(survey, !c(visit_id, survey_id)) %>% 
-#   colnames() %>% as.data.frame()
-# 
-# # capture
-# capture <- dbGetQuery(connection, "select * from capture") 
-# capture <- select(capture, !c(survey_id, capture_id)) %>% 
-#   colnames() %>% as.data.frame()
-
 # BD #
 
-comb_bd <-  dbGetQuery(connection, "select * from temp_shiny_bd") %>% 
+comb_bd <-  dbGetQuery(survey_data_connection, "select * from temp_shiny_bd") %>% 
   colnames() %>% as.data.frame()
 
 # AMP #
-serdp_amp <- dbGetQuery(connection, "select * from serdp_amp")%>% 
+serdp_amp <- dbGetQuery(survey_data_connection, "select * from serdp_amp")%>% 
   colnames() %>% as.data.frame()
 
 # Muc/microbiome #
-serdp_muc_mic <- dbGetQuery(connection, "select * from serdp_newt_microbiome_mucosome_antifungal") %>% 
+serdp_muc_mic <- dbGetQuery(survey_data_connection, "select * from serdp_newt_microbiome_mucosome_antifungal") %>% 
   colnames() %>% as.data.frame()
 
 # Bd GENETIC #
-serdp_bd_genom <- dbGetQuery(connection, "select * from serdp_bd_genomic")%>% 
+serdp_bd_genom <- dbGetQuery(survey_data_connection, "select * from serdp_bd_genomic")%>% 
   colnames() %>% as.data.frame()
 
 # full in memeory cap table
-full_cap_data <- tbl(connection, "location") %>%
-  inner_join(tbl(connection, "region"), by = c("location_id")) %>%
-  inner_join(tbl(connection, "site"), by = c("region_id")) %>%
-  inner_join(tbl(connection, "visit"), by = c("site_id")) %>%
-  inner_join(tbl(connection, "survey"), by = c("visit_id")) %>%
-  inner_join(tbl(connection, "capture"), by = c("survey_id")) %>%
-  left_join(tbl(connection, "temp_shiny_bd"), by = c("bd_swab_id")) %>% 
-  left_join(tbl(connection, "serdp_bd_genomic"), by = c("genetic_id")) %>% 
-  left_join(tbl(connection, "serdp_newt_microbiome_mucosome_antifungal"), by = c("mucosome_id", "microbiome_swab_id")) %>% 
-  left_join(tbl(connection, "serdp_amp"), by = c("amp_id")) %>%
+full_cap_data <- tbl(survey_data_connection, "location") %>%
+  inner_join(tbl(survey_data_connection, "region"), by = c("location_id")) %>%
+  inner_join(tbl(survey_data_connection, "site"), by = c("region_id")) %>%
+  inner_join(tbl(survey_data_connection, "visit"), by = c("site_id")) %>%
+  inner_join(tbl(survey_data_connection, "survey"), by = c("visit_id")) %>%
+  inner_join(tbl(survey_data_connection, "capture"), by = c("survey_id")) %>%
+  left_join(tbl(survey_data_connection, "temp_shiny_bd"), by = c("bd_swab_id")) %>% 
+  left_join(tbl(survey_data_connection, "serdp_bd_genomic"), by = c("genetic_id")) %>% 
+  left_join(tbl(survey_data_connection, "serdp_newt_microbiome_mucosome_antifungal"), by = c("mucosome_id", "microbiome_swab_id")) %>% 
+  left_join(tbl(survey_data_connection, "serdp_amp"), by = c("amp_id")) %>%
   mutate(year = year(date)) %>% 
   select(!c(location_id, region_id, site_id, visit_id, survey_id, capture_id))
 
 
 
 # full cap minus processed data
-no_pros_cap_data <- tbl(connection, "location") %>%
-  inner_join(tbl(connection, "region"), by = c("location_id")) %>%
-  inner_join(tbl(connection, "site"), by = c("region_id")) %>%
-  inner_join(tbl(connection, "visit"), by = c("site_id")) %>%
-  inner_join(tbl(connection, "survey"), by = c("visit_id")) %>%
-  inner_join(tbl(connection, "capture"), by = c("survey_id")) %>%
+no_pros_cap_data <- tbl(survey_data_connection, "location") %>%
+  inner_join(tbl(survey_data_connection, "region"), by = c("location_id")) %>%
+  inner_join(tbl(survey_data_connection, "site"), by = c("region_id")) %>%
+  inner_join(tbl(survey_data_connection, "visit"), by = c("site_id")) %>%
+  inner_join(tbl(survey_data_connection, "survey"), by = c("visit_id")) %>%
+  inner_join(tbl(survey_data_connection, "capture"), by = c("survey_id")) %>%
   mutate(year = year(date)) %>% 
   select(!c(location_id, region_id, site_id, visit_id, survey_id, capture_id))
 
 
 # ves
-# ves <- dbGetQuery(connection, "select * from ves") 
+# ves <- dbGetQuery(survey_data_connection, "select * from ves") 
 # ves <- select(ves, !c(survey_id, ves_id)) %>% 
 #   colnames() %>% as.data.frame()
 
 # full in memory ves table
-full_ves_data <- tbl(connection, "location") %>%
-  inner_join(tbl(connection, "region"), by = c("location_id")) %>%
-  inner_join(tbl(connection, "site"), by = c("region_id")) %>%
-  inner_join(tbl(connection, "visit"), by = c("site_id")) %>%
-  inner_join(tbl(connection, "survey"), by = c("visit_id")) %>%
-  inner_join(tbl(connection, "ves"), by = c("survey_id")) %>%
+full_ves_data <- tbl(survey_data_connection, "location") %>%
+  inner_join(tbl(survey_data_connection, "region"), by = c("location_id")) %>%
+  inner_join(tbl(survey_data_connection, "site"), by = c("region_id")) %>%
+  inner_join(tbl(survey_data_connection, "visit"), by = c("site_id")) %>%
+  inner_join(tbl(survey_data_connection, "survey"), by = c("visit_id")) %>%
+  inner_join(tbl(survey_data_connection, "ves"), by = c("survey_id")) %>%
   mutate(year = year(date)) %>% 
-  select(!c(location_id, region_id, site_id, visit_id, survey_id))
+  select(!c(location_id, region_id, site_id, visit_id, survey_id, ves_id))
+
+
 
 # full in memory aural table
-full_aural_data <- tbl(connection, "location") %>%
-  inner_join(tbl(connection, "region"), by = c("location_id")) %>%
-  inner_join(tbl(connection, "site"), by = c("region_id")) %>%
-  inner_join(tbl(connection, "visit"), by = c("site_id")) %>%
-  inner_join(tbl(connection, "survey"), by = c("visit_id")) %>%
-  inner_join(tbl(connection, "aural"), by = c("survey_id")) %>%
+full_aural_data <- tbl(survey_data_connection, "location") %>%
+  inner_join(tbl(survey_data_connection, "region"), by = c("location_id")) %>%
+  inner_join(tbl(survey_data_connection, "site"), by = c("region_id")) %>%
+  inner_join(tbl(survey_data_connection, "visit"), by = c("site_id")) %>%
+  inner_join(tbl(survey_data_connection, "survey"), by = c("visit_id")) %>%
+  inner_join(tbl(survey_data_connection, "aural"), by = c("survey_id")) %>%
   mutate(year = year(date)) %>% 
-  select(!c(location_id, region_id, site_id, visit_id, survey_id))
+  select(!c(location_id, region_id, site_id, visit_id, survey_id, aural_id))
 
-a <- full_aural_data %>% collect()
+######## END Survey Data #########
+
+####### HOBO Data ###########
+
+# DB conection
+tryCatch({
+  drv <- dbDriver("Postgres")
+  print("Connecting to Database…")
+  hobo_connection <- dbConnect(drv, 
+                               dbname = Sys.getenv("aws_dbname"),
+                               host = Sys.getenv("aws_host"), 
+                               port = Sys.getenv("aws_port"),
+                               user = Sys.getenv("aws_user"), 
+                               password = Sys.getenv("aws_password"))
+  dbExecute(hobo_connection, "set search_path = 'hobo'")
+  print("Database Connected!")
+},
+error=function(cond) {
+  print("Unable to connect to Database.")
+})
+
+# hobo years
+hobo_years <- tbl(hobo_connection, "hobo") %>% 
+  mutate(year = year(date_time)) %>% 
+  select(year) %>%
+  distinct(year) %>%
+  collect() %>% 
+  drop_na()
+
+# full in memory hobo table
+full_hobo_data <- tbl(hobo_connection, "hobo_location") %>% 
+  inner_join(tbl(hobo_connection, "hobo_region"), by = c("hobo_location_id")) %>% 
+  inner_join(tbl(hobo_connection, "hobo_site"), by = c("hobo_region_id")) %>% 
+  inner_join(tbl(hobo_connection, "hobo"), by = c("hobo_site_id")) %>% 
+  mutate(year = year(date_time)) %>% 
+  select(!c(hobo_location_id, hobo_region_id, hobo_site_id, hobo_id))
+
+# updated_hobo_locations <- full_hobo_data %>% 
+#   filter(year %in% c(2017:2019)) %>% 
+#   select(location) %>% 
+#   distinct(location) %>% 
+#   collect()
+
+######## END HOBO Data #########
 
 # a <- full_ves_data %>% filter(year %in% c(2017:2022),
 #                               location %in% c("usa"),
