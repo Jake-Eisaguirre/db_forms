@@ -155,6 +155,18 @@ full_ves_data <- tbl(connection, "location") %>%
   mutate(year = year(date)) %>% 
   select(!c(location_id, region_id, site_id, visit_id, survey_id))
 
+# full in memory aural table
+full_aural_data <- tbl(connection, "location") %>%
+  inner_join(tbl(connection, "region"), by = c("location_id")) %>%
+  inner_join(tbl(connection, "site"), by = c("region_id")) %>%
+  inner_join(tbl(connection, "visit"), by = c("site_id")) %>%
+  inner_join(tbl(connection, "survey"), by = c("visit_id")) %>%
+  inner_join(tbl(connection, "aural"), by = c("survey_id")) %>%
+  mutate(year = year(date)) %>% 
+  select(!c(location_id, region_id, site_id, visit_id, survey_id))
+
+a <- full_aural_data %>% collect()
+
 # a <- full_ves_data %>% filter(year %in% c(2017:2022),
 #                               location %in% c("usa"),
 #                               region %in% c("california"),

@@ -304,120 +304,93 @@ ui <- secure_app(head_auth = tags$script(inactivity),
                               hr(style = "border-top: 1px solid #000000;"))),
 
         ####### END VES ##########
-        # 
-        # ####### Aural Tab ##########
-        # 
-        # navbarMenu(title = "Aural", icon = icon("music"),
-        #            
-        #            tabPanel(title = "Data",
-        #                     
-        #                     sidebarLayout(
-        #                       
-        #                       sidebarPanel(
-        #                         fluidRow(    
-        #                           column(12, sliderInput(inputId = "year_a",
-        #                                                  label = "Select Annual Range:",
-        #                                                  min = min(visit$year), max(visit$year),
-        #                                                  sep = "",
-        #                                                  value = c(max(visit$year) - 5, max(visit$year)),
-        #                                                  step = 1)),
-        #                           column(5, pickerInput(inputId = "location_a",
-        #                                                 label = "Select Locations:",
-        #                                                 choices = unique(location$location),
-        #                                                 options = list(
-        #                                                   `actions-box` = TRUE, 
-        #                                                   size = 10,
-        #                                                   `selected-text-format` = "count > 3"
-        #                                                 ), 
-        #                                                 multiple = TRUE,
-        #                                                 width = "180px")),
-        #                           column(5, pickerInput(inputId = "region_a",
-        #                                                 label = "Select Regions:",
-        #                                                 choices = unique(region$region),
-        #                                                 options = list(
-        #                                                   `actions-box` = TRUE, 
-        #                                                   size = 10,
-        #                                                   `selected-text-format` = "count > 3"
-        #                                                 ),
-        #                                                 multiple = T,
-        #                                                 width = "180px"), offset = 1),
-        #                           column(12, pickerInput(inputId = "site_a",
-        #                                                  label = "Select Sites:",
-        #                                                  choices = unique(site$site),
-        #                                                  options = list(
-        #                                                    `actions-box` = TRUE, 
-        #                                                    size = 10,
-        #                                                    `selected-text-format` = "count > 3"
-        #                                                  ), 
-        #                                                  multiple = TRUE)),
-        #                           column(12, hr(style = "border-top: 1px solid #000000;")),
-        #                           column(12, pickerInput(inputId = "site_cols_a",
-        #                                                  label = "Select Site Variables of Interest:",
-        #                                                  choices = colnames(site),
-        #                                                  options = list(
-        #                                                    `actions-box` = TRUE, 
-        #                                                    size = 10,
-        #                                                    `selected-text-format` = "count > 3"
-        #                                                  ), 
-        #                                                  multiple = TRUE)),
-        #                           column(12, pickerInput(inputId = "visit_cols_a",
-        #                                                  label = "Select Visit Variables of Interest:",
-        #                                                  choices = colnames(visit),
-        #                                                  options = list(
-        #                                                    `actions-box` = TRUE, 
-        #                                                    size = 10,
-        #                                                    `selected-text-format` = "count > 3"
-        #                                                  ), 
-        #                                                  multiple = TRUE)),
-        #                           column(12, pickerInput(inputId = "survey_cols_a",
-        #                                                  label = "Select Survey Variables of Interest:",
-        #                                                  choices = survey,
-        #                                                  options = list(
-        #                                                    `actions-box` = TRUE, 
-        #                                                    size = 10,
-        #                                                    `selected-text-format` = "count > 3"
-        #                                                  ), 
-        #                                                  multiple = TRUE)),
-        #                           column(12, pickerInput(inputId = "aural_cols",
-        #                                                  label = "Select Aural Variables of Interest:",
-        #                                                  choices = aural_cols,
-        #                                                  options = list(
-        #                                                    `actions-box` = TRUE, 
-        #                                                    size = 10,
-        #                                                    `selected-text-format` = "count > 3"
-        #                                                  ),
-        #                                                  multiple = TRUE)))),
-        #                       
-        #                       mainPanel(withSpinner(DT::dataTableOutput("aural_table")),
-        #                                 headerPanel(""),
-        #                                 actionButton('aural_download',"Download the data",
-        #                                              icon("download"), 
-        #                                              style="color: #fff; background-color: #337ab7; border-color: black"),
-        #                                 actionButton('aural_clear', "Clear Selection",
-        #                                              icon("trash"),
-        #                                              style="color: #fff; background-color: red; border-color: black"))),
-        #                     hr(style = "border-top: 1px solid #000000;")),
-        #            
-        #            tabPanel(title = "Metadata",
-        #                     
-        #                     tabsetPanel(
-        #                       tabPanel(title = "Schema",
-        #                                tags$iframe(style="height:800px; 
-        #                                      width:100%; 
-        #                                      scrolling=yes;
-        #                                      zoom=yes", 
-        #                                      src= "schema.pdf")),
-        #                       tabPanel(title = "Legacy Schema",
-        #                                tags$iframe(style="height:800px; 
-        #                                      width:100%; 
-        #                                      scrolling=yes;
-        #                                      zoom=yes", 
-        #                                      src= "legacy_survey_data.pdf")),
-        #                         tabPanel(title = "Metadata",
-        #                                  img(src = "yoda.jpeg", height = "400", width = "500"))),
-        #                       hr(style = "border-top: 1px solid #000000;"))),
-        # 
-        # ########## END Aural Tab ##########
+
+        ####### Aural Tab ##########
+
+        navbarMenu(title = "Aural", icon = icon("music"),
+
+                   tabPanel(title = "Data",
+
+                            sidebarLayout(
+
+                              sidebarPanel(
+                                fluidRow(
+                                  column(12, sliderInput(inputId = "year_a",
+                                                         label = "Select Annual Range:",
+                                                         min = min(years$year), max(years$year),
+                                                         sep = "",
+                                                         value = c(max(years$year) - 5, max(years$year)),
+                                                         step = 1)),
+                                  column(5, pickerInput(inputId = "location_a",
+                                                        label = "Select Locations:",
+                                                        choices = "",
+                                                        options = list(
+                                                          `actions-box` = TRUE,
+                                                          size = 10,
+                                                          `selected-text-format` = "count > 3"
+                                                        ),
+                                                        multiple = TRUE,
+                                                        width = "180px")),
+                                  column(5, pickerInput(inputId = "region_a",
+                                                        label = "Select Regions:",
+                                                        choices = "",
+                                                        options = list(
+                                                          `actions-box` = TRUE,
+                                                          size = 10,
+                                                          `selected-text-format` = "count > 3"
+                                                        ),
+                                                        multiple = T,
+                                                        width = "180px"), offset = 1),
+                                  column(12, pickerInput(inputId = "site_a",
+                                                         label = "Select Sites:",
+                                                         choices = "",
+                                                         options = list(
+                                                           `actions-box` = TRUE,
+                                                           size = 10,
+                                                           `selected-text-format` = "count > 3"
+                                                         ),
+                                                         multiple = TRUE)),
+                                  column(12, hr(style = "border-top: 1px solid #000000;")),
+                                  column(12, pickerInput(inputId = "aural_cols",
+                                                         label = "Select Aural Variables of Interest:",
+                                                         choices = "",
+                                                         options = list(
+                                                           `actions-box` = TRUE,
+                                                           size = 10,
+                                                           `selected-text-format` = "count > 3"
+                                                         ),
+                                                         multiple = TRUE)))),
+
+                              mainPanel(withSpinner(DT::dataTableOutput("aural_table")),
+                                        headerPanel(""),
+                                        actionButton('aural_download',"Download the data",
+                                                     icon("download"),
+                                                     style="color: #fff; background-color: #337ab7; border-color: black"),
+                                        actionButton('aural_clear', "Clear Selection",
+                                                     icon("trash"),
+                                                     style="color: #fff; background-color: red; border-color: black"))),
+                            hr(style = "border-top: 1px solid #000000;")),
+
+                   tabPanel(title = "Metadata",
+
+                            tabsetPanel(
+                              tabPanel(title = "Schema",
+                                       tags$iframe(style="height:800px;
+                                             width:100%;
+                                             scrolling=yes;
+                                             zoom=yes",
+                                             src= "schema.pdf")),
+                              tabPanel(title = "Legacy Schema",
+                                       tags$iframe(style="height:800px;
+                                             width:100%;
+                                             scrolling=yes;
+                                             zoom=yes",
+                                             src= "legacy_survey_data.pdf")),
+                                tabPanel(title = "Metadata",
+                                         img(src = "yoda.jpeg", height = "400", width = "500"))),
+                              hr(style = "border-top: 1px solid #000000;"))),
+
+        ########## END Aural Tab ##########
         # 
         # ########## HOBO TAB ##########
         # 

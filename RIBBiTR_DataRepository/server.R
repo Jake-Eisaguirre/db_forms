@@ -301,107 +301,137 @@ shinyServer(function(input, output, session) {
 
 
   ######## END VES Data ##########
-  # 
-  # ######## Aural ################
-  # 
-  # aural_data <- reactive({
-  #   
-  #   aural %>% 
-  #     filter(year <= input$year_a[2] & year>= input$year_a[1],
-  #            location %in% input$location_a,
-  #            region %in% input$region_a,
-  #            site %in% input$site_a) %>% 
-  #     select(location, region, site, input$site_cols_a, input$visit_cols_a, input$survey_cols_a, input$aural_cols)
-  #   
-  # }) %>% bindCache(input$year_a, input$location_a, input$region_a, input$site_a, input$site_cols_a, input$visit_cols_a,
-  #                  input$survey_cols_a, input$aural_cols)
-  # 
-  # # update location options based on year selection
-  # observe(
-  #   {input$year_a
-  #     
-  #     updatePickerInput(session, inputId = "location_a",
-  #                       choices = unique(aural$location[aural$year <= input$year_a[2] 
-  #                                                       & aural$year>=input$year_a[1]]))
-  #   })
-  # 
-  # # update region options based on location selection
-  # observe(
-  #   {input$location_a
-  #     
-  #     updatePickerInput(session, inputId = "region_a",
-  #                       choices = unique(aural$region[aural$year <= input$year_a[2] 
-  #                                                     & aural$year>=input$year_a[1]
-  #                                                     & aural$location %in% input$location_a]))
-  #   })
-  # 
-  # # update site options based on region selection
-  # observe(
-  #   {input$region_a
-  #     
-  #     updatePickerInput(session, inputId = "site_a",
-  #                       choices = unique(aural$site[aural$year <= input$year_a[2] 
-  #                                                   & aural$year >= input$year_a[1]
-  #                                                   & aural$location %in% input$location_a
-  #                                                   & aural$region %in% input$region_a]))
-  #     
-  #   })
-  # 
-  # # clear button
-  # observeEvent(input$aural_clear,
-  #              {
-  #                updatePickerInput(session, inputId = "year_a", selected = c(max(visit$year) - 5, max(visit$year)))
-  #                updatePickerInput(session, inputId = "location_a", selected = "")
-  #                updatePickerInput(session, inputId = "region_a", selected = "")
-  #                updatePickerInput(session, inputId = "site_cols_a", selected = "")
-  #                updatePickerInput(session, inputId = "visit_cols_a", selected = "")
-  #                updatePickerInput(session, inputId = "survey_cols_a", selected = "")
-  #                updatePickerInput(session, inputId = "aural_cols", selected = "")
-  #                
-  #              }
-  # )
-  # 
-  # 
-  # # render data selection
-  # output$aural_table <- DT::renderDataTable(aural_data(), extensions= 'Buttons', rownames = FALSE, 
-  #                                           options = list(scrollX = T, TRUEom = 'Bfrtip', 
-  #                                                          buttons = c('copy', 'csv', 'excel', 'pdf', 'print')))
-  # # Data download
-  # observeEvent(input$aural_download, {
-  #   
-  #   shinyalert(title = "Pump the breaks!", 
-  #              text = "Did you get approval for data use from the data owners?",
-  #              type = "input", closeOnClickOutside = T, showCancelButton = T, inputId = "aural_download_btn",
-  #              showConfirmButton = T, confirmButtonText = "Confirm", cancelButtonText = "Cancel", 
-  #              animation = "slide-from-top", inputPlaceholder = "enter_username")
-  # })
-  # 
-  # observeEvent(input$aural_download_btn,{
-  #   if(input$aural_download_btn %in% credentials$user)
-  #     showModal(modalDialog(downloadButton("aural_dwnld", "download"), footer = NULL, easyClose = T, size = "s"))
-  #   
-  #   if(!input$aural_download_btn %in% credentials$user)
-  #     shinyalert(title = "Access Denied", type = "warning", confirmButtonCol = "#337ab7")
-  # })
-  # 
-  # output$aural_dwnld <- downloadHandler(
-  #   filename = function(){"insert_name.csv"},
-  #   
-  #   content = function(file) {
-  #     shiny::withProgress(
-  #       message = paste0("Downloading Aural Data"),
-  #       value = 0,
-  #       {
-  #         shiny::incProgress(10/10)
-  #         write.csv(aural_data(), file, row.names = FALSE)
-  #       }
-  #     )
-  #   }
-  # )
-  # 
-  # 
-  # ######## END AURAL##########
-  # 
+
+  ######## Aural ################
+
+  aural_data <- reactive({
+
+    full_aural_data %>%
+      filter(year <= !!input$year_a[2] & year >= !!input$year_ves[1],
+             location %in% c(!!input$location_a),
+             region %in% c(!!input$region_a),
+             site %in% c(!!input$site_a)) %>%
+      select(location, region, site, !!input$aural_cols) %>%
+      collect()
+    
+  }) %>% bindCache(input$year_a, input$location_a, input$region_a, input$site_a, input$aural_cols)
+
+  # update location options based on year selection
+  observeEvent(input$year_a,
+    {
+      
+      update_aural_locations <- full_aural_data %>% 
+        filter(year <= !!input$year_a[2] & year >= !!input$year_a[1]) %>% 
+        select(location) %>% 
+        distinct(location) %>% 
+        collect()
+
+      updatePickerInput(session, inputId = "location_a",
+                        choices = update_aural_locations)
+    })
+
+  # update region options based on location selection
+  observeEvent(input$location_a,
+    {
+      
+      update_aural_regions <- full_aural_data %>% 
+        filter(year <= !!input$year_a[2] & year >= !!input$year_a[1],
+               location %in% !!input$location_a) %>% 
+        select(region) %>% 
+        distinct(region) %>% 
+        collect()
+
+      updatePickerInput(session, inputId = "region_a",
+                        choices = update_aural_regions)
+    })
+
+  # update site options based on region selection
+  observeEvent(input$region_a,
+    {
+      
+      update_aural_sites <- full_aural_data %>% 
+        filter(year <= !!input$year_a[2] & year >= !!input$year_a[1],
+               location %in% !!input$location_a,
+               region %in% !!input$region_a) %>% 
+        select(site) %>% 
+        distinct(site) %>% 
+        collect()
+
+      updatePickerInput(session, inputId = "site_a",
+                        choices = update_aural_sites)
+
+    })
+  
+  observeEvent(input$site_a,
+               {
+                 
+                 site_aural_cols_update <- full_aural_data %>% 
+                   filter(year <= !!input$year_a[2] & year >= !!input$year_a[1],
+                          location %in% !!input$location_a,
+                          region %in% !!input$region_a,
+                          site %in% !!input$site_a) %>% 
+                   collect() %>% 
+                   janitor::remove_empty(which = "cols") %>% 
+                   colnames() %>% 
+                   as.data.frame()
+                 
+                 updatePickerInput(session, inputId = "aural_cols",
+                                   choices = site_aural_cols_update)
+               })
+
+  # clear button
+  observeEvent(input$aural_clear,
+               {
+                 updatePickerInput(session, inputId = "year_a", selected = c(max(years$year) - 5, max(years$year)))
+                 updatePickerInput(session, inputId = "location_a", selected = "")
+                 updatePickerInput(session, inputId = "region_a", selected = "")
+                 updatePickerInput(session, inputId = "site_a", selected = "")
+                 updatePickerInput(session, inputId = "aural_cols", selected = "")
+
+               }
+  )
+
+
+  # render data selection
+  output$aural_table <- DT::renderDataTable(aural_data(), extensions= 'Buttons', rownames = FALSE,
+                                            options = list(scrollX = T, TRUEom = 'Bfrtip',
+                                                           buttons = c('copy', 'csv', 'excel', 'pdf', 'print')))
+  # Data download
+  observeEvent(input$aural_download, {
+
+    shinyalert(title = "Pump the breaks!",
+               text = "Did you get approval for data use from the data owners?",
+               type = "input", closeOnClickOutside = T, showCancelButton = T, inputId = "aural_download_btn",
+               showConfirmButton = T, confirmButtonText = "Confirm", cancelButtonText = "Cancel",
+               animation = "slide-from-top", inputPlaceholder = "enter_username")
+  })
+
+  observeEvent(input$aural_download_btn,{
+    if(input$aural_download_btn %in% credentials$user)
+      showModal(modalDialog(downloadButton("aural_dwnld", "download"), footer = NULL, easyClose = T, size = "s"))
+
+    if(!input$aural_download_btn %in% credentials$user)
+      shinyalert(title = "Access Denied", type = "warning", confirmButtonCol = "#337ab7")
+  })
+
+  output$aural_dwnld <- downloadHandler(
+    filename = function(){"insert_name.csv"},
+
+    content = function(file) {
+      shiny::withProgress(
+        message = paste0("Downloading Aural Data"),
+        value = 0,
+        {
+          shiny::incProgress(10/10)
+          write.csv(aural_data(), file, row.names = FALSE)
+        }
+      )
+    }
+  )
+
+
+  ######## END AURAL##########
+
   # ######## HOBO ##########
   # 
   # hobo_data <- reactive({
