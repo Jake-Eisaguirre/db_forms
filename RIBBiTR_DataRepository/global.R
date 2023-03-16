@@ -68,19 +68,19 @@ years <- dbGetQuery(survey_data_connection, "select date from visit") %>%
 # BD #
 
 comb_bd <-  dbGetQuery(survey_data_connection, "select * from temp_shiny_bd") %>% 
-  colnames() %>% as.data.frame()
+  colnames() %>% as.data.frame() %>% rename("Temp Bd" = ".")
 
 # AMP #
 serdp_amp <- dbGetQuery(survey_data_connection, "select * from serdp_amp")%>% 
-  colnames() %>% as.data.frame()
+  colnames() %>% as.data.frame() %>% rename("Amp Variables" = ".")
 
 # Muc/microbiome #
 serdp_muc_mic <- dbGetQuery(survey_data_connection, "select * from serdp_newt_microbiome_mucosome_antifungal") %>% 
-  colnames() %>% as.data.frame()
+  colnames() %>% as.data.frame() %>% rename("Mucosome & Microbiome Variables" = ".")
 
 # Bd GENETIC #
 serdp_bd_genom <- dbGetQuery(survey_data_connection, "select * from serdp_bd_genomic")%>% 
-  colnames() %>% as.data.frame()
+  colnames() %>% as.data.frame() %>% rename("Bd Genomic Variables" = ".")
 
 # full in memeory cap table
 full_cap_data <- tbl(survey_data_connection, "location") %>%
@@ -108,11 +108,6 @@ no_pros_cap_data <- tbl(survey_data_connection, "location") %>%
   mutate(year = year(date)) %>% 
   select(!c(location_id, region_id, site_id, visit_id, survey_id, capture_id))
 
-
-# ves
-# ves <- dbGetQuery(survey_data_connection, "select * from ves") 
-# ves <- select(ves, !c(survey_id, ves_id)) %>% 
-#   colnames() %>% as.data.frame()
 
 # full in memory ves table
 full_ves_data <- tbl(survey_data_connection, "location") %>%
@@ -203,25 +198,54 @@ full_audio_data <- tbl(audio_connection, "audio_location") %>%
   mutate(year = year(date_of_deployment)) %>% 
   select(!c(location_id, region_id, site_id, visit_id, audio_id))
 
-audio_locations <- tbl(audio_connection, "audio_location") %>% 
-  select(location) %>% 
-  distinct(location) %>% 
-  collect()
 
-# audio_years <- tbl(audio_connection, "audio_visit") %>% 
-#   mutate(year = year(date_of_deployment)) %>% 
-#   select(year) %>%
-#   distinct(year) %>%
-#   collect() %>% 
-#   drop_na()
+audio_years <- tbl(audio_connection, "audio_visit") %>% 
+  mutate(year = year(date_of_deployment)) %>% 
+  distinct(year) %>% 
+  select(year) %>%
+  collect() %>% 
+  as.data.frame() %>% 
+  drop_na()
 
-# updated_hobo_locations <- full_hobo_data %>% 
-#   filter(year %in% c(2017:2019)) %>% 
-#   select(location) %>% 
-#   distinct(location) %>% 
-#   collect()
+######## END Audio Data #########
 
-######## END HOBO Data #########
+
+############ eDNA Data
+
+# DB conection
+tryCatch({
+  drv <- dbDriver("Postgres")
+  print("Connecting to Database…")
+  edna_connection <- dbConnect(drv, 
+                               dbname = Sys.getenv("aws_dbname"),
+                               host = Sys.getenv("aws_host"), 
+                               port = Sys.getenv("aws_port"),
+                               user = Sys.getenv("aws_user"), 
+                               password = Sys.getenv("aws_password"))
+  dbExecute(edna_connection, "set search_path = 'e_dna'")
+  print("Database Connected!")
+},
+error=function(cond) {
+  print("Unable to connect to Database.")
+})
+
+
+full_edna_data <- dbGetQuery(edna_connection, "select el.*, er.*, es.*, ev.*, es2.*
+                                               from edna_location el 
+                                               join edna_region er on el.location_id = er.location_id 
+                                               join edna_site es on er.region_id = es.region_id
+                                               join edna_visit ev on es.site_id = ev.site_id
+                                               join edna_survey es2 on ev.visit_id = es2.visit_id;") %>% 
+  select(!c(location_id, region_id, site_id, visit_id, survey_id, location_id..5, location..8, region_id..19,
+            site_id..28, visit_id..45))
+
+
+edna_years <- full_edna_data %>% 
+  select(year) %>%
+  distinct(year) %>% 
+  drop_na()
+
+
 
 # a <- full_ves_data %>% filter(year %in% c(2017:2022),
 #                               location %in% c("usa"),

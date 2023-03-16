@@ -115,12 +115,21 @@ a <- t %>%
 
 ```{r}
 
+cap <- full_cap_data %>% collect()
+
 b <- cap %>% 
   filter(year %in% c(2020:2022),
              location %in% c("brazil"),
              region %in% c("boraceia", "santa_virginia"),
              site %in% c("b3t", "lago_sede_water")) %>% 
-  remove_empty(which = "cols")
+  janitor::remove_empty(which = "cols") %>% 
+        colnames() %>% 
+        as.data.frame() %>%
+  rename("Variables" = ".") %>% 
+  filter(!Variables == "location" &
+         !Variables == "region" &
+         !Variables == "site" &
+         !Variables == "year")
 
 ```
 

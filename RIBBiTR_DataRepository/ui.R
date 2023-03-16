@@ -478,17 +478,85 @@ ui <- secure_app(head_auth = tags$script(inactivity),
 
         ######## eDNA TAB ############
 
-        tabPanel(title = "eDNA", icon = icon("dna"),
-
-                 sidebarLayout(
-
-                   sidebarPanel(
-
-                   ),
-                   mainPanel(img(src = "homer.jpeg", height = "600", width = "700")
-                   )
-
-                 )),
+        navbarMenu(title = "eDNA", icon = icon("dna"),
+                   
+                   tabPanel(title = "Data",
+                            
+                            sidebarLayout(
+                              
+                              sidebarPanel(
+                                fluidRow(
+                                  column(5, pickerInput(inputId = "year_edna",
+                                                         label = "Select Annual Range:",
+                                                         choices = edna_years$year,
+                                                         options = list(
+                                                           `actions-box` = TRUE,
+                                                           size = 10,
+                                                           `selected-text-format` = "count > 3"
+                                                         ),
+                                                         multiple = TRUE,
+                                                         width = "180px")),
+                                  column(5, pickerInput(inputId = "location_edna",
+                                                        label = "Select Locations:",
+                                                        choices = "",
+                                                        options = list(
+                                                          `actions-box` = TRUE,
+                                                          size = 10,
+                                                          `selected-text-format` = "count > 3"
+                                                        ),
+                                                        multiple = TRUE,
+                                                        width = "180px")),
+                                  column(4, pickerInput(inputId = "region_edna",
+                                                        label = "Select Regions:",
+                                                        choices = "",
+                                                        options = list(
+                                                          `actions-box` = TRUE,
+                                                          size = 10,
+                                                          `selected-text-format` = "count > 3"
+                                                        ),
+                                                        multiple = T,
+                                                        width = "180px")),
+                                  column(5, pickerInput(inputId = "site_edna",
+                                                        label = "Select Sites:",
+                                                        choices = "",
+                                                        options = list(
+                                                          `actions-box` = TRUE,
+                                                          size = 10,
+                                                          `selected-text-format` = "count > 3"
+                                                        ),
+                                                        multiple = TRUE), offset = 1),
+                                  column(12, hr(style = "border-top: 1px solid #000000;")),
+                                  column(12, pickerInput(inputId = "edna_cols",
+                                                         label = "Select eDNA Variables of Interest:",
+                                                         choices = "",
+                                                         options = list(
+                                                           `actions-box` = TRUE,
+                                                           size = 10,
+                                                           `selected-text-format` = "count > 3"
+                                                         ),
+                                                         multiple = TRUE)))),
+                              
+                              mainPanel(withSpinner(DT::dataTableOutput("edna_t")),
+                                        headerPanel(""),
+                                        actionButton('edna_download',"Download the data",
+                                                     icon("download"),
+                                                     style="color: #fff; background-color: #337ab7; border-color: black"),
+                                        actionButton('edna_clear', "Clear Selection",
+                                                     icon("trash"),
+                                                     style="color: #fff; background-color: red; border-color: black"))),
+                            hr(style = "border-top: 1px solid #000000;")),
+                   
+                   tabPanel(title = "Metadata",
+                            
+                            tabsetPanel(
+                              tabPanel(title = "Schema",
+                                       tags$iframe(style="height:800px;
+                                             width:100%;
+                                             scrolling=yes;
+                                             zoom=yes",
+                                             src= "audio.pdf")),
+                              tabPanel(title = "Metadata"))
+                   )),
 
         ######### END eDNA Tab #########
 
@@ -501,18 +569,9 @@ ui <- secure_app(head_auth = tags$script(inactivity),
 
                               sidebarPanel(
                                 fluidRow(
-                                  # column(12, sliderInput(inputId = "date_audio",
-                                  #                        label = "Select Annual Range:",
-                                  #                        min = min(as.Date(audio_visit$date_of_deployment, "%Y-%m-%d")),
-                                  #                        max = max(as.Date(audio_visit$date_of_deployment, "%Y-%m-%d")),
-                                  #                        sep = "",
-                                  #                        value = c(max(as.Date(audio_visit$date_of_deployment, "%Y-%m-%d")) -
-                                  #                                    15, max(as.Date(audio_visit$date_of_deployment, "%Y-%m-%d"))),
-                                  #
-                                  #                        timeFormat = "%Y-%m-%d")),
-                                  column(5, pickerInput(inputId = "location_audio",
-                                                        label = "Select Locations:",
-                                                        choices = audio_locations,
+                                  column(5, pickerInput(inputId = "year_audio",
+                                                        label = "Select Years:",
+                                                        choices = audio_years$year,
                                                         options = list(
                                                           `actions-box` = TRUE,
                                                           size = 10,
@@ -520,7 +579,17 @@ ui <- secure_app(head_auth = tags$script(inactivity),
                                                         ),
                                                         multiple = TRUE,
                                                         width = "180px")),
-                                  column(5, pickerInput(inputId = "region_audio",
+                                  column(5, pickerInput(inputId = "location_audio",
+                                                        label = "Select Locations:",
+                                                        choices = "",
+                                                        options = list(
+                                                          `actions-box` = TRUE,
+                                                          size = 10,
+                                                          `selected-text-format` = "count > 3"
+                                                        ),
+                                                        multiple = TRUE,
+                                                        width = "180px")),
+                                  column(4, pickerInput(inputId = "region_audio",
                                                         label = "Select Regions:",
                                                         choices = "",
                                                         options = list(
@@ -529,8 +598,8 @@ ui <- secure_app(head_auth = tags$script(inactivity),
                                                           `selected-text-format` = "count > 3"
                                                         ),
                                                         multiple = T,
-                                                        width = "180px"), offset = 1),
-                                  column(12, pickerInput(inputId = "site_audio",
+                                                        width = "180px")),
+                                  column(5, pickerInput(inputId = "site_audio",
                                                          label = "Select Sites:",
                                                          choices = "",
                                                          options = list(
@@ -538,10 +607,10 @@ ui <- secure_app(head_auth = tags$script(inactivity),
                                                            size = 10,
                                                            `selected-text-format` = "count > 3"
                                                          ),
-                                                         multiple = TRUE)),
+                                                         multiple = TRUE), offset = 1),
                                   column(12, hr(style = "border-top: 1px solid #000000;")),
                                   column(12, pickerInput(inputId = "audio_cols",
-                                                         label = "Select Hobo Sensors Variables of Interest:",
+                                                         label = "Select Audio Variables of Interest:",
                                                          choices = "",
                                                          options = list(
                                                            `actions-box` = TRUE,

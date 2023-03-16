@@ -106,7 +106,12 @@ shinyServer(function(input, output, session) {
         collect() %>% 
         janitor::remove_empty(which = "cols") %>% 
         colnames() %>% 
-        as.data.frame()
+        as.data.frame() %>% 
+        rename("Variables" = ".") %>% 
+        filter(!Variables == "location" &
+                 !Variables == "region" &
+                 !Variables == "site" &
+                 !Variables == "year")  
 
       updatePickerInput(session, inputId = "site_cols",
                         choices = site_cap_cols_update)
@@ -244,7 +249,12 @@ shinyServer(function(input, output, session) {
                    collect() %>% 
                    janitor::remove_empty(which = "cols") %>% 
                    colnames() %>% 
-                   as.data.frame()
+                   as.data.frame() %>% 
+                   rename("Variables" = ".") %>% 
+                   filter(!Variables == "location" &
+                            !Variables == "region" &
+                            !Variables == "site" &
+                            !Variables == "year")  
                  
                  updatePickerInput(session, inputId = "ves_cols",
                                    choices = site_ves_cols_update)
@@ -374,7 +384,12 @@ shinyServer(function(input, output, session) {
                    collect() %>% 
                    janitor::remove_empty(which = "cols") %>% 
                    colnames() %>% 
-                   as.data.frame()
+                   as.data.frame() %>% 
+                   rename("Variables" = ".") %>% 
+                   filter(!Variables == "location" &
+                            !Variables == "region" &
+                            !Variables == "site" &
+                            !Variables == "year")  
                  
                  updatePickerInput(session, inputId = "aural_cols",
                                    choices = site_aural_cols_update)
@@ -500,7 +515,12 @@ shinyServer(function(input, output, session) {
                  site_hobo_cols_update <- full_hobo_data %>% 
                    collect() %>% 
                    colnames() %>% 
-                   as.data.frame()
+                   as.data.frame() %>% 
+                   rename("Variables" = ".") %>% 
+                   filter(!Variables == "location" &
+                            !Variables == "region" &
+                            !Variables == "site" &
+                            !Variables == "year")  
                  
                  updatePickerInput(session, inputId = "hobo_cols",
                                    choices = site_hobo_cols_update)
@@ -576,9 +596,10 @@ shinyServer(function(input, output, session) {
   audio_data <- reactive({
 
     full_audio_data %>%
-      filter(location %in% (!!input$location_audio),
-      region %in% (!!input$region_audio),
-      site %in% c(!!input$site_audio)) %>%
+      filter(year %in% c(!!input$year_audio),
+             location %in% (!!input$location_audio),
+             region %in% (!!input$region_audio),
+             site %in% c(!!input$site_audio)) %>%
       select(location, region, site, !!input$audio_cols) %>% 
       collect()
   
@@ -626,14 +647,28 @@ shinyServer(function(input, output, session) {
     }
   )
   
-
+  # update location options based on location selection
+  observeEvent(input$year_audio,
+               {
+                 
+                 audio_location_update <- full_audio_data %>%
+                   filter(year %in% c(!!input$year_audio)) %>%
+                   select(location) %>% 
+                   distinct(location) %>% 
+                   collect()
+                 
+                 
+                 updatePickerInput(session, inputId = "location_audio",
+                                   choices = audio_location_update)
+               })
 
   # update region options based on location selection
   observeEvent(input$location_audio,
     {
       
       audio_region_update <- full_audio_data %>%
-        filter(location %in% (!!input$location_audio)) %>%
+        filter(year %in% c(!!input$year_audio),
+               location %in% (!!input$location_audio)) %>%
         select(region) %>% 
         distinct(region) %>% 
         collect()
@@ -648,7 +683,8 @@ shinyServer(function(input, output, session) {
     {
       
       audio_site_update <- full_audio_data %>%
-        filter(location %in% c(!!input$location_audio),
+        filter(year %in% c(!!input$year_audio),
+               location %in% c(!!input$location_audio),
                region %in% c(!!input$region_audio)) %>%
         select(site) %>% 
         distinct(site) %>% 
@@ -665,7 +701,12 @@ shinyServer(function(input, output, session) {
                  audio_cols_update <- full_audio_data %>%
                    collect() %>% 
                    colnames() %>% 
-                   as.data.frame()
+                   as.data.frame() %>% 
+                   rename("Variables" = ".") %>% 
+                   filter(!Variables == "location" &
+                          !Variables == "region" &
+                          !Variables == "site" &
+                          !Variables == "year") 
                  
                  updatePickerInput(session, inputId = "audio_cols",
                                    choices = audio_cols_update)
@@ -684,6 +725,138 @@ shinyServer(function(input, output, session) {
                })
   
   ############### END Audio ###################
+  
+  ######## eDNA ##########
+  
+  edna_data <- reactive({
+    
+    full_edna_data %>%
+      filter(year %in% input$year_edna,
+             location %in% input$location_edna,
+             region %in% input$region_edna,
+             site %in% input$site_edna) %>%
+      select(location, region, site, !!input$edna_cols)
+    
+  })%>% bindCache(input$date_edna, input$location_edna, input$region_edna, input$site_edna, input$edna_cols)
+  
+  
+  # update location options based on year selection
+  observeEvent(input$year_edna,
+               {
+                 updated_edna_locations <- full_edna_data %>% 
+                   filter(year %in% input$year_edna) %>% 
+                   select(location) %>% 
+                   distinct(location) 
+                 
+                 updatePickerInput(session, inputId = "location_edna",
+                                   choices = updated_edna_locations$location)
+               })
+  
+  # update region options based on location selection
+  observeEvent(input$location_edna,
+               {
+                 
+                 updated_edna_region <- full_edna_data %>% 
+                   filter(year %in% input$year_edna,
+                          location %in% input$location_edna) %>% 
+                   select(region) %>% 
+                   distinct(region) 
+                 
+                 updatePickerInput(session, inputId = "region_edna",
+                                   choices = updated_edna_region$region)
+               })
+  
+  # update site options based on region selection
+  observeEvent(input$region_edna,
+               {
+                 
+                 updated_edna_sites <-  full_edna_data %>% 
+                   filter(year %in% input$year_edna,
+                          location %in% input$location_edna,
+                          region %in% input$region_edna) %>% 
+                   select(site) %>% 
+                   distinct(site) 
+                 
+                 updatePickerInput(session, inputId = "site_edna",
+                                   choices = updated_edna_sites$site)
+                 
+               })
+  
+  # update aural col options
+  observeEvent(input$site_edna,
+               {
+                 
+                 site_edna_cols_update <- full_edna_data %>% 
+                   colnames() %>% 
+                   as.data.frame() %>% 
+                   rename("Variables" = ".") %>% 
+                   filter(!Variables == "location" &
+                            !Variables == "region" &
+                            !Variables == "site")  
+                 
+                 updatePickerInput(session, inputId = "edna_cols",
+                                   choices = site_edna_cols_update)
+               })
+  
+  # clear button
+  observeEvent(input$edna_clear,
+               {
+                 updatePickerInput(session, inputId = "year_edna", selected = (max(edna_years$year)))
+                 updatePickerInput(session, inputId = "location_edna", selected = "")
+                 updatePickerInput(session, inputId = "region_edna", selected = "")
+                 updatePickerInput(session, inputId = "site_edna", selected = "")
+                 updatePickerInput(session, inputId = "edna_cols", selected = "")
+                 
+               }
+  )
+  
+  
+  
+  # render data selection
+  output$edna_t <- DT::renderDataTable(edna_data(), extensions= 'Buttons', rownames = FALSE,
+                                       options = list(scrollX = T, TRUEom = 'Bfrtip',
+                                                      buttons = c('copy', 'csv', 'excel', 'pdf', 'print')))
+  
+  # Data download
+  observeEvent(input$edna_download, {
+    
+    shinyalert(title = "Pump the breaks!",
+               text = "Did you get approval for data use from the data owners?",
+               type = "input", closeOnClickOutside = T, showCancelButton = T, inputId = "edna_download_btn",
+               showConfirmButton = T, confirmButtonText = "Confirm", cancelButtonText = "Cancel",
+               animation = "slide-from-top", inputPlaceholder = "enter_username")
+  })
+  
+  observeEvent(input$edna_download_btn,{
+    if(input$edna_download_btn %in% credentials$user)
+      showModal(modalDialog(downloadButton("edna_dwnld", "download"), footer = NULL, easyClose = T, size = "s"))
+    
+    if(!input$edna_download_btn %in% credentials$user)
+      shinyalert(title = "Access Denied", type = "warning", confirmButtonCol = "#337ab7")
+  })
+  
+  output$edna_dwnld <- downloadHandler(
+    filename = function(){"insert_name.csv"},
+    
+    content = function(file) {
+      shiny::withProgress(
+        message = paste0("Downloading eDNA Data"),
+        value = 0,
+        {
+          shiny::incProgress(1/10)
+          Sys.sleep(1)
+          shiny::incProgress(3/10)
+          Sys.sleep(2)
+          shiny::incProgress(9/10)
+          write.csv(edna_data(), file, row.names = FALSE)
+        }
+      )
+    }
+  )
+  
+  
+  ######## END HOBO ##########
+  
   
 track_usage(storage_mode = store_rds(path = "/home/ubuntu/RIBBiTR_DataRepository/logs"))
 
