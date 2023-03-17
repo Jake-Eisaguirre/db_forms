@@ -1,16 +1,4 @@
 
-# if (!require(librarian)){
-#   install.packages("librarian")
-#   library(librarian)
-# }
-# 
-# # librarian downloads, if not already downloaded, and reads in needed packages
-# 
-# librarian::shelf(shiny, tidyverse, here, janitor, lubridate, RPostgres, rstudioapi, shinyWidgets, 
-#                  DT, glue, shinycssloaders, DBI, gargle,
-#                  shinyalert, googledrive, shinylogs, cachem, shinymanager)
-
-
 library(tidyverse)
 library(here)
 library(janitor)
@@ -246,89 +234,6 @@ edna_years <- full_edna_data %>%
   drop_na()
 
 
-
-# a <- full_ves_data %>% filter(year %in% c(2017:2022),
-#                               location %in% c("usa"),
-#                               region %in% c("california"),
-#                               site %in% c("70449")) %>%  collect()
-
-# dbExecute(connection, "set search_path = survey_data")
-# 
-# location <- read_csv(here("RIBBiTR_DataRepository", "data", "location.csv"))
-# 
-# region <- read_csv(here("RIBBiTR_DataRepository", "data", "region.csv"))
-# 
-# site_list <- read_csv(here("RIBBiTR_DataRepository", "data", "site_list.csv"))
-# 
-# site <- read_csv(here("RIBBiTR_DataRepository", "data", "site.csv"))
-# 
-# years <- read_csv(here("RIBBiTR_DataRepository", "data", "year.csv"))
-# 
-# visit <- read_csv(here("RIBBiTR_DataRepository", "data", "visit.csv"))
-# 
-# survey <- read_csv(here("RIBBiTR_DataRepository", "data", "survey.csv"))
-# 
-# capture <- read_csv(here("RIBBiTR_DataRepository", "data", "capture.csv"))
-
-# slow method for reading in all csv files
-
-# filenames <- gsub("\\.csv$","", list.files(here("data")))
-
- # for(i in filenames){
- #   assign(i, read_csv(here("data", paste(i, ".csv", sep=""))))
- # }
-
- # visit <- read_csv(here("RIBBiTR_DataRepository/data/visit.csv"))
- # 
- # ves <- read_csv(here("RIBBiTR_DataRepository/data/ves.csv"))
- # 
- # ves_cols <- read_csv(here("RIBBiTR_DataRepository/data/ves_cols.csv"))
- # 
- # survey <- read_csv(here("RIBBiTR_DataRepository/data/survey.csv"))
- # 
- # site <- read_csv(here("RIBBiTR_DataRepository/data/site.csv"))
- # 
- # serdp_muc_mic <- read_csv(here("RIBBiTR_DataRepository/data/serdp_muc_mic.csv"))
- # 
- # serdp_bd_genom <- read_csv(here("RIBBiTR_DataRepository/data/serdp_bd_genom.csv"))
- # 
- # serdp_amp <- read_csv(here("RIBBiTR_DataRepository/data/serdp_amp.csv"))
- # 
- # region <- read_csv(here("RIBBiTR_DataRepository/data/region.csv"))
- # 
- # location <- read_csv(here("RIBBiTR_DataRepository/data/location.csv"))
- # 
- # hobo <- read_csv(here("RIBBiTR_DataRepository/data/hobo.csv"))
- # 
- # hobo_site <- read_csv(here("RIBBiTR_DataRepository/data/hobo_site.csv"))
- # 
- # hobo_region <- read_csv(here("RIBBiTR_DataRepository/data/hobo_region.csv"))
- # 
- # hobo_location <- read_csv(here("RIBBiTR_DataRepository/data/hobo_location.csv"))
- # 
- # hobo_cols <- read_csv(here("RIBBiTR_DataRepository/data/hobo_cols.csv"))
- # 
- # comb_bd <- read_csv(here("RIBBiTR_DataRepository/data/comb_bd.csv"))
- # 
- # capture <- read_csv(here("RIBBiTR_DataRepository/data/capture.csv"))
- # 
- # aural <- read_csv(here("RIBBiTR_DataRepository/data/aural.csv"))
- # 
- # cap <- read_csv(here("RIBBiTR_DataRepository/data/cap.csv"))
- # 
- # aural_cols <- read_csv(here("RIBBiTR_DataRepository/data/aural_cols.csv"))
- # 
- # audio_cols <- read_csv(here("RIBBiTR_DataRepository/data/audio_cols.csv"))
- # 
- # audio_location <- read_csv(here("RIBBiTR_DataRepository/data/audio_location.csv"))
- # 
- # audio_region <- read_csv(here("RIBBiTR_DataRepository/data/audio_region.csv"))
- # 
- # audio_site <- read_csv(here("RIBBiTR_DataRepository/data/audio_site.csv"))
- # 
- # audio_visit <- read_csv(here("RIBBiTR_DataRepository/data/audio_visit.csv"))
- # 
- # audio <- read_csv(here("RIBBiTR_DataRepository/data/audio.csv"))
 
 
 #### Login ######
