@@ -1,6 +1,5 @@
 source(("global.R"), local = T)
 source(("creds.R"), local = T)
-# source("db_creds_goog.R", local = T)
 
 
 
@@ -554,7 +553,7 @@ ui <- secure_app(head_auth = tags$script(inactivity),
                                              width:100%;
                                              scrolling=yes;
                                              zoom=yes",
-                                             src= "audio.pdf")),
+                                             src= "eDNA.pdf")),
                               tabPanel(title = "Metadata"))
                    )),
 

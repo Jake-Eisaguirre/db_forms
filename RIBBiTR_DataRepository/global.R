@@ -23,7 +23,7 @@ shinyOptions(cache = cachem::cache_disk("./app_cache"))
 #shinyOptions(cache = cachem::cache_mem(max_size = 1000e6))
 
 
-
+source("db_creds.R")
 
 ########## survey_data ##########
 
@@ -34,11 +34,11 @@ tryCatch({
   drv <- dbDriver("Postgres")
   print("Connecting to Database…")
   survey_data_connection <- dbConnect(drv, 
-                                      dbname = Sys.getenv("aws_dbname"),
-                                      host = Sys.getenv("aws_host"), 
-                                      port = Sys.getenv("aws_port"),
-                                      user = Sys.getenv("aws_user"), 
-                                      password = Sys.getenv("aws_password"))
+                                      dbname = aws_dbname,
+                                      host = aws_host, 
+                                      port = aws_port,
+                                      user = aws_user, 
+                                      password = aws_password)
   dbExecute(survey_data_connection, "set search_path = 'survey_data'")
   print("Database Connected!")
 },
@@ -128,11 +128,11 @@ tryCatch({
   drv <- dbDriver("Postgres")
   print("Connecting to Database…")
   hobo_connection <- dbConnect(drv, 
-                               dbname = Sys.getenv("aws_dbname"),
-                               host = Sys.getenv("aws_host"), 
-                               port = Sys.getenv("aws_port"),
-                               user = Sys.getenv("aws_user"), 
-                               password = Sys.getenv("aws_password"))
+                               dbname = aws_dbname,
+                               host = aws_host, 
+                               port = aws_port,
+                               user = aws_user, 
+                               password = aws_password)
   dbExecute(hobo_connection, "set search_path = 'hobo'")
   print("Database Connected!")
 },
@@ -165,11 +165,11 @@ tryCatch({
   drv <- dbDriver("Postgres")
   print("Connecting to Database…")
   audio_connection <- dbConnect(drv, 
-                               dbname = Sys.getenv("aws_dbname"),
-                               host = Sys.getenv("aws_host"), 
-                               port = Sys.getenv("aws_port"),
-                               user = Sys.getenv("aws_user"), 
-                               password = Sys.getenv("aws_password"))
+                               dbname = aws_dbname,
+                               host = aws_host, 
+                               port = aws_port,
+                               user = aws_user, 
+                               password = aws_password)
   dbExecute(audio_connection, "set search_path = 'audio'")
   print("Database Connected!")
 },
@@ -205,11 +205,11 @@ tryCatch({
   drv <- dbDriver("Postgres")
   print("Connecting to Database…")
   edna_connection <- dbConnect(drv, 
-                               dbname = Sys.getenv("aws_dbname"),
-                               host = Sys.getenv("aws_host"), 
-                               port = Sys.getenv("aws_port"),
-                               user = Sys.getenv("aws_user"), 
-                               password = Sys.getenv("aws_password"))
+                               dbname = aws_dbname,
+                               host = aws_host, 
+                               port = aws_port,
+                               user = aws_user, 
+                               password = aws_password)
   dbExecute(edna_connection, "set search_path = 'e_dna'")
   print("Database Connected!")
 },
@@ -255,8 +255,4 @@ t = setTimeout(logout, 120000);  // time is in milliseconds (1000 is 1 second)
 }
 }
 idleTimer();"
-
-
-# remove NA function
-not_all_na <- function(x) any(!is.na(x))
 

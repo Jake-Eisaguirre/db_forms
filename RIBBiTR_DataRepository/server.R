@@ -172,7 +172,15 @@ shinyServer(function(input, output, session) {
     }
   )
 
-
+  # Comb bd warning
+  observeEvent(input$bd_temp, {
+    
+    shinyalert(title = "Warning",
+               text = "This data contains temporary combined Bd Loads. Contact data owners to confirm qPCR protocols are equivalent before use.",
+               type = "warning", closeOnClickOutside = T, showCancelButton = T,
+               showConfirmButton = T, confirmButtonText = "Ok", cancelButtonText = "Cancel",
+               animation = "slide-from-top")
+  })
 
   ####### End Capture Data ########
 
@@ -308,6 +316,8 @@ shinyServer(function(input, output, session) {
       )
     }
   )
+  
+
 
 
   ######## END VES Data ##########
@@ -858,7 +868,7 @@ shinyServer(function(input, output, session) {
   ######## END HOBO ##########
   
   
-track_usage(storage_mode = store_rds(path = "/home/ubuntu/RIBBiTR_DataRepository/logs"))
+#track_usage(storage_mode = store_rds(path = "/home/ubuntu/RIBBiTR_DataRepository/logs"))
 
 })
 
