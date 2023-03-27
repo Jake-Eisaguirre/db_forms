@@ -15,7 +15,7 @@ if (!require(librarian)){
 
 # librarian downloads, if not already downloaded, and reads in needed packages
 
-librarian::shelf(tidyverse, here, janitor, sf, lubridate, RPostgres, rstudioapi, DBI)
+librarian::shelf(tidyverse, here, janitor, sf, lubridate, RPostgres, rstudioapi, DBI, oce, leaflet)
 ```
 
 
@@ -135,11 +135,96 @@ b <- cap %>%
 
 ```{r}
 
-update_cap_locations <- full_cap_data %>% 
-  filter(year %in% c(2015:2019)) %>% 
-  select(location) %>% 
-  distinct(location) %>% 
+data <- no_pros_cap_data %>% 
+  filter(year %in% c(2014:2023),
+             location %in% c("usa"),
+             region %in% c("california")) %>% 
+  select(year, location, region, species_capture) %>%
+  group_by(year, location, region, species_capture) %>%
+  summarise(count = n()) %>% 
+  collect() %>% 
+  ungroup() %>% 
+  select(!c(location, region)) %>% 
+  mutate(count = as.numeric(count)) %>% 
+  filter(!species_capture %in% c("?", "control", "controle", NA))
+
+
+ggplot(data = data, aes(x = species_capture, y = count, fill = factor(year))) +   
+  geom_col(position = position_dodge2(preserve = "single")) +   
+  theme_classic() +
+  theme(axis.text.x = element_text(angle = 90, hjust = 1, vjust = 0.3)) 
+
+
+
+
+ggplot(data = data, aes(x = year, y = med, fill = factor(year))) +
+   geom_col(position = "dodge2")+
+   theme(axis.text.x = element_text(angle = 45, hjust = 1)) +
+   facet_wrap(vars(species_capture), scales = "free_y")  
+
+data$species_capture_year = paste0(data$species_capture,"-",data$year)
+
+ggplot(data = data, aes(x = species_capture_year, y = count, fill = factor(year))) +
+   geom_col(position = "dodge2")+
+   theme(axis.text.x = element_text(angle = 90, hjust = 1))
+```
+
+```{r}
+data <- full_cap_data %>% 
+  filter(year %in% c(2014:2023),
+             location %in% c("panama"),
+             region %in% c("el_cope")) %>% 
+  select(year, location, region, bd_swab_id, genetic_id, microbiome_swab_id, amp_id, mucosome_id,
+         bacterial_swab_id, antibody_id, crispr_id) %>% 
+  group_by(year, location, region) %>% 
+  summarise(bd_swab_id_count = as.numeric(count(bd_swab_id)),
+            genetic_id_count = as.numeric(count(genetic_id)),
+            microbiome_swab_id_count = as.numeric(count(microbiome_swab_id)),
+            amp_id_count = as.numeric(count(amp_id)),
+            mucosome_id_count = as.numeric(count(mucosome_id)),
+            bacterial_swab_id_count = as.numeric(count(bacterial_swab_id)),
+            antibody_id_count = as.numeric(count(antibody_id)),
+            crispr_id_count = as.numeric(count(crispr_id))) %>% 
+  collect() %>% 
+  ungroup() %>% 
+  select(!c(location, region)) %>% 
+  pivot_longer(!year, names_to = "swab_type", values_to = "count")
+
+
+ggplot(data = data, aes(x = factor(year), y = count, fill = swab_type )) +   
+  geom_point(aes(color = swab_type)) +   
+  theme_classic() +
+  theme(axis.text.x = element_text(angle = 90, hjust = 1, vjust = 0.3)) 
+```
+
+```{r}
+
+spat_data <- no_pros_cap_data %>% 
+  filter(year %in% c(1995:2023)) %>% 
+  select(region, site, utmn, utme, utm_zone) %>%
+  group_by(site) %>% 
+  distinct() %>% 
   collect()
+  
+spat <- utm2lonlat(spat_data$utme, spat_data$utmn, zone = spat_data$utm_zone) %>% 
+  as.data.frame()
+
+spat_data$lat <- spat$latitude
+
+spat_data$lon <- spat$longitude
+
+fin_spat <- select(spat_data, !c(utme, utmn, utm_zone))
+
+leaflet() %>% 
+  addProviderTiles("Esri.WorldImagery") %>% 
+  addCircleMarkers(data = fin_spat, lng = ~lon, lat = ~lat,
+             label = ~site, 
+             clusterOptions = markerClusterOptions(zoomToBoundsOnClick = T,
+                                                   spiderfyOnMaxZoom = T,
+                                                   freezeAtZoom = F,
+                                                   spiderfyDistanceMultiplier=5),
+             color = "#35b779", radius = 3, opacity = 1, fillOpacity = 1, weight = 5)
+
 
 ```
 

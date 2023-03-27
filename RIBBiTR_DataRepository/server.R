@@ -867,6 +867,17 @@ shinyServer(function(input, output, session) {
   
   ######## END HOBO ##########
   
+  ######## Cap_Spec data ##############
+  
+  # cap_spec <- reactive({
+  # 
+  #   no_pros_cap_data %>%
+  #     filter(year <= !!input$year_cap_spec[2] & year>= !!input$year_cap_spec[1],
+  #            location %in% !!c(input$location_cap_spec),
+  #            region %in% !!c(input$region_cap_spec),
+  #            site %in% c(!!input$site_cap_spec))
+  # })
+
   
 #track_usage(storage_mode = store_rds(path = "/home/ubuntu/RIBBiTR_DataRepository/logs"))
 

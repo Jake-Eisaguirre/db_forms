@@ -638,10 +638,68 @@ ui <- secure_app(head_auth = tags$script(inactivity),
                                              zoom=yes",
                                              src= "audio.pdf")),
                               tabPanel(title = "Metadata"))
-                   ))
+                   )),
 
         ########### END Audio #########
-                         
+        
+        ########## Data Exploration Tab ############
+        
+        navbarMenu(title = "Data Exploration", icon = icon("compass"),
+                   
+                   tabPanel(title = "Sepcies Count Capture",
+                            
+                            sidebarLayout(
+                              
+                              sidebarPanel(
+                                fluidRow(
+                                  column(12, sliderInput(inputId = "year_cap_spec",
+                                                         label = "Select Annual Range:",
+                                                         min = min(years$year), max(years$year),
+                                                         sep = "",
+                                                         value = c(max(years$year) - 5, max(years$year)),
+                                                         step = 1)),
+                                  column(5, pickerInput(inputId = "location_cap_spec",
+                                                        label = "Select Locations:",
+                                                        choices = "",
+                                                        options = list(
+                                                          `actions-box` = TRUE, 
+                                                          size = 10,
+                                                          `selected-text-format` = "count > 3"
+                                                        ), 
+                                                        multiple = TRUE,
+                                                        width = "180px")),
+                                  column(5, pickerInput(inputId = "region_cap_spec",
+                                                        label = "Select Regions:",
+                                                        choices = "",
+                                                        options = list(
+                                                          `actions-box` = TRUE, 
+                                                          size = 10,
+                                                          `selected-text-format` = "count > 3"
+                                                        ),
+                                                        multiple = T,
+                                                        width = "180px"), offset = 1),
+                                  column(12, pickerInput(inputId = "site_cap_spec",
+                                                         label = "Select Sites:",
+                                                         choices = "",
+                                                         options = list(
+                                                           `actions-box` = TRUE, 
+                                                           size = 10,
+                                                           `selected-text-format` = "count > 3"
+                                                         ), 
+                                                         multiple = TRUE)),
+                                  column(12, hr(style = "border-top: 1px solid #000000;")))),
+                              
+                              
+                              # Show a plot of the generated distribution
+                              mainPanel(
+                                withSpinner(plotOutput("cap_spec_plot")),
+                                headerPanel(""),
+                                actionButton('cap_spec_clear', "Clear Selection",
+                                             icon("trash"),
+                                             style="color: #fff; background-color: red; border-color: black"))),
+                            hr(style = "border-top: 1px solid #000000;"))),
+  
+                                             
   )
  )
 )
