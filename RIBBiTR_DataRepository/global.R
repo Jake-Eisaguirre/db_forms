@@ -15,6 +15,10 @@ library(shinyalert)
 library(googledrive)
 library(shinylogs)
 library(cachem)
+library(leaflet)
+library(oce)
+library(sf)
+library(leafem)
 library(shinymanager)
 library(dbplyr) # new
 

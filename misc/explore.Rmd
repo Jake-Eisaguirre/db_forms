@@ -15,7 +15,7 @@ if (!require(librarian)){
 
 # librarian downloads, if not already downloaded, and reads in needed packages
 
-librarian::shelf(tidyverse, here, janitor, sf, lubridate, RPostgres, rstudioapi, DBI, oce, leaflet)
+librarian::shelf(tidyverse, here, janitor, sf, lubridate, RPostgres, rstudioapi, DBI, oce, leaflet, sfheaders)
 ```
 
 
@@ -199,12 +199,29 @@ ggplot(data = data, aes(x = factor(year), y = count, fill = swab_type )) +
 
 ```{r}
 
+tally_data <- no_pros_cap_data %>% 
+  filter(year %in% c(1995:2023)) %>% 
+  select(year, site, species_capture, bd_swab_id, genetic_id, microbiome_swab_id, amp_id, mucosome_id,
+         bacterial_swab_id, antibody_id, crispr_id) %>%
+  group_by(site, year) %>%
+  summarise(species_count = count(species_capture),
+            bd_swab_tally = count(bd_swab_id),
+            genetic_tally = count(genetic_id),
+            microbiome_tally = count(microbiome_swab_id),
+            amp_tally = count(amp_id),
+            mucosome_tally = count(mucosome_id),
+            bacterial_tally = count(bacterial_swab_id),
+            anti_tally = count(antibody_id),
+            crispr_tally = count(crispr_id)) %>% 
+  collect()
+
 spat_data <- no_pros_cap_data %>% 
   filter(year %in% c(1995:2023)) %>% 
-  select(region, site, utmn, utme, utm_zone) %>%
+  select(location, region, site, utme, utmn, utm_zone) %>% 
   group_by(site) %>% 
   distinct() %>% 
   collect()
+
   
 spat <- utm2lonlat(spat_data$utme, spat_data$utmn, zone = spat_data$utm_zone) %>% 
   as.data.frame()
@@ -214,6 +231,12 @@ spat_data$lat <- spat$latitude
 spat_data$lon <- spat$longitude
 
 fin_spat <- select(spat_data, !c(utme, utmn, utm_zone))
+
+box <- fin_spat %>% 
+  filter(location == "usa")
+
+b <- st_bbox(c(xmin = min(box$lon, na.rm = T), xmax = max(box$lon, na.rm = T), ymin = min(box$lat, na.rm = T), 
+               ymax = max(box$lat, na.rm = T)))
 
 leaflet() %>% 
   addProviderTiles("Esri.WorldImagery") %>% 
@@ -226,5 +249,64 @@ leaflet() %>%
              color = "#35b779", radius = 3, opacity = 1, fillOpacity = 1, weight = 5)
 
 
+```
+
+```{r}
+
+loc_box_wrangle <- no_pros_cap_data %>% 
+  filter(year %in% c(1995:2023),
+         location == "brazil") %>% 
+  select(location, site, year, utme, utmn, utm_zone) %>% 
+  group_by(site) %>% 
+  distinct() %>% 
+  collect() %>% 
+  drop_na()
+
+
+
+loc_box_con <- utm2lonlat(loc_box_wrangle$utme, loc_box_wrangle$utmn, zone = loc_box_wrangle$utm_zone) %>% 
+  as.data.frame()
+
+loc_box_wrangle$lat <- loc_box_con$latitude
+
+loc_box_wrangle$lon <- loc_box_con$longitude
+
+fin_box_spat_loc <- select(loc_box_wrangle, !c(utme, utmn, utm_zone))
+
+loc_box <-  st_as_sf(fin_box_spat_loc, coords = c("lat", "lon")) %>% 
+  st_bbox(geometry) %>% 
+  as.vector()
+
+```
+
+## polygon creation
+```{r}
+
+polygons <- tbl(survey_data_connection, "location") %>%
+  inner_join(tbl(survey_data_connection, "region"), by = c("location_id")) %>%
+  inner_join(tbl(survey_data_connection, "site"), by = c("region_id")) %>% 
+  collect()
+
+spat <- utm2lonlat(polygons$utme, polygons$utmn, zone = polygons$utm_zone) %>% 
+  as.data.frame()
+
+polygons$lat <- spat$latitude
+
+polygons$lon <- spat$longitude
+
+fin_spat <- select(polygons, !c(utme, utmn, utm_zone)) %>% 
+  drop_na(c(lat, lon))%>% 
+  select(location, lat, lon)
+  
+poly <- sfheaders::sf_polygon(fin_spat, x = "lon", y = "lat", polygon_id = "region")  
+  
+  
+st_as_sf(coords = c("lat", "lon"), crs = 4326) %>% 
+  select(region, geometry) %>% 
+  group_by(region) %>% 
+  summarize(geometry = st_combine(geometry)) %>% 
+  st_cast("POLYGON")
+
+plot(fin_spat$geometry[1])
 ```
 

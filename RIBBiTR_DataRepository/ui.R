@@ -646,19 +646,19 @@ ui <- secure_app(head_auth = tags$script(inactivity),
         
         navbarMenu(title = "Data Exploration", icon = icon("compass"),
                    
-                   tabPanel(title = "Sepcies Count Capture",
+                   tabPanel(title = "Site Explorer",
                             
                             sidebarLayout(
                               
                               sidebarPanel(
                                 fluidRow(
-                                  column(12, sliderInput(inputId = "year_cap_spec",
+                                  column(12, sliderInput(inputId = "year_map",
                                                          label = "Select Annual Range:",
                                                          min = min(years$year), max(years$year),
                                                          sep = "",
                                                          value = c(max(years$year) - 5, max(years$year)),
                                                          step = 1)),
-                                  column(5, pickerInput(inputId = "location_cap_spec",
+                                  column(5, pickerInput(inputId = "location_map",
                                                         label = "Select Locations:",
                                                         choices = "",
                                                         options = list(
@@ -668,7 +668,7 @@ ui <- secure_app(head_auth = tags$script(inactivity),
                                                         ), 
                                                         multiple = TRUE,
                                                         width = "180px")),
-                                  column(5, pickerInput(inputId = "region_cap_spec",
+                                  column(5, pickerInput(inputId = "region_map",
                                                         label = "Select Regions:",
                                                         choices = "",
                                                         options = list(
@@ -678,7 +678,7 @@ ui <- secure_app(head_auth = tags$script(inactivity),
                                                         ),
                                                         multiple = T,
                                                         width = "180px"), offset = 1),
-                                  column(12, pickerInput(inputId = "site_cap_spec",
+                                  column(12, pickerInput(inputId = "site_map",
                                                          label = "Select Sites:",
                                                          choices = "",
                                                          options = list(
@@ -692,9 +692,10 @@ ui <- secure_app(head_auth = tags$script(inactivity),
                               
                               # Show a plot of the generated distribution
                               mainPanel(
-                                withSpinner(plotOutput("cap_spec_plot")),
+                                withSpinner(leafletOutput(outputId = "site_map", width = 1000, height = 500)),
                                 headerPanel(""),
-                                actionButton('cap_spec_clear', "Clear Selection",
+                                #withSpinner(dataTableOutput("map_id")),
+                                actionButton('cap_map_clear', "Clear Selection",
                                              icon("trash"),
                                              style="color: #fff; background-color: red; border-color: black"))),
                             hr(style = "border-top: 1px solid #000000;"))),

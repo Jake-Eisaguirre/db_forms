@@ -869,16 +869,173 @@ shinyServer(function(input, output, session) {
   
   ######## Cap_Spec data ##############
   
-  # cap_spec <- reactive({
-  # 
-  #   no_pros_cap_data %>%
-  #     filter(year <= !!input$year_cap_spec[2] & year>= !!input$year_cap_spec[1],
-  #            location %in% !!c(input$location_cap_spec),
-  #            region %in% !!c(input$region_cap_spec),
-  #            site %in% c(!!input$site_cap_spec))
+  cap_map <- reactive({
+
+    spat_data <- no_pros_cap_data %>%
+      filter(year <= !!input$year_map[2] & year >= !!input$year_map[1]) %>%
+      select(location, region, site, year, utme, utmn, utm_zone) %>%
+      group_by(site) %>%
+      distinct() %>%
+      collect()
+
+
+    spat <- utm2lonlat(spat_data$utme, spat_data$utmn, zone = spat_data$utm_zone) %>%
+      as.data.frame()
+
+    spat_data$lat <- spat$latitude
+
+    spat_data$lon <- spat$longitude
+
+    fin_spat <- select(spat_data, !c(utme, utmn, utm_zone))
+  })
+  
+  # # update location options based on year selection
+  observeEvent(input$year_map,
+               {
+                 updated_map_locations <- no_pros_cap_data %>%
+                   filter(year <= !!input$year_map[2] & year >= !!input$year_map[1]) %>%
+                   select(location) %>%
+                   distinct(location) %>%
+                   collect()
+
+                 updatePickerInput(session, inputId = "location_map",
+                                   choices = updated_map_locations$location)
+               })
+
+
+
+  # update region options based on location selection
+  observeEvent(input$location_map,
+               {
+                 updated_map_regions <- no_pros_cap_data %>%
+                   filter(year <= !!input$year_map[2] & year >= !!input$year_map[1],
+                          location %in% !!input$location_map) %>%
+                   select(region) %>%
+                   distinct(region) %>%
+                   collect()
+
+                 updatePickerInput(session, inputId = "region_map",
+                                   choices = updated_map_regions$region)
+               })
+
+
+# table_map <- reactive({
+# 
+# 
+#   full_cap_data %>%
+#     filter(year <= !!input$year_map[2] & year >= !!input$year_map[1]) %>%
+#     select(year, site, species_capture, bd_swab_id, genetic_id, microbiome_swab_id, amp_id, mucosome_id,
+#            bacterial_swab_id, antibody_id, crispr_id) %>%
+#     group_by(site, year) %>%
+#     summarise(species_count = count(species_capture),
+#               bd_swab_tally = count(bd_swab_id),
+#               genetic_tally = count(genetic_id),
+#               microbiome_tally = count(microbiome_swab_id),
+#               amp_tally = count(amp_id),
+#               mucosome_tally = count(mucosome_id),
+#               bacterial_tally = count(bacterial_swab_id),
+#               anti_tally = count(antibody_id),
+#               crispr_tally = count(crispr_id)) %>%
+#     collect()
+# 
+# })
+  
+  output$site_map <- renderLeaflet({
+    
+    leaflet() %>% 
+      addProviderTiles("Esri.WorldImagery") %>% 
+      addMouseCoordinates() %>% 
+      addMeasure(
+        position = "bottomleft",
+        primaryLengthUnit = "feet",
+        primaryAreaUnit = "sqfeet",
+        activeColor = "#3D535D",
+        completedColor = "#7D4479")
+     
+    
+  })
+  
+  observeEvent(input$year_map, {
+
+    leafletProxy("site_map", data = cap_map()) %>%
+      addCircleMarkers(lng = ~lon, lat = ~lat,
+                       label = ~site,
+                       clusterOptions = markerClusterOptions(zoomToBoundsOnClick = T,
+                                                             spiderfyOnMaxZoom = T,
+                                                             freezeAtZoom = F,
+                                                             spiderfyDistanceMultiplier=5),
+                       color = "#35b779", radius = 3, opacity = 1, fillOpacity = 1, weight = 5,
+                       layerId = ~site)
+
+  })
+
+  # cap_map_loc <- reactive({
+  #   
+  #   spat_data_loc <- no_pros_cap_data %>% 
+  #     filter(year <= !!input$year_map[2] & year >= !!input$year_map[1],
+  #            location %in% !!input$location_map) %>% 
+  #     select(location, region, site, year, utme, utmn, utm_zone) %>% 
+  #     group_by(site) %>% 
+  #     distinct() %>% 
+  #     collect()
+  #   
+  #   
+  #   spat_loc <- utm2lonlat(spat_data_loc$utme, spat_data_loc$utmn, zone = spat_data_loc$utm_zone) %>% 
+  #     as.data.frame()
+  #   
+  #   spat_data_loc$lat <- spat_loc$latitude
+  #   
+  #   spat_data_loc$lon <- spat_loc$longitude
+  #   
+  #   fin_spat_loc <- select(spat_data_loc, !c(utme, utmn, utm_zone))
   # })
+  
+  
+  # output$site_map <- renderLeaflet({
+  #   
+  #   leaflet() %>% 
+  #     addProviderTiles("Esri.WorldImagery") %>% 
+  #     addCircleMarkers(data = cap_map_loc(), lng = ~lon, lat = ~lat,
+  #                      label = ~site, 
+  #                      clusterOptions = markerClusterOptions(zoomToBoundsOnClick = T,
+  #                                                            spiderfyOnMaxZoom = T,
+  #                                                            freezeAtZoom = F,
+  #                                                            spiderfyDistanceMultiplier=5),
+  #                      color = "#35b779", radius = 3, opacity = 1, fillOpacity = 1, weight = 5,
+  #                      layerId = ~site)
+  #   
+  # })
+  
+ # observe({
+ # 
+ #   leafletProxy("site_map")
+ # 
+ #   site_click <- input$site_map_marker_click
+ # 
+ #   click_data <- full_cap_data %>%
+ #     filter(year <= !!input$year_map[2] & year >= !!input$year_map[1],
+ #            site %in% site_click$site) %>%
+ #     select(year, site, species_capture, bd_swab_id, genetic_id, microbiome_swab_id, amp_id, mucosome_id,
+ #            bacterial_swab_id, antibody_id, crispr_id) %>%
+ #     group_by(site, year) %>%
+ #     summarise(species_count = count(species_capture),
+ #               bd_swab_tally = count(bd_swab_id),
+ #               genetic_tally = count(genetic_id),
+ #               microbiome_tally = count(microbiome_swab_id),
+ #               amp_tally = count(amp_id),
+ #               mucosome_tally = count(mucosome_id),
+ #               bacterial_tally = count(bacterial_swab_id),
+ #               anti_tally = count(antibody_id),
+ #               crispr_tally = count(crispr_id)) %>%
+ #     collect()
+ # 
+ # })
+  
+
+ 
 
   
+ 
 #track_usage(storage_mode = store_rds(path = "/home/ubuntu/RIBBiTR_DataRepository/logs"))
 
 })
