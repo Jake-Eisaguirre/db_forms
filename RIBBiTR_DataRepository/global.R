@@ -238,6 +238,19 @@ edna_years <- full_edna_data %>%
   drop_na()
 
 
+##### Map info########
+
+map_locs <- no_pros_cap_data %>%
+  select(location) %>% 
+  group_by(location) %>% 
+  distinct() %>% 
+  collect()
+
+map_regs <- no_pros_cap_data %>%
+  select(region) %>% 
+  group_by(region) %>% 
+  distinct() %>% 
+  collect()
 
 
 #### Login ######

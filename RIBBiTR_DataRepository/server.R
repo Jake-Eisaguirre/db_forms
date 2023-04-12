@@ -872,7 +872,8 @@ shinyServer(function(input, output, session) {
   cap_map <- reactive({
 
     spat_data <- no_pros_cap_data %>%
-      filter(year <= !!input$year_map[2] & year >= !!input$year_map[1]) %>%
+      filter(year <= !!input$year_map[2] & year >= !!input$year_map[1],
+             location %in% !!input$location_map, region %in% !!input$region_map) %>%
       select(location, region, site, year, utme, utmn, utm_zone) %>%
       group_by(site) %>%
       distinct() %>%
@@ -889,34 +890,41 @@ shinyServer(function(input, output, session) {
     fin_spat <- select(spat_data, !c(utme, utmn, utm_zone))
   })
   
+  # observeEvent(input$location_map, {
+  # 
+  #   cap_map() %>%
+  #     filter(location %in% !!input$location_map)
+  # 
+  # }, ignoreNULL = T)
+  
   # # update location options based on year selection
-  observeEvent(input$year_map,
-               {
-                 updated_map_locations <- no_pros_cap_data %>%
-                   filter(year <= !!input$year_map[2] & year >= !!input$year_map[1]) %>%
-                   select(location) %>%
-                   distinct(location) %>%
-                   collect()
-
-                 updatePickerInput(session, inputId = "location_map",
-                                   choices = updated_map_locations$location)
-               })
-
-
-
-  # update region options based on location selection
-  observeEvent(input$location_map,
-               {
-                 updated_map_regions <- no_pros_cap_data %>%
-                   filter(year <= !!input$year_map[2] & year >= !!input$year_map[1],
-                          location %in% !!input$location_map) %>%
-                   select(region) %>%
-                   distinct(region) %>%
-                   collect()
-
-                 updatePickerInput(session, inputId = "region_map",
-                                   choices = updated_map_regions$region)
-               })
+  # observeEvent(input$year_map,
+  #              {
+  #                updated_map_locations <- no_pros_cap_data %>%
+  #                  filter(year <= !!input$year_map[2] & year >= !!input$year_map[1]) %>%
+  #                  select(location) %>%
+  #                  distinct(location) %>%
+  #                  collect()
+  # 
+  #                updatePickerInput(session, inputId = "location_map",
+  #                                  choices = updated_map_locations$location)
+  #              })
+  # 
+  # 
+  # 
+  # # update region options based on location selection
+  # observeEvent(input$location_map,
+  #              {
+  #                updated_map_regions <- no_pros_cap_data %>%
+  #                  filter(year <= !!input$year_map[2] & year >= !!input$year_map[1],
+  #                         location %in% !!input$location_map) %>%
+  #                  select(region) %>%
+  #                  distinct(region) %>%
+  #                  collect()
+  # 
+  #                updatePickerInput(session, inputId = "region_map",
+  #                                  choices = updated_map_regions$region)
+  #              })
 
 
 # table_map <- reactive({
@@ -951,8 +959,8 @@ shinyServer(function(input, output, session) {
         primaryAreaUnit = "sqfeet",
         activeColor = "#3D535D",
         completedColor = "#7D4479") %>% 
-      addCircleMarkers(lng = ~lon, lat = ~lat, data = cap_map(),
-                       label = ~site,
+      addCircleMarkers(lng = cap_map()$lon, lat = cap_map()$lat, data = cap_map(),
+                       label = cap_map()$site,
                        clusterOptions = markerClusterOptions(zoomToBoundsOnClick = T,
                                                              spiderfyOnMaxZoom = T,
                                                              freezeAtZoom = F,
@@ -964,42 +972,22 @@ shinyServer(function(input, output, session) {
   })
   
 
-  # cap_map_loc <- reactive({
-  #   
-  #   spat_data_loc <- no_pros_cap_data %>% 
-  #     filter(year <= !!input$year_map[2] & year >= !!input$year_map[1],
-  #            location %in% !!input$location_map) %>% 
-  #     select(location, region, site, year, utme, utmn, utm_zone) %>% 
-  #     group_by(site) %>% 
-  #     distinct() %>% 
-  #     collect()
-  #   
-  #   
-  #   spat_loc <- utm2lonlat(spat_data_loc$utme, spat_data_loc$utmn, zone = spat_data_loc$utm_zone) %>% 
-  #     as.data.frame()
-  #   
-  #   spat_data_loc$lat <- spat_loc$latitude
-  #   
-  #   spat_data_loc$lon <- spat_loc$longitude
-  #   
-  #   fin_spat_loc <- select(spat_data_loc, !c(utme, utmn, utm_zone))
-  # })
-  
-  
-  # output$site_map <- renderLeaflet({
-  #   
-  #   leaflet() %>% 
-  #     addProviderTiles("Esri.WorldImagery") %>% 
-  #     addCircleMarkers(data = cap_map_loc(), lng = ~lon, lat = ~lat,
-  #                      label = ~site, 
+ 
+  # observeEvent(input$location_map, {
+  # 
+  #   leafletProxy("site_map") %>%
+  #     clearMarkers() %>%
+  #     addCircleMarkers(lng = ~lon, lat = ~lat, data = cap_map(),
+  #                      label = ~site,
   #                      clusterOptions = markerClusterOptions(zoomToBoundsOnClick = T,
   #                                                            spiderfyOnMaxZoom = T,
   #                                                            freezeAtZoom = F,
   #                                                            spiderfyDistanceMultiplier=5),
   #                      color = "#35b779", radius = 3, opacity = 1, fillOpacity = 1, weight = 5,
   #                      layerId = ~site)
-  #   
-  # })
+  # 
+  # }, ignoreNULL = T)
+  
   
  # observe({
  # 

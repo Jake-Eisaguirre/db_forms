@@ -309,4 +309,22 @@ st_as_sf(coords = c("lat", "lon"), crs = 4326) %>%
 
 plot(fin_spat$geometry[1])
 ```
+```{r}
+spat_data <- no_pros_cap_data %>%
+  filter(year %in% !!c(2015:2019),
+         location %in% !!c("usa")) %>%
+  select(location, region, site, year, utme, utmn, utm_zone) %>%
+  group_by(site) %>%
+  distinct() %>%
+  collect()
+
+    spat <- utm2lonlat(spat_data$utme, spat_data$utmn, zone = spat_data$utm_zone) %>%
+      as.data.frame()
+
+    spat_data$lat <- spat$latitude
+
+    spat_data$lon <- spat$longitude
+
+    fin_spat <- select(spat_data, !c(utme, utmn, utm_zone))
+```
 
