@@ -687,7 +687,8 @@ ui <- secure_app(head_auth = tags$script(inactivity),
                                                            `selected-text-format` = "count > 3"
                                                          ), 
                                                          multiple = TRUE)),
-                                  column(12, hr(style = "border-top: 1px solid #000000;")))),
+                                  column(12, hr(style = "border-top: 1px solid #000000;")),
+                                  column(12,  strong(h5("Please be patient as map rendering can be delayed."))))),
                               
                               
                               # Show a plot of the generated distribution

@@ -950,15 +950,8 @@ shinyServer(function(input, output, session) {
         primaryLengthUnit = "feet",
         primaryAreaUnit = "sqfeet",
         activeColor = "#3D535D",
-        completedColor = "#7D4479")
-     
-    
-  })
-  
-  observeEvent(input$year_map, {
-
-    leafletProxy("site_map", data = cap_map()) %>%
-      addCircleMarkers(lng = ~lon, lat = ~lat,
+        completedColor = "#7D4479") %>% 
+      addCircleMarkers(lng = ~lon, lat = ~lat, data = cap_map(),
                        label = ~site,
                        clusterOptions = markerClusterOptions(zoomToBoundsOnClick = T,
                                                              spiderfyOnMaxZoom = T,
@@ -966,8 +959,10 @@ shinyServer(function(input, output, session) {
                                                              spiderfyDistanceMultiplier=5),
                        color = "#35b779", radius = 3, opacity = 1, fillOpacity = 1, weight = 5,
                        layerId = ~site)
-
+     
+    
   })
+  
 
   # cap_map_loc <- reactive({
   #   
