@@ -888,7 +888,7 @@ shinyServer(function(input, output, session) {
     spat_data$lon <- spat$longitude
 
     fin_spat <- select(spat_data, !c(utme, utmn, utm_zone))
-  })
+  }) 
   
   # observeEvent(input$location_map, {
   # 
