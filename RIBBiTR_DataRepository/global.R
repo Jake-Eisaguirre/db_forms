@@ -21,6 +21,7 @@ library(sf)
 library(leafem)
 library(shinymanager)
 library(dbplyr) # new
+library(mailtoR)
 
 
 shinyOptions(cache = cachem::cache_disk("./app_cache"))
