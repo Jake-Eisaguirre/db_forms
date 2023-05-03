@@ -9,4 +9,5 @@ RIBBiTR_DataRepository/db_creds.R
 RIBBiTR_DataRepository/app_cache/
 .secrets
 .secrets/
+RIBBiTR_DataRepository/.secrets/
 
