@@ -24,8 +24,16 @@ library(dbplyr) # new
 library(mailtoR)
 
 
+
 shinyOptions(cache = cachem::cache_disk("./app_cache"))
 #shinyOptions(cache = cachem::cache_mem(max_size = 1000e6))
+
+options(
+  # whenever there is one account token found, use the cached token
+  gargle_oauth_email = TRUE,
+  # specify auth tokens should be stored in a hidden directory ".secrets"
+  gargle_oauth_cache = "RIBBiTR_DataRepository/.secrets"
+)
 
 
 source("db_creds.R")

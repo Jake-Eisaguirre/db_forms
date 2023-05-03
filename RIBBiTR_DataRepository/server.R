@@ -969,39 +969,8 @@ shinyServer(function(input, output, session) {
   
   
   
-
-  
- # observe({
- # 
- #   leafletProxy("site_map")
- # 
- #   site_click <- input$site_map_marker_click
- # 
- #   click_data <- full_cap_data %>%
- #     filter(year <= !!input$year_map[2] & year >= !!input$year_map[1],
- #            site %in% site_click$site) %>%
- #     select(year, site, species_capture, bd_swab_id, genetic_id, microbiome_swab_id, amp_id, mucosome_id,
- #            bacterial_swab_id, antibody_id, crispr_id) %>%
- #     group_by(site, year) %>%
- #     summarise(species_count = count(species_capture),
- #               bd_swab_tally = count(bd_swab_id),
- #               genetic_tally = count(genetic_id),
- #               microbiome_tally = count(microbiome_swab_id),
- #               amp_tally = count(amp_id),
- #               mucosome_tally = count(mucosome_id),
- #               bacterial_tally = count(bacterial_swab_id),
- #               anti_tally = count(antibody_id),
- #               crispr_tally = count(crispr_id)) %>%
- #     collect()
- # 
- # })
-  
-
  
-
-  
- 
-#track_usage(storage_mode = store_rds(path = "/home/ubuntu/RIBBiTR_DataRepository/logs"))
+  track_usage(storage_mode = store_googledrive(path = "https://drive.google.com/drive/folders/1RIThFYRvFXQ0m0XefcETOCQ05meM_7wr"))
 
 })
 
