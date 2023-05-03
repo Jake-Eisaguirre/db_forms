@@ -8,6 +8,8 @@ ui <- secure_app(head_auth = tags$script(inactivity),
         fluidPage(
           
           # Styling 
+          tags$head(tags$style(HTML(".shiny-output-error-validation 
+                                    {color: #ff0000;font-weight: bold;}"))),
           tags$style('body {
                     background-color: #c7c7c7;}'),
           tags$style(HTML(".well {
@@ -646,7 +648,7 @@ ui <- secure_app(head_auth = tags$script(inactivity),
         
         navbarMenu(title = "Data Exploration", icon = icon("compass"),
                    
-                   tabPanel(title = "Site Explorer",
+                   tabPanel(title = "Site Location Explorer",
                             
                             sidebarLayout(
                               
@@ -656,12 +658,12 @@ ui <- secure_app(head_auth = tags$script(inactivity),
                                                          label = "Select Annual Range:",
                                                          min = min(years$year), max(years$year),
                                                          sep = "",
-                                                         value = c(max(years$year) - 5, max(years$year)),
+                                                         value = c(max(years$year) - 10, max(years$year)),
                                                          step = 1)),
                                   column(5, pickerInput(inputId = "location_map",
                                                         label = "Select Locations:",
-                                                        choices = map_locs$location,
-                                                        selected = map_locs$location,
+                                                        choices = '',
+                                                        selected = '',
                                                         options = list(
                                                           `actions-box` = TRUE, 
                                                           size = 10,
@@ -671,8 +673,8 @@ ui <- secure_app(head_auth = tags$script(inactivity),
                                                         width = "180px")),
                                   column(5, pickerInput(inputId = "region_map",
                                                         label = "Select Regions:",
-                                                        choices = map_regs$region,
-                                                        selected = map_regs$region,
+                                                        choices = '',
+                                                        selected = '',
                                                         options = list(
                                                           `actions-box` = TRUE, 
                                                           size = 10,
@@ -680,6 +682,17 @@ ui <- secure_app(head_auth = tags$script(inactivity),
                                                         ),
                                                         multiple = T,
                                                         width = "180px"), offset = 1),
+                                  column(12, pickerInput(inputId = "site_map",
+                                                         label = "Select Sites:",
+                                                         choices = '',
+                                                         selected = '',
+                                                         options = list(
+                                                           `actions-box` = TRUE,
+                                                           size = 10,
+                                                           `selected-text-format` = "count > 3",
+                                                           `live-search`=TRUE
+                                                         ),
+                                                         multiple = TRUE)),
                                   # column(12, pickerInput(inputId = "site_map",
                                   #                        label = "Select Sites:",
                                   #                        choices = "",
@@ -695,6 +708,7 @@ ui <- secure_app(head_auth = tags$script(inactivity),
                               
                               # Show a plot of the generated distribution
                               mainPanel(
+                                tableOutput("table"),
                                 withSpinner(leafletOutput(outputId = "site_map", width = 1000, height = 500)),
                                 headerPanel(""),
                                 #withSpinner(dataTableOutput("map_id")),

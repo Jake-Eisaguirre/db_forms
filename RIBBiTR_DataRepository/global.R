@@ -240,17 +240,23 @@ edna_years <- full_edna_data %>%
 
 ##### Map info########
 
-map_locs <- no_pros_cap_data %>%
-  select(location) %>% 
-  group_by(location) %>% 
-  distinct() %>% 
-  collect()
-
-map_regs <- no_pros_cap_data %>%
-  select(region) %>% 
-  group_by(region) %>% 
-  distinct() %>% 
-  collect()
+# map_locs <- no_pros_cap_data %>%
+#   select(location) %>% 
+#   group_by(location) %>% 
+#   distinct() %>% 
+#   collect()
+# 
+# map_regs <- no_pros_cap_data %>%
+#   select(region) %>% 
+#   group_by(region) %>% 
+#   distinct() %>% 
+#   collect()
+# 
+# map_site <- no_pros_cap_data %>%
+#   select(site) %>% 
+#   group_by(site) %>% 
+#   distinct() %>% 
+#   collect()
 
 
 #### Login ######
@@ -272,4 +278,8 @@ t = setTimeout(logout, 120000);  // time is in milliseconds (1000 is 1 second)
 }
 }
 idleTimer();"
+
+`%then%` <- function(a, b) {
+  if (is.null(a)) b else a
+}
 

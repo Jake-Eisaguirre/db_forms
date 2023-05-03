@@ -870,10 +870,17 @@ shinyServer(function(input, output, session) {
   ######## Cap_Spec data ##############
   
   cap_map <- reactive({
+    
+    validate(
+      need(input$location_map, "Please select a Location"),
+      need(input$region_map, "Please select a Region"),
+      need(input$site_map, "Please select a Site")
+    )
 
     spat_data <- no_pros_cap_data %>%
       filter(year <= !!input$year_map[2] & year >= !!input$year_map[1],
-             location %in% !!input$location_map, region %in% !!input$region_map) %>%
+             location %in% !!input$location_map, region %in% !!input$region_map,
+             site %in% !!input$site_map) %>%
       select(location, region, site, year, utme, utmn, utm_zone) %>%
       group_by(site) %>%
       distinct() %>%
@@ -890,65 +897,9 @@ shinyServer(function(input, output, session) {
     fin_spat <- select(spat_data, !c(utme, utmn, utm_zone))
   }) 
   
-  # observeEvent(input$location_map, {
-  # 
-  #   cap_map() %>%
-  #     filter(location %in% !!input$location_map)
-  # 
-  # }, ignoreNULL = T)
-  
-  # # update location options based on year selection
-  # observeEvent(input$year_map,
-  #              {
-  #                updated_map_locations <- no_pros_cap_data %>%
-  #                  filter(year <= !!input$year_map[2] & year >= !!input$year_map[1]) %>%
-  #                  select(location) %>%
-  #                  distinct(location) %>%
-  #                  collect()
-  # 
-  #                updatePickerInput(session, inputId = "location_map",
-  #                                  choices = updated_map_locations$location)
-  #              })
-  # 
-  # 
-  # 
-  # # update region options based on location selection
-  # observeEvent(input$location_map,
-  #              {
-  #                updated_map_regions <- no_pros_cap_data %>%
-  #                  filter(year <= !!input$year_map[2] & year >= !!input$year_map[1],
-  #                         location %in% !!input$location_map) %>%
-  #                  select(region) %>%
-  #                  distinct(region) %>%
-  #                  collect()
-  # 
-  #                updatePickerInput(session, inputId = "region_map",
-  #                                  choices = updated_map_regions$region)
-  #              })
-
-
-# table_map <- reactive({
-# 
-# 
-#   full_cap_data %>%
-#     filter(year <= !!input$year_map[2] & year >= !!input$year_map[1]) %>%
-#     select(year, site, species_capture, bd_swab_id, genetic_id, microbiome_swab_id, amp_id, mucosome_id,
-#            bacterial_swab_id, antibody_id, crispr_id) %>%
-#     group_by(site, year) %>%
-#     summarise(species_count = count(species_capture),
-#               bd_swab_tally = count(bd_swab_id),
-#               genetic_tally = count(genetic_id),
-#               microbiome_tally = count(microbiome_swab_id),
-#               amp_tally = count(amp_id),
-#               mucosome_tally = count(mucosome_id),
-#               bacterial_tally = count(bacterial_swab_id),
-#               anti_tally = count(antibody_id),
-#               crispr_tally = count(crispr_id)) %>%
-#     collect()
-# 
-# })
   
   output$site_map <- renderLeaflet({
+    
     
     leaflet() %>% 
       addProviderTiles("Esri.WorldImagery") %>% 
@@ -965,29 +916,60 @@ shinyServer(function(input, output, session) {
                                                              spiderfyOnMaxZoom = T,
                                                              freezeAtZoom = F,
                                                              spiderfyDistanceMultiplier=5),
-                       color = "#35b779", radius = 3, opacity = 1, fillOpacity = 1, weight = 5,
+                       color = "#7D2499", radius = 3, opacity = 1, fillOpacity = 1, weight = 5,
                        layerId = ~site)
      
     
   })
   
 
- 
-  # observeEvent(input$location_map, {
-  # 
-  #   leafletProxy("site_map") %>%
-  #     clearMarkers() %>%
-  #     addCircleMarkers(lng = ~lon, lat = ~lat, data = cap_map(),
-  #                      label = ~site,
-  #                      clusterOptions = markerClusterOptions(zoomToBoundsOnClick = T,
-  #                                                            spiderfyOnMaxZoom = T,
-  #                                                            freezeAtZoom = F,
-  #                                                            spiderfyDistanceMultiplier=5),
-  #                      color = "#35b779", radius = 3, opacity = 1, fillOpacity = 1, weight = 5,
-  #                      layerId = ~site)
-  # 
-  # }, ignoreNULL = T)
+  observeEvent(input$year_map,
+               {
+                 updated_map_locations <- no_pros_cap_data %>% 
+                   filter(year <= !!input$year_map[2] & year>= !!input$year_map[1]) %>% 
+                   select(location) %>% 
+                   distinct(location) %>% 
+                   collect()
+                 
+                 updatePickerInput(session, inputId = "location_map",
+                                   choices = updated_map_locations$location,
+                                   selected = updated_map_locations$location)
+               })
   
+  observeEvent(input$location_map,
+               {
+                 
+                 updated_map_region <- no_pros_cap_data %>% 
+                   filter(year <= !!input$year_map[2] & year>= !!input$year_map[1],
+                          location %in% !!input$location_map) %>% 
+                   select(region) %>% 
+                   distinct(region) %>% 
+                   collect()
+                 
+                 updatePickerInput(session, inputId = "region_map",
+                                   choices = updated_map_region$region,
+                                   selected = updated_map_region$region)
+               })
+  
+  observeEvent(input$region_map,
+               {
+                 
+                 updated_map_site <- no_pros_cap_data %>% 
+                   filter(year <= !!input$year_map[2] & year>= !!input$year_map[1],
+                          location %in% !!input$location_map,
+                          region %in% !!input$region_map) %>% 
+                   select(site) %>% 
+                   distinct(site) %>% 
+                   collect()
+                 
+                 updatePickerInput(session, inputId = "site_map",
+                                   choices = updated_map_site$site,
+                                   selected = updated_map_site$site)
+               })
+  
+  
+  
+
   
  # observe({
  # 
