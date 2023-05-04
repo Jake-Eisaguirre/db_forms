@@ -1,6 +1,15 @@
 source(("global.R"), local = T)
 source(("creds.R"), local = T)
 
+options(
+  # whenever there is one account token found, use the cached token
+  gargle_oauth_email = TRUE,
+  # specify auth tokens should be stored in a hidden directory ".secrets"
+  gargle_oauth_cache = here(".secrets")
+)
+
+drive_auth(path = here(".secrets"))
+
 
 shinyServer(function(input, output, session) {
   
@@ -966,7 +975,6 @@ shinyServer(function(input, output, session) {
                                    choices = updated_map_site$site,
                                    selected = updated_map_site$site)
                })
-  
   
   
  
