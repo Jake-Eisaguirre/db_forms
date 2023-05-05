@@ -4,10 +4,8 @@ library(here)
 library(janitor)
 library(lubridate) # new
 library(RPostgres) # new
-#library(rstudioapi)
 library(shinyWidgets)
 library(DT)
-#library(glue)
 library(shinycssloaders)
 library(DBI) # new
 library(gargle)
@@ -205,7 +203,7 @@ audio_years <- tbl(audio_connection, "audio_visit") %>%
 ######## END Audio Data #########
 
 
-############ eDNA Data
+############ eDNA Data ##########
 
 # DB conection
 tryCatch({
@@ -281,6 +279,7 @@ t = setTimeout(logout, 120000);  // time is in milliseconds (1000 is 1 second)
 }
 }
 idleTimer();"
+
 
 `%then%` <- function(a, b) {
   if (is.null(a)) b else a
