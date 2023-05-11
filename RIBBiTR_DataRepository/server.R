@@ -977,6 +977,26 @@ shinyServer(function(input, output, session) {
                })
   
   
+  
+  observe({
+    
+    leafletProxy("site_map")
+    
+    map_click <- input$site_map_marker_click
+    
+    id_filt <- no_pros_cap_data %>% 
+      filter(site %in% map_click$id)
+    tab_display <- id_filt %>%
+      filter(year <= !!input$year_map[2] & year>= !!input$year_map[1],
+             location %in% !!input$location_map,
+             region %in% !!input$region_map) %>%
+      select(year, location, region, site, species_capture)
+    
+    output$map_table <- DT::renderDataTable(tab_display, rownames = F,  options = list(scrollY = T, searching = FALSE, dom = "rtip"))
+    
+  })
+  
+  
  
   track_usage(storage_mode = store_googledrive(path = "https://drive.google.com/drive/folders/1RIThFYRvFXQ0m0XefcETOCQ05meM_7wr"))
 

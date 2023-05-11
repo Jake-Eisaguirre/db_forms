@@ -724,10 +724,11 @@ ui <- secure_app(head_auth = tags$script(inactivity),
                                 tableOutput("table"),
                                 withSpinner(leafletOutput(outputId = "site_map", width = 1000, height = 500)),
                                 headerPanel(""),
-                                #withSpinner(dataTableOutput("map_id")),
+                                
                                 actionButton('cap_map_clear', "Clear Selection",
                                              icon("trash"),
-                                             style="color: #fff; background-color: red; border-color: black"))),
+                                             style="color: #fff; background-color: red; border-color: black"),
+                                withSpinner(dataTableOutput("map_id")))),
                             hr(style = "border-top: 1px solid #000000;"))),
   
                                              
