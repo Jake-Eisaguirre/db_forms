@@ -706,17 +706,11 @@ ui <- secure_app(head_auth = tags$script(inactivity),
                                                            `live-search`=TRUE
                                                          ),
                                                          multiple = TRUE)),
-                                  # column(12, pickerInput(inputId = "site_map",
-                                  #                        label = "Select Sites:",
-                                  #                        choices = "",
-                                  #                        options = list(
-                                  #                          `actions-box` = TRUE, 
-                                  #                          size = 10,
-                                  #                          `selected-text-format` = "count > 3"
-                                  #                        ), 
-                                  #                        multiple = TRUE)),
                                   column(12, hr(style = "border-top: 1px solid #000000;")),
-                                  column(12,  strong(h5("Please be patient as map rendering can be delayed."))))),
+                                  column(8,  strong(h5("Please be patient as map rendering can be delayed."))),
+                                  actionButton('cap_map_clear', "Clear Selection",
+                                               icon("trash"),
+                                               style="color: #fff; background-color: red; border-color: black"))),
                               
                               
                               # Show a plot of the generated distribution
@@ -724,11 +718,7 @@ ui <- secure_app(head_auth = tags$script(inactivity),
                                 tableOutput("table"),
                                 withSpinner(leafletOutput(outputId = "site_map", width = 1000, height = 500)),
                                 headerPanel(""),
-                                
-                                actionButton('cap_map_clear', "Clear Selection",
-                                             icon("trash"),
-                                             style="color: #fff; background-color: red; border-color: black"),
-                                withSpinner(dataTableOutput("map_id")))),
+                                DT::dataTableOutput("map_table"))),
                             hr(style = "border-top: 1px solid #000000;"))),
   
                                              

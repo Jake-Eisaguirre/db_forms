@@ -926,7 +926,7 @@ shinyServer(function(input, output, session) {
                                                              freezeAtZoom = F,
                                                              spiderfyDistanceMultiplier=5),
                        color = "#7D2499", radius = 3, opacity = 1, fillOpacity = 1, weight = 5,
-                       layerId = ~site)
+                       layerId = cap_map()$site)
      
     
   })
@@ -978,21 +978,18 @@ shinyServer(function(input, output, session) {
   
   
   
-  observe({
+  
+  observeEvent(input$site_map_marker_click, {
     
-    leafletProxy("site_map")
+    id <- input$site_map_marker_click$id
     
-    map_click <- input$site_map_marker_click
+    tbl_info <- no_pros_cap_data %>% 
+      filter(site == id) %>% 
+      select(date, location, region, site, species_capture) %>% 
+      collect() %>% 
+      mutate(date = sort(date)) 
     
-    id_filt <- no_pros_cap_data %>% 
-      filter(site %in% map_click$id)
-    tab_display <- id_filt %>%
-      filter(year <= !!input$year_map[2] & year>= !!input$year_map[1],
-             location %in% !!input$location_map,
-             region %in% !!input$region_map) %>%
-      select(year, location, region, site, species_capture)
-    
-    output$map_table <- DT::renderDataTable(tab_display, rownames = F,  options = list(scrollY = T, searching = FALSE, dom = "rtip"))
+    output$map_table <- DT::renderDataTable(tbl_info, rownames = F,  options = list(scrollY = T, searching = FALSE, dom = "rtip"))
     
   })
   
