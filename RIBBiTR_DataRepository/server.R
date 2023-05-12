@@ -981,15 +981,48 @@ shinyServer(function(input, output, session) {
   
   observeEvent(input$site_map_marker_click, {
     
+    
     id <- input$site_map_marker_click$id
     
     tbl_info <- no_pros_cap_data %>% 
       filter(site == id) %>% 
-      select(date, location, region, site, species_capture) %>% 
+      select(date, location, region, site, species_capture) %>%
+      group_by(date, location, region, site, species_capture) %>% 
+      summarise(species_count = as.numeric(count(species_capture))) %>% 
       collect() %>% 
       mutate(date = sort(date)) 
     
-    output$map_table <- DT::renderDataTable(tbl_info, rownames = F,  options = list(scrollY = T, searching = FALSE, dom = "rtip"))
+    output$map_table <- DT::renderDataTable(datatable(tbl_info, rownames = F,  
+                                                      options = list(scrollY = T, searching = FALSE, dom = "rtip", scrollX=T),
+                                                      caption = htmltools::tags$caption(
+                                                        htmltools::tags$span("Species Counts", style="color:black; font-size:18px"))))
+    
+  })
+  
+  
+  observeEvent(input$site_map_marker_click, {
+    
+    swab_id <- input$site_map_marker_click$id
+    
+    swab_info <- full_cap_data %>% 
+      filter(site == swab_id) %>% 
+      select(year, location, region, site, bd_swab_id, genetic_id, microbiome_swab_id, amp_id, mucosome_id,
+             bacterial_swab_id, antibody_id, crispr_id) %>% 
+      group_by(year, location, region, site) %>% 
+      summarise(bd_swab_id_count = as.numeric(count(bd_swab_id)),
+                genetic_id_count = as.numeric(count(genetic_id)),
+                microbiome_swab_id_count = as.numeric(count(microbiome_swab_id)),
+                amp_id_count = as.numeric(count(amp_id)),
+                mucosome_id_count = as.numeric(count(mucosome_id)),
+                bacterial_swab_id_count = as.numeric(count(bacterial_swab_id)),
+                antibody_id_count = as.numeric(count(antibody_id)),
+                crispr_id_count = as.numeric(count(crispr_id))) %>% 
+      collect()
+    
+    output$swab_table <- DT::renderDataTable(datatable(swab_info, rownames = F,  
+                                                       options = list(scrollY = T, searching = FALSE, dom = "rtip", scrollX=T),
+                                                       caption = htmltools::tags$caption(
+                                                         htmltools::tags$span("Swab Counts", style="color:black; font-size:18px"))))
     
   })
   

@@ -173,10 +173,11 @@ ggplot(data = data, aes(x = species_capture_year, y = count, fill = factor(year)
 data <- full_cap_data %>% 
   filter(year %in% c(2014:2023),
              location %in% c("panama"),
-             region %in% c("el_cope")) %>% 
-  select(year, location, region, bd_swab_id, genetic_id, microbiome_swab_id, amp_id, mucosome_id,
+             region %in% c("el_cope"),
+         site %in% c("sophia_stream")) %>% 
+  select(year, location, region, site, bd_swab_id, genetic_id, microbiome_swab_id, amp_id, mucosome_id,
          bacterial_swab_id, antibody_id, crispr_id) %>% 
-  group_by(year, location, region) %>% 
+  group_by(year, location, region, site) %>% 
   summarise(bd_swab_id_count = as.numeric(count(bd_swab_id)),
             genetic_id_count = as.numeric(count(genetic_id)),
             microbiome_swab_id_count = as.numeric(count(microbiome_swab_id)),
@@ -188,13 +189,16 @@ data <- full_cap_data %>%
   collect() %>% 
   ungroup() %>% 
   select(!c(location, region)) %>% 
-  pivot_longer(!year, names_to = "swab_type", values_to = "count")
+  pivot_longer(!year, names_to = "swab_type", values_to = "count") %>% 
+  rename("bd swab" = bd_swab_id_count)
 
 
 ggplot(data = data, aes(x = factor(year), y = count, fill = swab_type )) +   
-  geom_point(aes(color = swab_type)) +   
+  geom_jitter(aes(color = swab_type)) +
   theme_classic() +
-  theme(axis.text.x = element_text(angle = 90, hjust = 1, vjust = 0.3)) 
+  theme(axis.text.x = element_text(angle = 90, hjust = 1, vjust = 0.3)) +
+  xlab("Year") +
+  ylab("Swab Count")
 ```
 
 ```{r}
