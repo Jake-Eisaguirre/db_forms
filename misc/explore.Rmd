@@ -15,7 +15,7 @@ if (!require(librarian)){
 
 # librarian downloads, if not already downloaded, and reads in needed packages
 
-librarian::shelf(tidyverse, here, janitor, sf, lubridate, RPostgres, rstudioapi, DBI, oce, leaflet, sfheaders)
+librarian::shelf(tidyverse, here, janitor, sf, lubridate, RPostgres, rstudioapi, DBI, oce, leaflet, sfheaders, viridis)
 ```
 
 
@@ -173,32 +173,33 @@ ggplot(data = data, aes(x = species_capture_year, y = count, fill = factor(year)
 data <- full_cap_data %>% 
   filter(year %in% c(2014:2023),
              location %in% c("panama"),
-             region %in% c("el_cope"),
-         site %in% c("sophia_stream")) %>% 
-  select(year, location, region, site, bd_swab_id, genetic_id, microbiome_swab_id, amp_id, mucosome_id,
+             region %in% c("el_cope")) %>% 
+  select(year, location, region, bd_swab_id, genetic_id, microbiome_swab_id, amp_id, mucosome_id,
          bacterial_swab_id, antibody_id, crispr_id) %>% 
-  group_by(year, location, region, site) %>% 
-  summarise(bd_swab_id_count = as.numeric(count(bd_swab_id)),
-            genetic_id_count = as.numeric(count(genetic_id)),
-            microbiome_swab_id_count = as.numeric(count(microbiome_swab_id)),
-            amp_id_count = as.numeric(count(amp_id)),
-            mucosome_id_count = as.numeric(count(mucosome_id)),
-            bacterial_swab_id_count = as.numeric(count(bacterial_swab_id)),
-            antibody_id_count = as.numeric(count(antibody_id)),
-            crispr_id_count = as.numeric(count(crispr_id))) %>% 
+  group_by(year, location, region) %>% 
+  summarise(bd_swab_id = as.numeric(count(bd_swab_id)),
+            genetic_id = as.numeric(count(genetic_id)),
+            microbiome_swab_id = as.numeric(count(microbiome_swab_id)),
+            amp_id = as.numeric(count(amp_id)),
+            mucosome_id = as.numeric(count(mucosome_id)),
+            bacterial_swab_id = as.numeric(count(bacterial_swab_id)),
+            antibody_id = as.numeric(count(antibody_id)),
+            crispr_id = as.numeric(count(crispr_id))) %>% 
   collect() %>% 
   ungroup() %>% 
   select(!c(location, region)) %>% 
-  pivot_longer(!year, names_to = "swab_type", values_to = "count") %>% 
-  rename("bd swab" = bd_swab_id_count)
+  pivot_longer(!year, names_to = "swab_type", values_to = "count")
 
-
-ggplot(data = data, aes(x = factor(year), y = count, fill = swab_type )) +   
-  geom_jitter(aes(color = swab_type)) +
+ggplot(data = data, aes(x = factor(year), y = count, fill = swab_type)) +   
+  geom_col(position = "dodge2") +
   theme_classic() +
-  theme(axis.text.x = element_text(angle = 90, hjust = 1, vjust = 0.3)) +
+  theme(axis.text.x = element_text(angle = 90, hjust = 1, vjust = 0.3),
+        plot.title = element_text(hjust = 0.5))+
+  ggtitle("Region Swab Count") +
+  labs(fill = "Swab ID") +
   xlab("Year") +
-  ylab("Swab Count")
+  ylab("Swab Count") +
+  scale_fill_viridis(discrete=TRUE, option = "C")
 ```
 
 ```{r}

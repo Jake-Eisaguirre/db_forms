@@ -20,6 +20,7 @@ library(leafem)
 library(shinymanager)
 library(dbplyr) # new
 library(mailtoR)
+library(viridis)
 
 
 

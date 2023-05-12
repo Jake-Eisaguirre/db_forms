@@ -711,7 +711,11 @@ ui <- secure_app(head_auth = tags$script(inactivity),
                                                        Click on site of interest to display data"))),
                                   actionButton('cap_map_clear', "Clear Selection",
                                                icon("trash"),
-                                               style="color: #fff; background-color: red; border-color: black"))),
+                                               style="color: #fff; background-color: red; border-color: black")),
+                                hr(style = "border-top: 1px solid #000000;"),
+                                headerPanel(""),
+                                headerPanel(""),
+                                column(12, plotOutput("swab_figure"))),
                               
                               
                               # Show a plot of the generated distribution
@@ -719,9 +723,9 @@ ui <- secure_app(head_auth = tags$script(inactivity),
                                 tableOutput("table"),
                                 withSpinner(leafletOutput(outputId = "site_map", width = 1000, height = 500)),
                                 headerPanel(""),
-                                DT::dataTableOutput("map_table"),
+                                DT::dataTableOutput("swab_table"),
                                 headerPanel(""),
-                                DT::dataTableOutput("swab_table"))),
+                                DT::dataTableOutput("map_table"))),
                             hr(style = "border-top: 1px solid #000000;"))),
   
                                              

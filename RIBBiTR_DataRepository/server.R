@@ -978,6 +978,7 @@ shinyServer(function(input, output, session) {
   
   
   
+  # Site species count click
   
   observeEvent(input$site_map_marker_click, {
     
@@ -985,7 +986,10 @@ shinyServer(function(input, output, session) {
     id <- input$site_map_marker_click$id
     
     tbl_info <- no_pros_cap_data %>% 
-      filter(site == id) %>% 
+      filter(year <= !!input$year_map[2] & year>= !!input$year_map[1],
+             location %in% !!input$location_map,
+             region %in% !!input$region_map,
+             site == id) %>% 
       select(date, location, region, site, species_capture) %>%
       group_by(date, location, region, site, species_capture) %>% 
       summarise(species_count = as.numeric(count(species_capture))) %>% 
@@ -999,13 +1003,17 @@ shinyServer(function(input, output, session) {
     
   })
   
+  # Site Swab Count Table Click
   
   observeEvent(input$site_map_marker_click, {
     
     swab_id <- input$site_map_marker_click$id
     
     swab_info <- full_cap_data %>% 
-      filter(site == swab_id) %>% 
+      filter(year <= !!input$year_map[2] & year>= !!input$year_map[1],
+             location %in% !!input$location_map,
+             region %in% !!input$region_map,
+             site == swab_id) %>% 
       select(year, location, region, site, bd_swab_id, genetic_id, microbiome_swab_id, amp_id, mucosome_id,
              bacterial_swab_id, antibody_id, crispr_id) %>% 
       group_by(year, location, region, site) %>% 
@@ -1024,6 +1032,53 @@ shinyServer(function(input, output, session) {
                                                        caption = htmltools::tags$caption(
                                                          htmltools::tags$span("Swab Counts", style="color:black; font-size:18px"))))
     
+  })
+  
+  # Swab plot
+  
+  observeEvent(input$site_map_marker_click, {
+    
+    swab_plot_id <- input$site_map_marker_click$id
+    
+    swab_title <- full_cap_data %>% 
+      filter(year <= !!input$year_map[2] & year>= !!input$year_map[1],
+             location %in% !!input$location_map,
+             region == swab_plot_id) %>% 
+      distinct(region) %>%
+      collect()
+    
+    swab_info_plot <- full_cap_data %>% 
+      filter(region == swab_plot_id,
+             ) %>% 
+      select(year, location, region, bd_swab_id, genetic_id, microbiome_swab_id, amp_id, mucosome_id,
+             bacterial_swab_id, antibody_id, crispr_id) %>% 
+      group_by(year, location, region) %>% 
+      summarise(bd_swab_id = as.numeric(count(bd_swab_id)),
+                genetic_id = as.numeric(count(genetic_id)),
+                microbiome_swab_id = as.numeric(count(microbiome_swab_id)),
+                amp_id = as.numeric(count(amp_id)),
+                mucosome_id = as.numeric(count(mucosome_id)),
+                bacterial_swab_id = as.numeric(count(bacterial_swab_id)),
+                antibody_id = as.numeric(count(antibody_id)),
+                crispr_id = as.numeric(count(crispr_id))) %>% 
+      collect() %>% 
+      ungroup() %>% 
+      select(!c(location, region)) %>% 
+      pivot_longer(!year, names_to = "swab_type", values_to = "count")
+    
+    swab_plot <- ggplot(data = swab_info_plot, aes(x = factor(year), y = count, fill = swab_type)) +   
+        geom_col(position = "dodge2") +
+        theme_classic() +
+        theme(axis.text.x = element_text(angle = 90, hjust = 1, vjust = 0.3),
+              plot.title = element_text(hjust = 0.5))+
+        ggtitle(paste0("'",swab_title,"'", " Swab Count")) +
+        labs(fill = "Swab ID") +
+        xlab("Year") +
+        ylab("Swab Count") +
+        scale_fill_viridis(discrete=TRUE, option = "C")
+    
+    output$swab_figure <- renderPlot(swab_plot)
+      
   })
   
   
