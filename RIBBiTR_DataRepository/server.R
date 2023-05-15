@@ -1074,12 +1074,14 @@ shinyServer(function(input, output, session) {
       pivot_longer(!year, names_to = "swab_type", values_to = "count")
     
     swab_plot <- ggplot(data = swab_info_plot, aes(x = factor(year), y = count, fill = swab_type)) +   
-      geom_col(position = "dodge2") +
+      geom_col(position = "dodge2", width = 1) +
       theme_classic() +
-      theme(axis.text.x = element_text(angle = 90, hjust = 1, vjust = 0.3, size = 18),
-            axis.text.y = element_text(size = 18),
+      theme(axis.text.x = element_text(angle = 90, hjust = 1, vjust = 0.3, size = 16),
+            axis.text.y = element_text(size = 16),
             plot.title = element_text(hjust = 0.5, size = 16),
-            legend.text = element_text(size = 12))+
+            legend.text = element_text(size = 10),
+            axis.title = element_text(size = 15),
+            legend.position = "bottom")+
       ggtitle(paste0("'",swab_title,"'", " Swab Count")) +
       labs(fill = "Swab ID") +
       xlab("Year") +
