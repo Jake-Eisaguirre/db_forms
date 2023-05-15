@@ -715,7 +715,7 @@ ui <- secure_app(head_auth = tags$script(inactivity),
                                 hr(style = "border-top: 1px solid #000000;"),
                                 headerPanel(""),
                                 headerPanel(""),
-                                column(12, plotOutput("swab_figure"))),
+                                column(12, plotOutput("swab_figure", width = 475, height = 700))),
                               
                               
                               # Show a plot of the generated distribution

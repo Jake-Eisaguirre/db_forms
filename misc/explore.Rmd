@@ -333,3 +333,16 @@ spat_data <- no_pros_cap_data %>%
     fin_spat <- select(spat_data, !c(utme, utmn, utm_zone))
 ```
 
+```{r}
+
+ swab_title <- full_cap_data %>% 
+      filter(year %in% c(2012:2023),
+             location == 'panama',
+             region == 'el_valle') %>% 
+      distinct(region) %>%
+      collect()
+
+swab_title$region
+
+```
+
