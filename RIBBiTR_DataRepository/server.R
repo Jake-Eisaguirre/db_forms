@@ -992,9 +992,6 @@ shinyServer(function(input, output, session) {
   
   
   # Empty species table
-  spec_cols <- c("year", "location", "region", "site", "species_capture", "species_count")
-  empty_spec_table <- data.frame(matrix(ncol = 6, nrow = 0))
-  colnames(empty_spec_table) <- spec_cols
   
   output$map_table <-  DT::renderDataTable(datatable(empty_spec_table, rownames = F,  
                                                       options = list(scrollY = T, searching = FALSE, dom = "rtip", scrollX=T),
@@ -1028,10 +1025,6 @@ shinyServer(function(input, output, session) {
   })
   
   # empty swab table
-  swab_cols <- c("year", "location", "region", "site", "bd_swab_id", "genetic_id", "microbiome_swab_id", "amp_id", 
-                 "mucosome_id", "bacterial_swab_id", "antibody_id", "crispr_id")
-  empty_swab_table <- data.frame(matrix(ncol = 12, nrow = 0))
-  colnames(empty_swab_table) <- swab_cols
   
   output$swab_table <-  DT::renderDataTable(datatable(empty_swab_table, rownames = F,  
                                                       options = list(scrollY = T, searching = FALSE, dom = "rtip", scrollX=T),
@@ -1116,13 +1109,13 @@ shinyServer(function(input, output, session) {
             plot.title = element_text(hjust = 0.5, size = 16),
             legend.text = element_text(size = 10),
             axis.title = element_text(size = 15),
-            legend.position = "bottom",
-            legend.title = element_text("Swab ID")) +
+            legend.position = "bottom") +
       ggtitle(paste0("'",swab_title,"'", " Swab Count")) +
       xlab("Year") +
       ylab("Swab Count") +
       scale_fill_discrete(pals::glasbey(n=8)) +
-      scale_y_continuous(expand = c(0,0))
+      scale_y_continuous(expand = c(0,0)) +
+      guides(fill = guide_legend("Swab ID"))
     
     output$swab_figure <- renderPlot(swab_plot)
   

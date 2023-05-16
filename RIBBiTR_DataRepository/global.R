@@ -280,8 +280,13 @@ t = setTimeout(logout, 120000);  // time is in milliseconds (1000 is 1 second)
 }
 idleTimer();"
 
+# empty swab table
+swab_cols <- c("year", "location", "region", "site", "bd_swab_id", "genetic_id", "microbiome_swab_id", "amp_id", 
+               "mucosome_id", "bacterial_swab_id", "antibody_id", "crispr_id")
+empty_swab_table <- data.frame(matrix(ncol = 12, nrow = 0))
+colnames(empty_swab_table) <- swab_cols
 
-`%then%` <- function(a, b) {
-  if (is.null(a)) b else a
-}
-
+# empty species table
+spec_cols <- c("year", "location", "region", "site", "species_capture", "species_count")
+empty_spec_table <- data.frame(matrix(ncol = 6, nrow = 0))
+colnames(empty_spec_table) <- spec_cols
