@@ -931,6 +931,8 @@ shinyServer(function(input, output, session) {
     
   })
   
+ 
+  
 
   observeEvent(input$year_map,
                {
@@ -977,6 +979,28 @@ shinyServer(function(input, output, session) {
                })
   
   
+  # clear button
+  observeEvent(input$cap_map_clear,
+               {
+                 updatePickerInput(session, inputId = "year_map", selected = c(max(years$year) - 10, max(years$year)))
+                 updatePickerInput(session, inputId = "location_map", selected = "")
+                 updatePickerInput(session, inputId = "region_map", selected = "")
+                 updatePickerInput(session, inputId = "site_map", selected = "")
+
+               }
+  )
+  
+  
+  # Empty species table
+  spec_cols <- c("year", "location", "region", "site", "species_capture", "species_count")
+  empty_spec_table <- data.frame(matrix(ncol = 6, nrow = 0))
+  colnames(empty_spec_table) <- spec_cols
+  
+  output$map_table <-  DT::renderDataTable(datatable(empty_spec_table, rownames = F,  
+                                                      options = list(scrollY = T, searching = FALSE, dom = "rtip", scrollX=T),
+                                                      caption = htmltools::tags$caption(
+                                                        htmltools::tags$span("Species Counts", style="color:black; font-size:18px"))))
+                                                        
   
   # Site species count click
   
@@ -1002,6 +1026,17 @@ shinyServer(function(input, output, session) {
                                                         htmltools::tags$span("Species Counts", style="color:black; font-size:18px"))))
     
   })
+  
+  # empty swab table
+  swab_cols <- c("year", "location", "region", "site", "bd_swab_id", "genetic_id", "microbiome_swab_id", "amp_id", 
+                 "mucosome_id", "bacterial_swab_id", "antibody_id", "crispr_id")
+  empty_swab_table <- data.frame(matrix(ncol = 12, nrow = 0))
+  colnames(empty_swab_table) <- swab_cols
+  
+  output$swab_table <-  DT::renderDataTable(datatable(empty_swab_table, rownames = F,  
+                                                      options = list(scrollY = T, searching = FALSE, dom = "rtip", scrollX=T),
+                                                      caption = htmltools::tags$caption(
+                                                        htmltools::tags$span("Swab Counts", style="color:black; font-size:18px"))))
   
   # Site Swab Count Table Click
   
@@ -1040,7 +1075,6 @@ shinyServer(function(input, output, session) {
     
     swab_plot_id <- input$site_map_marker_click$id
     
-    print(swab_plot_id)
     
     swab_title <- full_cap_data %>% 
       filter(year <= !!input$year_map[2] & year>= !!input$year_map[1],
@@ -1050,7 +1084,6 @@ shinyServer(function(input, output, session) {
       distinct(site) %>%
       collect()
     
-    print(swab_title)
     
     swab_info_plot <- full_cap_data %>% 
       filter(year <= !!input$year_map[2] & year>= !!input$year_map[1],
@@ -1073,6 +1106,8 @@ shinyServer(function(input, output, session) {
       select(!c(location, region, site)) %>% 
       pivot_longer(!year, names_to = "swab_type", values_to = "count")
     
+    
+    
     swab_plot <- ggplot(data = swab_info_plot, aes(x = factor(year), y = count, fill = swab_type)) +   
       geom_col(position = "dodge2", width = 1) +
       theme_classic() +
@@ -1081,12 +1116,12 @@ shinyServer(function(input, output, session) {
             plot.title = element_text(hjust = 0.5, size = 16),
             legend.text = element_text(size = 10),
             axis.title = element_text(size = 15),
-            legend.position = "bottom")+
+            legend.position = "bottom",
+            legend.title = element_text("Swab ID")) +
       ggtitle(paste0("'",swab_title,"'", " Swab Count")) +
-      labs(fill = "Swab ID") +
       xlab("Year") +
       ylab("Swab Count") +
-      scale_fill_viridis(discrete=TRUE, option = "C") +
+      scale_fill_discrete(pals::glasbey(n=8)) +
       scale_y_continuous(expand = c(0,0))
     
     output$swab_figure <- renderPlot(swab_plot)

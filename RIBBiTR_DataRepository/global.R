@@ -20,8 +20,7 @@ library(leafem)
 library(shinymanager)
 library(dbplyr) # new
 library(mailtoR)
-library(viridis)
-
+library(pals)
 
 
 shinyOptions(cache = cachem::cache_disk("./app_cache"))
