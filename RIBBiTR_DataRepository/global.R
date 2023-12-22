@@ -64,8 +64,8 @@ comb_bd <-  dbGetQuery(survey_data_connection, "select * from temp_shiny_bd") %>
   colnames() %>% as.data.frame() %>% rename("Temp Bd" = ".")
 
 # AMP #
-serdp_amp <- dbGetQuery(survey_data_connection, "select * from serdp_amp")%>% 
-  colnames() %>% as.data.frame() %>% rename("Amp Variables" = ".")
+# serdp_amp <- dbGetQuery(survey_data_connection, "select * from serdp_amp")%>% 
+#   colnames() %>% as.data.frame() %>% rename("Amp Variables" = ".")
 
 # Muc/microbiome #
 serdp_muc_mic <- dbGetQuery(survey_data_connection, "select * from serdp_newt_microbiome_mucosome_antifungal") %>% 
@@ -85,7 +85,7 @@ full_cap_data <- tbl(survey_data_connection, "location") %>%
   full_join(tbl(survey_data_connection, "temp_shiny_bd"), by = c("bd_swab_id")) %>% 
   full_join(tbl(survey_data_connection, "serdp_bd_genomic"), by = c("genetic_id")) %>% 
   full_join(tbl(survey_data_connection, "serdp_newt_microbiome_mucosome_antifungal"), by = c("mucosome_id", "microbiome_swab_id")) %>% 
-  full_join(tbl(survey_data_connection, "serdp_amp"), by = c("amp_id")) %>%
+  #full_join(tbl(survey_data_connection, "serdp_amp"), by = c("amp_id")) %>%
   mutate(year = year(date)) %>% 
   select(!c(location_id, region_id, site_id, visit_id, survey_id, capture_id))
 
