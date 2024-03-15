@@ -60,7 +60,7 @@ years <- dbGetQuery(survey_data_connection, "select date from visit") %>%
 
 # BD #
 
-comb_bd <-  dbGetQuery(survey_data_connection, "select * from temp_shiny_bd") %>% 
+comb_bd <-  dbGetQuery(survey_data_connection, "select * from qpcr_bd_results") %>% 
   colnames() %>% as.data.frame() %>% rename("Temp Bd" = ".")
 
 # AMP #
@@ -82,7 +82,7 @@ full_cap_data <- tbl(survey_data_connection, "location") %>%
   inner_join(tbl(survey_data_connection, "visit"), by = c("site_id")) %>%
   inner_join(tbl(survey_data_connection, "survey"), by = c("visit_id")) %>%
   inner_join(tbl(survey_data_connection, "capture"), by = c("survey_id")) %>%
-  full_join(tbl(survey_data_connection, "temp_shiny_bd"), by = c("bd_swab_id")) %>% 
+  full_join(tbl(survey_data_connection, "qpcr_bd_results"), by = c("bd_swab_id")) %>% 
   full_join(tbl(survey_data_connection, "serdp_bd_genomic"), by = c("genetic_id")) %>% 
   full_join(tbl(survey_data_connection, "serdp_newt_microbiome_mucosome_antifungal"), by = c("mucosome_id", "microbiome_swab_id")) %>% 
   #full_join(tbl(survey_data_connection, "serdp_amp"), by = c("amp_id")) %>%
